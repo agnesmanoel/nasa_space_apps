@@ -69,3 +69,64 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft")
     window.scrollTo({ left: clampScroll(window.scrollX - STEP), behavior: "smooth" });
 });
+
+// ====== Binding slider ⇄ meses ⇄ botões (não altera seu código de scroll) ======
+(function () {
+  const range   = document.querySelector('.hud-range');
+  const months  = Array.from(document.querySelectorAll('.hud-months span'));
+  const prevBtn = document.querySelector('.nav-btn.left');
+  const nextBtn = document.querySelector('.nav-btn.right');
+
+  if (!range || months.length !== 12) return;
+
+  // estado
+  let idx = parseInt(range.value, 10) || 0;
+
+  function clamp(n, min, max) { return Math.min(Math.max(n, min), max); }
+
+  function setMonth(newIdx, from = 'code') {
+    idx = clamp(newIdx, 0, 11);
+    // 1) atualiza slider
+    if (from !== 'range') range.value = idx;
+    // 2) atualiza destaque dos meses
+    months.forEach((el, i) => el.classList.toggle('active', i === idx));
+  }
+
+  // clique em um mês → move slider
+  months.forEach((el, i) => {
+    el.style.cursor = 'pointer';
+    el.addEventListener('click', (e) => {
+      e.stopPropagation(); // evita qualquer handler global
+      setMonth(i);
+    });
+  });
+
+  // mover slider → atualiza mês ativo
+  range.addEventListener('input', () => setMonth(parseInt(range.value, 10), 'range'));
+
+    // botões < > → mudam mês
+    function step(delta) { setMonth(idx + delta); }
+
+    // segurando o botão repete (responsivo)
+    // (um passo no pointerdown; NENHUM handler de 'click' para evitar passo duplo)
+    function holdRepeat(btn, delta) {
+    if (!btn) return;
+    let timer, fast;
+    btn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        step(delta); // passo imediato
+        fast = setTimeout(() => {
+        timer = setInterval(() => step(delta), 110);
+        }, 350);
+    });
+    ['pointerup','pointerleave','pointercancel','blur'].forEach(ev =>
+        btn.addEventListener(ev, () => { clearTimeout(fast); clearInterval(timer); })
+    );
+    }
+  holdRepeat(prevBtn, -1);
+  holdRepeat(nextBtn,  1);
+
+  // inicializa destaque
+  setMonth(idx);
+})();

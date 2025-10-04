@@ -247,3 +247,17 @@ body::-webkit-scrollbar { display: none; }
   border: 1px solid rgba(255,255,255,.35);
 }
 
+/* empurra o bloco central um pouco p/ baixo */
+.hud-col.center { padding-top: 18px; }
+/* mantém o rótulo do ano próximo da barra */
+.hud-year { top: -6px; }
+
+/* ↓ move a bolinha um pouco para BAIXO no Chrome/Edge/Safari */
+.hud-range::-webkit-slider-thumb{
+  margin-top: -3px;  /* era -7px; -6 ou -5 desce ~1–2px */
+}
+
+/* ↓ move a bolinha um pouco para BAIXO no Firefox */
+.hud-range::-moz-range-thumb{
+  transform: translateY(3px); /* 1–3px costuma bastar */
+}
