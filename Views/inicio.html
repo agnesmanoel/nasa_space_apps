@@ -47,15 +47,23 @@
     </div>
 
     <div class="hud-col center">
-      <div class="hud-track">
-        <div class="hud-thumb" style="left: 8%"></div>
-      </div>
-      <div class="hud-months">
-        <span>Jan</span><span>Fev</span><span>Mar</span><span>Abr</span>
-        <span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span>
-        <span>Set</span><span>Out</span><span>Nov</span><span>Dez</span>
-      </div>
+        <div class="hud-controls">
+            <button class="nav-btn left" aria-label="Mês anterior">‹</button>
+
+            <div class="hud-year">2025</div>
+
+            <input type="range" class="hud-range" min="0" max="11" value="0" />
+
+            <button class="nav-btn right" aria-label="Próximo mês">›</button>
+        </div>
+
+        <div class="hud-months">
+            <span class="active">Jan</span><span>Fev</span><span>Mar</span><span>Abr</span>
+            <span>Mai</span><span>Jun</span><span>Jul</span><span>Ago</span>
+            <span>Set</span><span>Out</span><span>Nov</span><span>Dez</span>
+        </div>
     </div>
+
 
     <div class="hud-col right">
       <p class="hud-muted">Estação chuvosa em pleno vigor. O cerrado está verde e exuberante.</p>

@@ -167,3 +167,83 @@ body::-webkit-scrollbar { display: none; }
   .hud-subcard{ width: 100%; }
 }
 
+/* ===== Slider do HUD com setas e ano ===== */
+.hud-col.center { align-content: start; }
+
+.hud-controls{
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Botões de navegação (vidrados) */
+.nav-btn{
+  width: 56px; height: 56px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.18);
+  border-radius: 18px;
+  color: #fff;
+  font-size: 28px; line-height: 1;
+  display: grid; place-items: center;
+  cursor: pointer;
+  backdrop-filter: saturate(120%) blur(4px);
+}
+.nav-btn:hover{ background: rgba(255,255,255,.22); }
+
+/* Ano central acima da barra */
+.hud-year{
+  position: absolute;
+  top: -28px; left: 50%;
+  transform: translateX(-50%);
+  font-weight: 800;
+  letter-spacing: .3px;
+  pointer-events: none;
+}
+
+/* Range “vidrado” (track arredondado + thumb branca) */
+.hud-range{
+  width: 100%;
+  appearance: none;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.25));
+  border: 1px solid rgba(255,255,255,.45);
+  outline: none;
+}
+
+/* WebKit */
+.hud-range::-webkit-slider-thumb{
+  appearance: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(0,0,0,.25);
+  border: 0;
+  cursor: pointer;
+  margin-top: -7px; /* centraliza no track de 14px */
+}
+
+/* Firefox */
+.hud-range::-moz-range-thumb{
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #fff; border: 0; box-shadow: 0 3px 12px rgba(0,0,0,.25);
+  cursor: pointer;
+}
+.hud-range::-moz-range-track{
+  height: 14px; border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.25));
+  border: 1px solid rgba(255,255,255,.45);
+}
+
+/* Meses com “pílula” para o ativo */
+.hud-months { margin-top: 10px; }
+.hud-months span{
+  padding: 6px 10px; border-radius: 12px;
+}
+.hud-months .active{
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.35);
+}
+
