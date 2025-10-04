@@ -1,0 +1,28 @@
+/* Estilo para o botão, apenas para centralizá-lo */
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 20px;
+}
+
+/* Estilo inicial da abelha, ANTES de voar */
+#abelha {
+    position: absolute; /* Essencial para podermos mover a abelha livremente na tela */
+    top: 50%;
+    left: 10%; /* Começa no lado esquerdo da tela */
+    width: 80px;
+
+    /* A MÁGICA ESTÁ AQUI */
+    /* Isso diz: "Se qualquer propriedade mudar, não faça de uma vez.
+       Crie uma transição suave que dura 3 segundos." */
+    transition: all 3s ease-in-out;
+}
+
+/* Criamos uma "classe" que representa o estado "voando" */
+#abelha.voando {
+    top: 20%;
+    left: 80%; /* A posição FINAL da abelha */
+    transform: rotate(15deg); /* Gira um pouco para parecer mais natural */
+    width: 100px; /* Pode até aumentar de tamanho */
+}
