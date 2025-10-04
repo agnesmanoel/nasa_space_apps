@@ -84,17 +84,86 @@ body::-webkit-scrollbar { display: none; }
 }
 .hud-months { display: grid; grid-auto-flow: column; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); }
 
-/* Subcard (quadradinho do Figma) */
-.hud-subcard {
+/* Subcard fluido (desktop-first) */
+.hud-subcard{
   display: flex;
-  width: 245.25px;
-  padding: 29px 29px 29px 29px;
+  /* Largura adaptável: nunca menor que 200px, cresce com a tela, limita em 300px */
+  width: clamp(200px, 22vw, 250px);
+  max-width: 100%;
+
+  /* Espaços que escalam um pouco com a viewport */
+  padding: clamp(12px, 1.2vw, 17px) clamp(12px, 1.2vw, 17px)
+           clamp(6px, 0.8vw, 12px) clamp(12px, 1.2vw, 17px);
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: clamp(8px, 1vw, 12px);
 
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.30);
   background: rgba(255, 255, 255, 0.20);
+}
+
+/* Evita quebrar feio se o texto crescer */
+.hud-subcard .hud-muted{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Garante que ele não “estique” no grid */
+.hud-col.left { align-content: start; }
+
+/* Cabeçalho do subcard: ícone - título - ícone */
+.subcard-header{
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Quadradinhos dos ícones (vidrados) */
+.icon-sq{
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: saturate(120%) blur(4px);
+}
+.icon-sq .i{ font-size: 20px; line-height: 1; opacity: .95; }
+.icon-sq.alt{ opacity: .95; }
+
+/* Título e subtítulo */
+.subcard-title{ line-height: 1.1; }
+.month{
+  margin: 0;
+  font-weight: 800;
+  font-size: 22px;  /* ajuste se quiser maior/menor */
+  letter-spacing: .2px;
+}
+.season{
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Pílula com temperatura */
+.info-pill{
+  margin-top: 12px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.30);
+  background: rgba(255,255,255,0.16);
+  box-shadow: var(--shadow);
+}
+.pill-icon{ width: 18px; text-align: center; opacity: .95; }
+.pill-text{ line-height: 1.2; color: var(--text); }
+.pill-title{ font-weight: 700; }
+.pill-sub{ opacity: .95; }
+
+/* (opcional) quando a coluna afinar, subcard usa 100% */
+@media (max-width: 980px){
+  .hud-subcard{ width: 100%; }
 }
 
