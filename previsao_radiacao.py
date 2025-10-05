@@ -57,5 +57,5 @@ print("\nPrevisão dos Próximos 24 Meses:")
 cols = [c for c in ['ds', 'yhat1', 'yhat1_lower', 'yhat1_upper'] if c in forecast.columns]
 print(forecast[cols])
 
-forecast[cols].to_csv("previsao_radiacao_mensal_maior.csv", index=False)
-print("\n✅ Exportação para CSV concluída.")
+# forecast[cols].to_csv("previsao_radiacao_mensal_maior.csv", index=False)
+# print("\n✅ Exportação para CSV concluída.")

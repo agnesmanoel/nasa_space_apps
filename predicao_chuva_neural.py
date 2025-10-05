@@ -55,4 +55,4 @@ print("\nPrevisão dos Próximos 24 Meses:")
 cols = [c for c in ['ds', 'yhat1', 'yhat1_lower', 'yhat1_upper'] if c in forecast.columns]
 print(forecast[cols])
 
-forecast[cols].to_csv("previsao_precipitacao_mensal_neural_menor.csv", index=False)
+# forecast[cols].to_csv("previsao_precipitacao_mensal_neural_menor.csv", index=False)
