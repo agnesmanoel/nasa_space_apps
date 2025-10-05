@@ -25,7 +25,8 @@ function clampScroll(x) {
 /* =========================
    Drag horizontal (ignora áreas interativas)
    ========================= */
-const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button'], .flower";
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop";
+
 
 window.addEventListener("pointerdown", (e) => {
   if (e.target.closest(SAFE_SELECTOR)) return; // não inicia drag em áreas interativas
@@ -195,4 +196,42 @@ document.addEventListener("keydown", (e) => {
     .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
 
   updateUI(!!isFS());
+})();
+
+/* =========================
+   Alerta inicial (glass)
+   ========================= */
+(function () {
+  const backdrop = document.getElementById('intro-backdrop');
+  const modal    = document.getElementById('intro-modal');
+  const btnOk    = document.getElementById('intro-ok');
+  const btnX     = document.querySelector('.intro-close');
+
+  if (!backdrop || !modal || !btnOk || !btnX) return;
+
+  // mostra ao entrar (se quiser lembrar que já foi visto, usar localStorage aqui)
+  function openIntro(){
+    backdrop.hidden = false;
+    modal.hidden = false;
+    btnOk.focus();
+  }
+  function closeIntro(){
+    backdrop.hidden = true;
+    modal.hidden = true;
+  }
+
+  // abrir na primeira carga
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    openIntro();
+  } else {
+    window.addEventListener('DOMContentLoaded', openIntro, { once:true });
+  }
+
+  // interações
+  btnOk.addEventListener('click', closeIntro);
+  btnX.addEventListener('click', closeIntro);
+  backdrop.addEventListener('click', closeIntro);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeIntro();
+  });
 })();
