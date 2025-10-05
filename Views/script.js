@@ -66,8 +66,8 @@ window.addEventListener('load', () => {
       prefix: "abelha",   // arquivos: abelha0..abelha9
       ext: "png",         // "png" | "webp" | "jpg"
       frames: 10,
-      fps: 2,
-      scale: 1,           // escala dessa página
+      fps: 10,
+      scale: 1.5,           // escala dessa página
       autoplay: true,
       loop: true
     }); 
