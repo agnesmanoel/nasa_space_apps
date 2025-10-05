@@ -65,7 +65,7 @@ window.addEventListener("load", () => {
 })();
 
 // =====================
-// Passo-a-passo do texto + Abelha animada
+// Passo-a-passo do texto + Abelha animada (overlay) movendo ESQ → DIR
 // =====================
 (function(){
   const parts = [
@@ -78,53 +78,83 @@ window.addEventListener("load", () => {
   const okBtn   = document.getElementById("hudOk");
   const beeEl   = document.getElementById("beeIntro");
 
+  // Frações horizontais da viewport (0=esq, 1=dir)
+  // Começa bem à esquerda e caminha até quase o canto.
+  const beeFractions = [0.08, 0.50, 0.82]; // passo 1, 2, 3 (cada OK)
+  const beeFinal     = 0.97;               // corrida final antes de trocar de página
+
   let idx = 0;
-  let beeStarted = false;
+  let beeAnimatorStarted = false;
 
   function render(){
-    if (!hudText) return;
     hudText.innerHTML = parts[idx];
 
-    // último passo? mostra abelha
-    if (idx === parts.length - 1){
-      if (beeEl) {
-        beeEl.hidden = false;
-        // inicia animação uma única vez
-        if (!beeStarted && window.BeeAnimator){
-          try{
-            const animator = new window.BeeAnimator(beeEl, {
-              basePath: "../../assets/abelha", // ajuste se necessário
-              prefix: "abelha",
-              ext: "png",
-              frames: 10,
-              fps: 12,
-              scale: 1,
-              autoplay: true,
-              loop: true
-            });
-            beeStarted = true;
-          }catch{}
-        }
+    if (beeEl.hidden){
+      beeEl.hidden = false;
+
+      // (opcional) aumentar via escala extra
+      beeEl.style.setProperty('--bee-scale', '1'); // mude para 1.2/1.3 se quiser maior
+
+      // inicia sprite uma única vez
+      if (!beeAnimatorStarted && window.BeeAnimator){
+        try{
+          new window.BeeAnimator(beeEl, {
+            basePath: "../../assets/abelha",
+            prefix: "abelha",
+            ext: "png",
+            frames: 10,
+            fps: 12,
+            scale: 1,
+            autoplay: true,
+            loop: true
+          });
+          beeAnimatorStarted = true;
+        }catch{}
       }
-      okBtn.textContent = "OK";
+
+      // posiciona na primeira fração (esquerda), instantaneamente
+      moveBeeToFraction(beeFractions[0], true);
     } else {
-      if (beeEl) beeEl.hidden = true;
-      okBtn.textContent = "OK";
+      moveBeeToFraction(beeFractions[idx]);
     }
   }
 
-  okBtn?.addEventListener("click", () => {
+  // Move a abelha para uma fração horizontal da viewport (mantém centro vertical)
+  function moveBeeToFraction(frac = 0.5, instant = false){
+    if (!beeEl) return;
+    const clamped = Math.max(0.02, Math.min(0.98, frac));
+    const dx = (clamped - 0.5) * window.innerWidth;  // delta X desde o centro
+    if (instant) beeEl.style.transitionDuration = "0ms";
+    beeEl.style.transform = `translate(calc(-50% + ${dx}px), -50%)`;
+    if (instant) requestAnimationFrame(()=> beeEl.style.transitionDuration = "");
+  }
+
+  okBtn.addEventListener("click", () => {
     if (idx < parts.length - 1){
       idx++;
-      render();
-    } else {
-      // fim → vai para explore
-      window.location.href = "../explore/explore.html";
+      render();               // texto + move para a próxima posição
+      return;
     }
+    // último OK → corre ao final e só então na vega
+    const handleEnd = () => {
+      beeEl.removeEventListener("transitionend", handleEnd);
+      window.location.href = "../explore/explore.html";
+    };
+    beeEl.addEventListener("transitionend", handleEnd, { once: true });
+    moveBeeToFraction(beeFinal);
   });
+
+  // Reposiciona corretamente ao redimensionar
+  window.addEventListener("resize", () =>
+    moveBeeToFraction(
+      (idx < beeFractions.length ? beeFractions[idx] : beeFinal),
+      true
+    )
+  );
 
   render();
 })();
+
 
 // =====================
 // Fullscreen
