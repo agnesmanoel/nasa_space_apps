@@ -1,32 +1,31 @@
-// === Objeto com os dados de previsão ===
 const MONTH_DATA = {
   2026: [
-    { name:"Janeiro", season:"Chuvosa", temp_forecast:27.43, temp_trend:"up", precip_forecast:3.68, precip_trend:"down" },
-    { name:"Fevereiro", season:"Chuvosa", temp_forecast:27.17, temp_trend:"down", precip_forecast:1.97, precip_trend:"down" },
-    { name:"Março", season:"Chuvosa", temp_forecast:26.80, temp_trend:"down", precip_forecast:-1.39, precip_trend:"down" },
-    { name:"Abril", season:"Transição", temp_forecast:26.18, temp_trend:"down", precip_forecast:12.33, precip_trend:"up" },
-    { name:"Maio", season:"Seca", temp_forecast:24.74, temp_trend:"down", precip_forecast:18.79, precip_trend:"up" },
-    { name:"Junho", season:"Seca", temp_forecast:24.22, temp_trend:"down", precip_forecast:64.49, precip_trend:"up" },
-    { name:"Julho", season:"Seca", temp_forecast:24.22, temp_trend:"same", precip_forecast:111.15, precip_trend:"up" },
-    { name:"Agosto", season:"Seca", temp_forecast:26.23, temp_trend:"up", precip_forecast:188.46, precip_trend:"up" },
-    { name:"Setembro", season:"Transição", temp_forecast:26.00, temp_trend:"up", precip_forecast:114.35, precip_trend:"up" },
-    { name:"Outubro", season:"Chuvosa", temp_forecast:27.00, temp_trend:"up", precip_forecast:99.39, precip_trend:"down" },
-    { name:"Novembro", season:"Chuvosa", temp_forecast:28.00, temp_trend:"up", precip_forecast:110.47, precip_trend:"up" },
-    { name:"Dezembro", season:"Chuvosa", temp_forecast:29.00, temp_trend:"up", precip_forecast:63.16, precip_trend:"down" }
+    { name:"January", season:"Rainy", temp_forecast:27.43, temp_trend:"up", precip_forecast:3.68, precip_trend:"down" },
+    { name:"February", season:"Rainy", temp_forecast:27.17, temp_trend:"down", precip_forecast:1.97, precip_trend:"down" },
+    { name:"March", season:"Rainy", temp_forecast:26.80, temp_trend:"down", precip_forecast:-1.39, precip_trend:"down" },
+    { name:"April", season:"Transition", temp_forecast:26.18, temp_trend:"down", precip_forecast:12.33, precip_trend:"up" },
+    { name:"May", season:"Dry", temp_forecast:24.74, temp_trend:"down", precip_forecast:18.79, precip_trend:"up" },
+    { name:"June", season:"Dry", temp_forecast:24.22, temp_trend:"down", precip_forecast:64.49, precip_trend:"up" },
+    { name:"July", season:"Dry", temp_forecast:24.22, temp_trend:"same", precip_forecast:111.15, precip_trend:"up" },
+    { name:"August", season:"Dry", temp_forecast:26.23, temp_trend:"up", precip_forecast:188.46, precip_trend:"up" },
+    { name:"September", season:"Transition", temp_forecast:26.00, temp_trend:"up", precip_forecast:114.35, precip_trend:"up" },
+    { name:"October", season:"Rainy", temp_forecast:27.00, temp_trend:"up", precip_forecast:99.39, precip_trend:"down" },
+    { name:"November", season:"Rainy", temp_forecast:28.00, temp_trend:"up", precip_forecast:110.47, precip_trend:"up" },
+    { name:"December", season:"Rainy", temp_forecast:29.00, temp_trend:"up", precip_forecast:63.16, precip_trend:"down" }
   ],
   2027: [
-    { name:"Janeiro", season:"Chuvosa", temp_forecast:27.5, temp_trend:"up", precip_forecast:100, precip_trend:"down" },
-    { name:"Fevereiro", season:"Chuvosa", temp_forecast:27.0, temp_trend:"down", precip_forecast:95, precip_trend:"down" },
-    { name:"Março", season:"Chuvosa", temp_forecast:26.7, temp_trend:"down", precip_forecast:105, precip_trend:"up" },
-    { name:"Abril", season:"Transição", temp_forecast:26.2, temp_trend:"down", precip_forecast:60, precip_trend:"down" },
-    { name:"Maio", season:"Seca", temp_forecast:25.0, temp_trend:"down", precip_forecast:10, precip_trend:"down" },
-    { name:"Junho", season:"Seca", temp_forecast:24.5, temp_trend:"down", precip_forecast:5, precip_trend:"down" },
-    { name:"Julho", season:"Seca", temp_forecast:24.5, temp_trend:"same", precip_forecast:0, precip_trend:"down" },
-    { name:"Agosto", season:"Seca", temp_forecast:26.0, temp_trend:"up", precip_forecast:15, precip_trend:"up" },
-    { name:"Setembro", season:"Transição", temp_forecast:26.1, temp_trend:"up", precip_forecast:20, precip_trend:"up" },
-    { name:"Outubro", season:"Chuvosa", temp_forecast:27.0, temp_trend:"up", precip_forecast:65, precip_trend:"up" },
-    { name:"Novembro", season:"Chuvosa", temp_forecast:28.0, temp_trend:"up", precip_forecast:110, precip_trend:"up" },
-    { name:"Dezembro", season:"Chuvosa", temp_forecast:28.5, temp_trend:"up", precip_forecast:190, precip_trend:"up" }
+    { name:"January", season:"Rainy", temp_forecast:27.5, temp_trend:"up", precip_forecast:100, precip_trend:"down" },
+    { name:"February", season:"Rainy", temp_forecast:27.0, temp_trend:"down", precip_forecast:95, precip_trend:"down" },
+    { name:"March", season:"Rainy", temp_forecast:26.7, temp_trend:"down", precip_forecast:105, precip_trend:"up" },
+    { name:"April", season:"Transition", temp_forecast:26.2, temp_trend:"down", precip_forecast:60, precip_trend:"down" },
+    { name:"May", season:"Dry", temp_forecast:25.0, temp_trend:"down", precip_forecast:10, precip_trend:"down" },
+    { name:"June", season:"Dry", temp_forecast:24.5, temp_trend:"down", precip_forecast:5, precip_trend:"down" },
+    { name:"July", season:"Dry", temp_forecast:24.5, temp_trend:"same", precip_forecast:0, precip_trend:"down" },
+    { name:"August", season:"Dry", temp_forecast:26.0, temp_trend:"up", precip_forecast:15, precip_trend:"up" },
+    { name:"September", season:"Transition", temp_forecast:26.1, temp_trend:"up", precip_forecast:20, precip_trend:"up" },
+    { name:"October", season:"Rainy", temp_forecast:27.0, temp_trend:"up", precip_forecast:65, precip_trend:"up" },
+    { name:"November", season:"Rainy", temp_forecast:28.0, temp_trend:"up", precip_forecast:110, precip_trend:"up" },
+    { name:"December", season:"Rainy", temp_forecast:28.5, temp_trend:"up", precip_forecast:190, precip_trend:"up" }
   ]
 };
 
