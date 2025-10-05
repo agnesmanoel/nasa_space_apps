@@ -5,7 +5,7 @@
   if (!layer) return;
 
   // Caminho da sua imagem (assets está um nível acima)
-  const SRC = '../assets/girassol.png';
+  const SRC = '../../assets/girassol.png';
   const WIDTH = 3000;   // combine com .fx-layer
   const COUNT = 18;
 

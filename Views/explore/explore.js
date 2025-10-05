@@ -284,7 +284,7 @@ document.addEventListener("keydown", (e) => {
   backBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     if (history.length > 1) history.back();
-    else window.location.href = './index.html';
+    else window.location.href = '../index.html';
   });
 })();
 

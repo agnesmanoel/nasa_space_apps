@@ -171,7 +171,7 @@ if (skipBtn){
   skipBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     // Vai para a tela de explore
-    window.location.href = '../explore.html'; // use '../explore.html' se seu explore estiver fora de /views
+    window.location.href = '../explore/explore.html'; // use '../explore.html' se seu explore estiver fora de /views
   });
 }
 
