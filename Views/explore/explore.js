@@ -1,31 +1,31 @@
 const MONTH_DATA = {
   2026: [
-    { name:"January", season:"Rainy", temp_forecast:27.43, temp_trend:"up", precip_forecast:3.68, precip_trend:"down" },
-    { name:"February", season:"Rainy", temp_forecast:27.17, temp_trend:"down", precip_forecast:1.97, precip_trend:"down" },
-    { name:"March", season:"Rainy", temp_forecast:26.80, temp_trend:"down", precip_forecast:-1.39, precip_trend:"down" },
-    { name:"April", season:"Transition", temp_forecast:26.18, temp_trend:"down", precip_forecast:12.33, precip_trend:"up" },
-    { name:"May", season:"Dry", temp_forecast:24.74, temp_trend:"down", precip_forecast:18.79, precip_trend:"up" },
-    { name:"June", season:"Dry", temp_forecast:24.22, temp_trend:"down", precip_forecast:64.49, precip_trend:"up" },
-    { name:"July", season:"Dry", temp_forecast:24.22, temp_trend:"same", precip_forecast:111.15, precip_trend:"up" },
-    { name:"August", season:"Dry", temp_forecast:26.23, temp_trend:"up", precip_forecast:188.46, precip_trend:"up" },
-    { name:"September", season:"Transition", temp_forecast:26.00, temp_trend:"up", precip_forecast:114.35, precip_trend:"up" },
-    { name:"October", season:"Rainy", temp_forecast:27.00, temp_trend:"up", precip_forecast:99.39, precip_trend:"down" },
-    { name:"November", season:"Rainy", temp_forecast:28.00, temp_trend:"up", precip_forecast:110.47, precip_trend:"up" },
-    { name:"December", season:"Rainy", temp_forecast:29.00, temp_trend:"up", precip_forecast:63.16, precip_trend:"down" }
+    { name:"January", season:"Rainy", temp_forecast:27.43, temp_trend:"up", precip_forecast:3.68, precip_trend:"down", ndvi: 0.6633500000000003 },
+    { name:"February", season:"Rainy", temp_forecast:27.17, temp_trend:"down", precip_forecast:1.97, precip_trend:"down", ndvi: 0.7027066666666677 },
+    { name:"March", season:"Rainy", temp_forecast:26.80, temp_trend:"down", precip_forecast:-1.39, precip_trend:"down", ndvi: 0.6751366666666669 },
+    { name:"April", season:"Transition", temp_forecast:26.18, temp_trend:"down", precip_forecast:12.33, precip_trend:"up", ndvi: 0.8116933333333378 },
+    { name:"May", season:"Dry", temp_forecast:24.74, temp_trend:"down", precip_forecast:18.79, precip_trend:"up", ndvi: 0.6545933333333309 },
+    { name:"June", season:"Dry", temp_forecast:24.22, temp_trend:"down", precip_forecast:64.49, precip_trend:"up", ndvi: 0.6041933333333276 },
+    { name:"July", season:"Dry", temp_forecast:24.22, temp_trend:"same", precip_forecast:111.15, precip_trend:"up", ndvi: 0.795983333333325 },
+    { name:"August", season:"Dry", temp_forecast:26.23, temp_trend:"up", precip_forecast:188.46, precip_trend:"up", ndvi: 0.762123333333335 },
+    { name:"September", season:"Transition", temp_forecast:26.00, temp_trend:"up", precip_forecast:114.35, precip_trend:"up", ndvi: 0.8229966666666684 },
+    { name:"October", season:"Rainy", temp_forecast:27.00, temp_trend:"up", precip_forecast:99.39, precip_trend:"down" }, // NDVI Ausente
+    { name:"November", season:"Rainy", temp_forecast:28.00, temp_trend:"up", precip_forecast:110.47, precip_trend:"up", ndvi: 0.5516499999999986 },
+    { name:"December", season:"Rainy", temp_forecast:29.00, temp_trend:"up", precip_forecast:63.16, precip_trend:"down", ndvi: 0.5167799999999971 }
   ],
   2027: [
-    { name:"January", season:"Rainy", temp_forecast:27.5, temp_trend:"up", precip_forecast:100, precip_trend:"down" },
-    { name:"February", season:"Rainy", temp_forecast:27.0, temp_trend:"down", precip_forecast:95, precip_trend:"down" },
-    { name:"March", season:"Rainy", temp_forecast:26.7, temp_trend:"down", precip_forecast:105, precip_trend:"up" },
-    { name:"April", season:"Transition", temp_forecast:26.2, temp_trend:"down", precip_forecast:60, precip_trend:"down" },
-    { name:"May", season:"Dry", temp_forecast:25.0, temp_trend:"down", precip_forecast:10, precip_trend:"down" },
-    { name:"June", season:"Dry", temp_forecast:24.5, temp_trend:"down", precip_forecast:5, precip_trend:"down" },
-    { name:"July", season:"Dry", temp_forecast:24.5, temp_trend:"same", precip_forecast:0, precip_trend:"down" },
-    { name:"August", season:"Dry", temp_forecast:26.0, temp_trend:"up", precip_forecast:15, precip_trend:"up" },
-    { name:"September", season:"Transition", temp_forecast:26.1, temp_trend:"up", precip_forecast:20, precip_trend:"up" },
-    { name:"October", season:"Rainy", temp_forecast:27.0, temp_trend:"up", precip_forecast:65, precip_trend:"up" },
-    { name:"November", season:"Rainy", temp_forecast:28.0, temp_trend:"up", precip_forecast:110, precip_trend:"up" },
-    { name:"December", season:"Rainy", temp_forecast:28.5, temp_trend:"up", precip_forecast:190, precip_trend:"up" }
+    { name:"January", season:"Rainy", temp_forecast:27.5, temp_trend:"up", precip_forecast:100, precip_trend:"down", ndvi: 0.6644785714285715 },
+    { name:"February", season:"Rainy", temp_forecast:27.0, temp_trend:"down", precip_forecast:95, precip_trend:"down", ndvi: 0.6927895238095232 },
+    { name:"March", season:"Rainy", temp_forecast:26.7, temp_trend:"down", precip_forecast:105, precip_trend:"up", ndvi: 0.6613423809523802 },
+    { name:"April", season:"Transition", temp_forecast:26.2, temp_trend:"down", precip_forecast:60, precip_trend:"down", ndvi: 0.8329819047619083 },
+    { name:"May", season:"Dry", temp_forecast:25.0, temp_trend:"down", precip_forecast:10, precip_trend:"down", ndvi: 0.6285247619047638 },
+    { name:"June", season:"Dry", temp_forecast:24.5, temp_trend:"down", precip_forecast:5, precip_trend:"down", ndvi: 0.565103333333326 },
+    { name:"July", season:"Dry", temp_forecast:24.5, temp_trend:"same", precip_forecast:0, precip_trend:"down", ndvi: 0.8317476190476043 },
+    { name:"August", season:"Dry", temp_forecast:26.0, temp_trend:"up", precip_forecast:15, precip_trend:"up", ndvi: 0.7978133333333375 },
+    { name:"September", season:"Transition", temp_forecast:26.1, temp_trend:"up", precip_forecast:20, precip_trend:"up", ndvi: 0.8745766666666697 },
+    { name:"October", season:"Rainy", temp_forecast:27.0, temp_trend:"up", precip_forecast:65, precip_trend:"up" }, // NDVI Ausente
+    { name:"November", season:"Rainy", temp_forecast:28.0, temp_trend:"up", precip_forecast:110, precip_trend:"up", ndvi: 0.542544999999997 },
+    { name:"December", season:"Rainy", temp_forecast:28.5, temp_trend:"up", precip_forecast:190, precip_trend:"up", ndvi: 0.462600000000009 }
   ]
 };
 
@@ -62,6 +62,10 @@ function atualizarCards(ano, indiceMes) {
   // As chaves aqui precisam corresponder aos valores em inglês do seu objeto de dados
   const iconeEstacao = { Rainy: '💧', Dry: '☀️', Transition: '🌀' };
   elIconeEstacao.textContent = iconeEstacao[dadosDoMes.season] || '❔';
+
+
+    elNdviSub.textContent = `Index: ${dadosDoMes.ndvi.toFixed(4)}`;
+  
 }
 
 // === Centraliza ao carregar ===
