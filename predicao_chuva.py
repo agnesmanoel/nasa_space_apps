@@ -7,7 +7,6 @@ import os
 print(os.getcwd())
 
 
-
 with open("precipitacao.json", "r") as f:
     data = json.load(f)
 
@@ -22,7 +21,6 @@ df = df.sort_values("ds").reset_index(drop=True)
 df_mes = df.set_index("ds").resample("ME").sum().reset_index()
 
 print(df.head())
-
 
 
 model = Prophet(yearly_seasonality=True)
@@ -56,9 +54,3 @@ plt.show()
 fig2 = model.plot_components(forecast)
 plt.show()
 
-print("teste")
-
-forecast[["ds", "yhat", "yhat_lower", "yhat_upper"]].to_csv(
-    "/Users/isabelcristina/Desktop/nasa_space_apps/previsao_chuva_mensal.csv", index=False
-)
-print("CSV criado com sucesso!")
