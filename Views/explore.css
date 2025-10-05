@@ -483,3 +483,42 @@ body::-webkit-scrollbar { display: none; }
 }
 .side-tip-ok:hover{ background: rgba(255,255,255,.22); }
 .side-tip-ok:active{ transform: translateY(1px); }
+
+/* ... (todo o seu CSS atual acima permanece igual) ... */
+
+/* ===== Botão Som (igual outras telas) ===== */
+.icon-btn{
+  position: fixed; top: 16px; left: 16px;
+  display: grid; place-items:center;
+  width: 44px; height: 44px; border-radius: 14px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer; z-index: 4;
+}
+.icon-btn:hover{ filter: brightness(1.04); }
+.icon-btn:active{ transform: translateY(1px); }
+.icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
+.icon .waves{ fill: none; }
+
+/* ===== Botão Voltar ===== */
+.nav-back{
+  position: fixed; top: 16px; left: 72px; /* ao lado do som */
+  z-index: 4;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.18);
+  color: #fff; font-size: 22px; line-height: 1;
+  cursor: pointer; box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.nav-back:hover{ background: rgba(255,255,255,0.22); }
+
+/* util – se precisar (Bootstrap já tem, mas garantimos) */
+.visually-hidden{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;
+}

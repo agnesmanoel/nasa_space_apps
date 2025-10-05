@@ -10,9 +10,9 @@ window.addEventListener("load", () => {
 const bg = document.querySelector(".background-scroll-container");
 const body = document.body;
 let dragging = false;
-let startX = 0;        // posição do ponteiro no início do gesto
-let startScrollX = 0;  // scrollX no início do gesto
-let dragDistance = 0;  // px acumulados para distinguir clique de arrasto
+let startX = 0;
+let startScrollX = 0;
+let dragDistance = 0;
 const SPEED = 1.5;
 
 // util para limitar dentro do fundo (0 .. max)
@@ -25,12 +25,10 @@ function clampScroll(x) {
 /* =========================
    Drag horizontal (ignora áreas interativas)
    ========================= */
-const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop, #side-tip";
-
-
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, #toggleMuteBtn, #backBtn, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop, #side-tip";
 
 window.addEventListener("pointerdown", (e) => {
-  if (e.target.closest(SAFE_SELECTOR)) return; // não inicia drag em áreas interativas
+  if (e.target.closest(SAFE_SELECTOR)) return;
   dragging = true;
   startX = e.clientX;
   startScrollX = window.scrollX;
@@ -56,12 +54,14 @@ window.addEventListener("pointerup", endDrag);
 window.addEventListener("pointercancel", endDrag);
 
 /* =========================
-   Clique para pular (ignora drag, HUD e botão FS)
+   Clique para pular (ignora drag e áreas UI)
    ========================= */
 document.addEventListener("click", (e) => {
   if (dragDistance > 10 || dragging) return;
   if (e.target.closest(".hud-bar")) return;
   if (e.target.closest("#fs-toggle")) return;
+  if (e.target.closest("#toggleMuteBtn")) return;
+  if (e.target.closest("#backBtn")) return;
 
   const STEP = 100;
   const dir = e.clientX > window.innerWidth / 2 ? 1 : -1;
@@ -129,15 +129,15 @@ document.addEventListener("keydown", (e) => {
 
   setMonth(idx);
 })();
+
 /* =========================
-   Botão de Tela Cheia (versão única)
+   Botão de Tela Cheia (ícones iguais às outras telas)
    ========================= */
 (function () {
   const btn = document.getElementById('fs-toggle');
-  if (!btn) return; // botão precisa existir no HTML (dentro do <body>, antes do <script>)
+  if (!btn) return;
 
-  const target = document.documentElement; // mude para document.body se preferir
-
+  const target = document.documentElement;
   const isFS = () =>
     document.fullscreenElement ||
     document.webkitFullscreenElement ||
@@ -151,10 +151,7 @@ document.addEventListener("keydown", (e) => {
       el.mozRequestFullScreen ||
       el.msRequestFullscreen;
     if (!req) return;
-    try {
-      const p = req.call(el);
-      if (p && typeof p.catch === 'function') p.catch(()=>{});
-    } catch {}
+    try { const p = req.call(el); p?.catch?.(()=>{}); } catch {}
   }
 
   function exitFS() {
@@ -164,27 +161,21 @@ document.addEventListener("keydown", (e) => {
       document.mozCancelFullScreen ||
       document.msExitFullscreen;
     if (!ex) return;
-    try {
-      const p = ex.call(document);
-      if (p && typeof p.catch === 'function') p.catch(()=>{});
-    } catch {}
+    try { const p = ex.call(document); p?.catch?.(()=>{}); } catch {}
   }
 
   function updateUI(active){
     const i = btn.querySelector('i');
-    i.className = active ? 'bi bi-fullscreen-exit' : 'bi bi-arrows-fullscreen';
+    i.className = active ? 'bi bi-fullscreen-exit' : 'bi bi-fullscreen';
     btn.setAttribute('aria-label', active ? 'Sair de tela cheia' : 'Tela cheia');
     btn.title = active ? 'Sair de tela cheia (F)' : 'Tela cheia (F)';
   }
 
-
-  // evita conflito com o clique global/drag
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    isFS() ? exitFS() : requestFS(target); // síncrono
+    isFS() ? exitFS() : requestFS(target);
   });
 
-  // tecla F alterna fullscreen
   window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'f' && !e.repeat) {
       e.preventDefault();
@@ -192,7 +183,6 @@ document.addEventListener("keydown", (e) => {
     }
   });
 
-  // sincroniza estado do botão
   ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
     .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
 
@@ -207,10 +197,8 @@ document.addEventListener("keydown", (e) => {
   const modal    = document.getElementById('intro-modal');
   const btnOk    = document.getElementById('intro-ok');
   const btnX     = document.querySelector('.intro-close');
-
   if (!backdrop || !modal || !btnOk || !btnX) return;
 
-  // mostra ao entrar (se quiser lembrar que já foi visto, usar localStorage aqui)
   function openIntro(){
     backdrop.hidden = false;
     modal.hidden = false;
@@ -219,19 +207,15 @@ document.addEventListener("keydown", (e) => {
   function closeIntro(){
     backdrop.hidden = true;
     modal.hidden = true;
-
-    // (atraso pequeno só para a transição do modal terminar bonitinha)
     setTimeout(() => window.sideTip?.show(), 150);
   }
 
-  // abrir na primeira carga
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     openIntro();
   } else {
     window.addEventListener('DOMContentLoaded', openIntro, { once:true });
   }
 
-  // interações
   btnOk.addEventListener('click', closeIntro);
   btnX.addEventListener('click', closeIntro);
   backdrop.addEventListener('click', closeIntro);
@@ -252,15 +236,53 @@ document.addEventListener("keydown", (e) => {
     tip.hidden = false;
     requestAnimationFrame(()=> tip.classList.add('is-open'));
   }
-
   function hide(){
     tip.classList.remove('is-open');
     setTimeout(()=> tip.hidden = true, 240);
   }
-
   okBtn.addEventListener('click', hide);
-
-  // Exponho um controle global simples para o bloco do modal inicial chamar
   window.sideTip = { show, hide };
 })();
 
+/* =========================
+   NOVO: Som sincronizado + Voltar
+   ========================= */
+(function(){
+  const STORAGE_KEYS = { muted: 'bee_audio_muted', volume: 'bee_audio_volume' };
+  const muteBtn = document.getElementById('toggleMuteBtn');
+  const backBtn = document.getElementById('backBtn');
+
+  function setMuteIcon(isMuted){
+    if (!muteBtn) return;
+    muteBtn.title = isMuted ? 'Ativar som' : 'Silenciar';
+    muteBtn.setAttribute('aria-label', muteBtn.title);
+    const waves = muteBtn.querySelector('.waves');
+    if (waves) waves.style.opacity = isMuted ? '0.45' : '1';
+    muteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
+  }
+
+  // Restaurar estado salvo
+  (function restoreAudioState(){
+    const savedMuted  = localStorage.getItem(STORAGE_KEYS.muted);
+    setMuteIcon(savedMuted === 'true'); // atualiza visual (aqui não há <video>, só refletimos o estado global)
+  })();
+
+  // Alternar e persistir
+  muteBtn?.addEventListener('click', () => {
+    const currentMuted = localStorage.getItem(STORAGE_KEYS.muted) === 'true';
+    const nextMuted = !currentMuted;
+    localStorage.setItem(STORAGE_KEYS.muted, String(nextMuted));
+    // mantenha último volume se já existir; se não, salva 1 como padrão
+    if (localStorage.getItem(STORAGE_KEYS.volume) === null) {
+      localStorage.setItem(STORAGE_KEYS.volume, '1');
+    }
+    setMuteIcon(nextMuted);
+  });
+
+  // Voltar (histórico com fallback)
+  backBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (history.length > 1) history.back();
+    else window.location.href = './index.html';
+  });
+})();

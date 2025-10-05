@@ -153,3 +153,25 @@ window.addEventListener('keydown', (e) => {
     .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
   updateUI(!!isFS());
 })();
+
+/* ===== Navegação: Voltar e Pular ===== */
+const backBtn = document.getElementById('backBtn');
+const skipBtn = document.getElementById('skipBtn');
+
+if (backBtn){
+  backBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Volta para a primeira tela (landing dentro de /views)
+    window.location.href = '../index.html';
+    // Se preferir histórico: history.length > 1 ? history.back() : (window.location.href = './index.html');
+  });
+}
+
+if (skipBtn){
+  skipBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    // Vai para a tela de explore
+    window.location.href = '../explore.html'; // use '../explore.html' se seu explore estiver fora de /views
+  });
+}
+

@@ -105,3 +105,29 @@ html, body{ height:100%; margin:0; overflow:hidden; }
 @media (max-width: 560px){
   .controls{ grid-template-columns:auto auto min(86vw, 960px) auto; }
 }
+
+/* ===== Botões de navegação (Voltar / Pular) ===== */
+.nav-btn{
+  position: fixed;
+  z-index: 2147483647;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  font-size: 22px; line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.nav-btn:hover{ background: rgba(255,255,255,0.22); }
+
+/* Posicionamento */
+.nav-btn.back { top: 16px; left: 72px; }    /* à direita do botão de som */
+.nav-btn.skip { top: 72px; right: 16px; }   /* abaixo do botão de tela cheia */
+
+@media (max-width: 560px){
+  .nav-btn.back { left: 68px; }
+  .nav-btn.skip { right: 12px; top: 68px; }
+}
