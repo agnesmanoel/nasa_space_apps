@@ -9,7 +9,7 @@ const MONTH_DATA = {
     { name:"July", season:"Dry", temp_forecast:24.22, temp_trend:"same", precip_forecast:111.15, precip_trend:"up", ndvi: 0.795983333333325 },
     { name:"August", season:"Dry", temp_forecast:26.23, temp_trend:"up", precip_forecast:188.46, precip_trend:"up", ndvi: 0.762123333333335 },
     { name:"September", season:"Transition", temp_forecast:26.00, temp_trend:"up", precip_forecast:114.35, precip_trend:"up", ndvi: 0.8229966666666684 },
-    { name:"October", season:"Rainy", temp_forecast:27.00, temp_trend:"up", precip_forecast:99.39, precip_trend:"down" }, // NDVI Ausente
+    { name:"October", season:"Rainy", temp_forecast:27.00, temp_trend:"up", precip_forecast:99.39, precip_trend:"down", ndvi: 0.684 }, 
     { name:"November", season:"Rainy", temp_forecast:28.00, temp_trend:"up", precip_forecast:110.47, precip_trend:"up", ndvi: 0.5516499999999986 },
     { name:"December", season:"Rainy", temp_forecast:29.00, temp_trend:"up", precip_forecast:63.16, precip_trend:"down", ndvi: 0.5167799999999971 }
   ],
@@ -23,7 +23,7 @@ const MONTH_DATA = {
     { name:"July", season:"Dry", temp_forecast:24.5, temp_trend:"same", precip_forecast:0, precip_trend:"down", ndvi: 0.8317476190476043 },
     { name:"August", season:"Dry", temp_forecast:26.0, temp_trend:"up", precip_forecast:15, precip_trend:"up", ndvi: 0.7978133333333375 },
     { name:"September", season:"Transition", temp_forecast:26.1, temp_trend:"up", precip_forecast:20, precip_trend:"up", ndvi: 0.8745766666666697 },
-    { name:"October", season:"Rainy", temp_forecast:27.0, temp_trend:"up", precip_forecast:65, precip_trend:"up" }, // NDVI Ausente
+    { name:"October", season:"Rainy", temp_forecast:27.0, temp_trend:"up", precip_forecast:65, precip_trend:"up", ndvi: 0.705 }, 
     { name:"November", season:"Rainy", temp_forecast:28.0, temp_trend:"up", precip_forecast:110, precip_trend:"up", ndvi: 0.542544999999997 },
     { name:"December", season:"Rainy", temp_forecast:28.5, temp_trend:"up", precip_forecast:190, precip_trend:"up", ndvi: 0.462600000000009 }
   ]
