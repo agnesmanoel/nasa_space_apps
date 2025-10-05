@@ -1,9 +1,9 @@
 const imagensFlores = {
-  "Sucupira-branca": "imagens/Sucupira-branca.png",
-  "Candeia": "imagens/Candeia.png",
-  "Ipê-amarelo": "imagens/Ipê-amarelo.png",
-  "Barbatimão": "imagens/barbatimao.png",
-  "Puçá": "imagens/puca.png",
-  "Tingui": "imagens/Tingui.png",
-  "Velame": "imagens/velame.png"
+  "Sucupira-branca": "imagens_zoom/Sucupira-brancazoom.png",
+  "Candeia": "imagens_zoom/Candeiazoom.png",
+  "Ipê-amarelo": "imagens_zoom/Ipê-amarelozoom.png",
+  "Barbatimão": "imagens_zoom/barbatimaozoom.png",
+  "Puçá": "imagens_zoom/pucazoom.png",
+  "Tingui": "imagens_zoom/Tinguizoom.png",
+  "Velame": "imagens_zoom/velamezoom.png"
 };
