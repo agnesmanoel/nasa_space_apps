@@ -3,6 +3,11 @@ const toggleMuteBtn = document.getElementById('toggleMuteBtn');
 const autoplayNote = document.getElementById('autoplayNote');
 const startBtn = document.getElementById('startBtn');
 
+const STORAGE_KEYS = {
+  muted: 'bee_audio_muted',
+  volume: 'bee_audio_volume'
+};
+
 /* Autoplay + Som */
 async function ensureAutoplay() {
   try {
@@ -22,15 +27,52 @@ function setMuteIcon(isMuted){
 toggleMuteBtn.addEventListener('click', () => {
   video.muted = !video.muted;
   setMuteIcon(video.muted);
+  localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
+  localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
   if (!video.muted) video.play().catch(()=>{});
+
 });
 startBtn.addEventListener('click', () => {
-  video.muted = false;
-  setMuteIcon(false);
-  video.play().catch(()=>{});
+  localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
+  localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
+
   // window.location.href = './explore.html';
+  window.location.href = './intro/intro.html';
 });
-window.addEventListener('load', () => { setMuteIcon(true); ensureAutoplay(); });
+window.addEventListener('load', () => { 
+  const savedMuted  = localStorage.getItem(STORAGE_KEYS.muted);
+  const savedVolume = localStorage.getItem(STORAGE_KEYS.volume);
+
+  if (savedMuted !== null) {
+    video.muted = savedMuted === 'true';
+    setMuteIcon(video.muted);
+  } else {
+    setMuteIcon(true); // padrão: mutado
+  }
+
+  if (savedVolume !== null) {
+    const v = Math.min(1, Math.max(0, parseFloat(savedVolume)));
+    if (!Number.isNaN(v)) video.volume = v;
+  }
+
+  ensureAutoplay(); 
+
+   // Bee Animator — você pode mudar fps/scale por página
+  const beeEl = document.getElementById('beeSprite');
+  if (beeEl && window.BeeAnimator) {
+    // exemplo: 12 fps, escala 1.0, 10 frames "abelha0..9.png"
+    window.beeAnim = new BeeAnimator(beeEl, {
+      basePath: "../assets/abelha",
+      prefix: "abelha",   // arquivos: abelha0..abelha9
+      ext: "png",         // "png" | "webp" | "jpg"
+      frames: 10,
+      fps: 10,
+      scale: 1.5,           // escala dessa página
+      autoplay: true,
+      loop: true
+    }); 
+  }
+});
 video.addEventListener('error', () => { if (autoplayNote) autoplayNote.hidden = false; });
 
 /* Botão de Tela Cheia (mesma lógica do explore) */

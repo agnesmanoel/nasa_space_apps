@@ -10,7 +10,11 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
   --shadow: 0 25px 60px -18px rgba(0,0,0,.55);
 
   /* <<< padding fixo da borda do SQUAD >>> */
-  --squad-pad: clamp(12px, 12vw, 108px);
+  --squad-pad: clamp(12px, 12vw, 88px);
+
+  --bee-scale: 1;
+  --bee-x: 0%;     /* deslocamento horizontal da abelha */
+  --bee-y: 0px;    /* deslocamento vertical da abelha */
 }
 
 /* Utilitário (equiv. Bootstrap) para esconder texto visualmente */
@@ -59,17 +63,22 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
 
 /* Colunas internas */
 .col{ position: relative; min-width: 0; }
-.bee-wrap{ display: grid; place-items: center; }
+/* garante centralização no grid/coluna da abelha */
+.bee-wrap{ 
+  display: grid; 
+  place-items: center;  /* centro perfeito da coluna */
+}
 .bee{
   width: min(540px, 50vw);
   height: auto;
   filter:
     drop-shadow(0 14px 28px rgba(0,0,0,.45))
     drop-shadow(0 2px 6px rgba(0,0,0,.25));
-  transform: translateX(6%);
+  transform: translate(var(--bee-x), var(--bee-y)) scale(var(--bee-scale, 1));
+  transform-origin: center center;
 }
 
-.hero-copy{ align-self: center; }
+.hero-copy{ align-self: center; } 
 .title{
   margin: 0 0 .35rem 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
@@ -95,7 +104,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
   background: rgba(255,255,255,0.14);
   color: #fff; font-weight: 800; font-size: clamp(18px, 2.6vw, 28px);
   letter-spacing: .4px;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.45);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   cursor: pointer;
   transition: transform .15s ease, filter .15s ease;
 }
@@ -130,7 +139,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
   background: rgba(255,255,255,0.18);
   color: #fff; font-size: 20px; line-height: 1;
   cursor: pointer; pointer-events: auto;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter: saturate(120%) blur(6px);
 }
 .fs-toggle:hover{ background: rgba(255,255,255,0.22); }

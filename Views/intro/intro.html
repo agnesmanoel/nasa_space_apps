@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Bee Adventure — Intro</title>
+
+  <link rel="stylesheet" href="./intro.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+</head>
+<body>
+  <!-- VÍDEO = FUNDO DA TELA -->
+  <div class="bg-video-wrap" aria-hidden="true">
+    <video id="introVideo" class="bg-video" autoplay muted playsinline preload="auto">
+      <source src="../../assets/cerrado.webm" type="video/webm" />
+      <source src="../../assets/cerrado.mp4"  type="video/mp4" />
+      Seu navegador não suporta vídeo em HTML5.
+    </video>
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- Aviso topo-centro -->
+  <div class="ai-badge" aria-label="Aviso: vídeo criado por IA">
+    Video created by AI
+  </div>
+
+
+  <!-- Botão Som -->
+  <button id="toggleMuteBtn" class="icon-btn" aria-label="Ativar som" title="Ativar som">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 10v4h4l5 4V6L7 10H3z"></path>
+      <path class="waves" d="M14.5 8.5a4 4 0 0 1 0 7m2.5-9a7 7 0 0 1 0 11"></path>
+    </svg>
+    <span class="visually-hidden">Som</span>
+  </button>
+
+  <!-- Botão Tela Cheia -->
+  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia" title="Tela cheia (F)">
+    <i class="bi bi-fullscreen" aria-hidden="true"></i>
+    <span class="visually-hidden">Tela cheia</span>
+  </button>
+
+    <!-- Botão Voltar -->
+  <button id="backBtn" class="nav-btn back" type="button" aria-label="Voltar para a tela inicial" title="Voltar">
+    <i class="bi bi-arrow-left-short" aria-hidden="true"></i>
+    <span class="visually-hidden">Voltar</span>
+  </button>
+
+  <!-- Botão Pular -->
+  <button id="skipBtn" class="nav-btn skip" type="button" aria-label="Pular vídeo" title="Pular vídeo">
+    <i class="bi bi-skip-forward-fill" aria-hidden="true"></i>
+    <span class="visually-hidden">Pular</span>
+  </button>
+
+
+  <!-- CONTROLES DO PLAYER (sobre o vídeo) -->
+  <div class="controls">
+    <button id="playPause" class="ctrl-btn" aria-label="Reproduzir/Pausar">
+      <i class="bi bi-play-fill" aria-hidden="true"></i>
+    </button>
+
+    <span id="currentTime" class="time">0:00</span>
+
+    <input id="seek" class="seek" type="range" min="0" max="100" value="0" aria-label="Linha do tempo">
+
+    <span id="duration" class="time">0:00</span>
+  </div>
+
+  <script src="./intro.js"></script>
+</body>
+</html>
