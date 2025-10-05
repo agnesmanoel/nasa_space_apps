@@ -22,6 +22,9 @@ body::-webkit-scrollbar { display: none; }
   --text: #e6e6e6;
   --muted: #b9c0cc;
   --shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  --card-pad-x: clamp(12px, 1.2vw, 17px);
+  --card-pad-top: clamp(12px, 1.2vw, 17px);
+  --card-pad-bottom: clamp(6px, 0.8vw, 12px);
 }
 
 /* ===== Fundo largo (3.000px) ===== */
@@ -92,8 +95,9 @@ body::-webkit-scrollbar { display: none; }
   max-width: 100%;
 
   /* Espaços que escalam um pouco com a viewport */
-  padding: clamp(12px, 1.2vw, 17px) clamp(12px, 1.2vw, 17px)
-           clamp(6px, 0.8vw, 12px) clamp(12px, 1.2vw, 17px);
+  /*padding: clamp(12px, 1.2vw, 17px) clamp(12px, 1.2vw, 17px)
+           clamp(6px, 0.8vw, 12px) clamp(12px, 1.2vw, 17px);*/
+  padding: var(--card-pad-top) var(--card-pad-x) var(--card-pad-bottom) var(--card-pad-x);
   flex-direction: column;
   align-items: flex-start;
   gap: clamp(8px, 1vw, 12px);
@@ -270,4 +274,76 @@ body::-webkit-scrollbar { display: none; }
   transform: translateX(-50%);
   z-index: 2;        /* garante que fique sobre o input range */
   pointer-events: none;
+}
+
+/* Right card (mesmo vidro do subcard esquerdo) */
+.hud-col.right { align-content: start; }
+
+.hud-rightcard{
+  display: block;
+  width: clamp(260px, 28vw, 20px);
+  /*padding: 18px;*/
+  padding: var(--card-pad-top) var(--card-pad-x) var(--card-pad-bottom) var(--card-pad-x);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.30);
+  background: rgba(255,255,255,0.20);
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+
+.rightcard-row{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Ícone vidrado (mesmo estilo dos ícones do header esquerdo) */
+.right-icon{
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: saturate(120%) blur(4px);
+  font-size: 20px; line-height: 1;
+}
+
+/* Texto */
+.right-text p{
+  margin: 0;
+  color: var(--text);
+  line-height: 1.35;
+}
+.right-text p strong{ display:block; margin-bottom: 6px; }
+
+/* ↑ Aumenta a largura total do HUD e dá mais fôlego ao centro */
+.hud-bar{
+  width: clamp(320px, 95vw, 1500px); /* antes: 75vw, 1095px */
+  min-height: 200px;                 /* opcional: fica um pouco mais alto */
+  grid-template-columns: 1fr 1.7fr 1.1fr; /* esquerda | centro | direita */
+  gap: 28px;                         /* um espacinho extra entre colunas */
+}
+
+/* Esquerda: subcard pode crescer um pouco em telas grandes */
+.hud-subcard{
+  width: clamp(220px, 24vw, 320px); /* antes: até 250px */
+}
+
+/* Direita: card de texto acompanha a largura maior */
+.hud-rightcard{
+  width: 100%;
+  width: clamp(280px, 30vw, 380px); /* antes: até 420px */
+
+}
+
+/* Central: range ocupa 100% de um miolo agora mais largo */
+.hud-controls{ grid-template-columns: 64px 1fr 64px; }  /* botões um tico maiores */
+.nav-btn{ width: 64px; height: 64px; border-radius: 20px; font-size: 30px; }
+
+.hud-col.right { align-content: start; justify-items: end; }
+
+.hud-rightcard{
+  width: 100%;
+  max-width: 350px;   /* ajuste ao seu gosto */
+  margin-left: auto;  /* encosta à direita da coluna */
 }
