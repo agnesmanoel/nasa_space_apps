@@ -25,7 +25,8 @@ function clampScroll(x) {
 /* =========================
    Drag horizontal (ignora áreas interativas)
    ========================= */
-const SAFE_SELECTOR = ".hud-bar, #fs-toggle, #toggleMuteBtn, #backBtn, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop, #side-tip";
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, #toggleMuteBtn, #backBtn, #beeFab, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop, #side-tip";
+
 
 window.addEventListener("pointerdown", (e) => {
   if (e.target.closest(SAFE_SELECTOR)) return;
@@ -286,3 +287,149 @@ document.addEventListener("keydown", (e) => {
     else window.location.href = './index.html';
   });
 })();
+
+/* =========================
+   Abelha-mini: frames + voo (imagem sai do vidro)
+   Requer bee-anim.js.
+   ========================= */
+(function(){
+  const fab = document.getElementById('beeFab');
+  const img = document.getElementById('beeMini');
+  if (!fab || !img) return;
+
+  // animação de frames (reaproveita do projeto)
+  if (window.BeeAnimator) {
+    new BeeAnimator(img, {
+      basePath: "../assets/abelha",
+      prefix: "abelha",
+      ext: "png",
+      frames: 10,
+      fps: 12,
+      scale: 1,
+      autoplay: true,
+      loop: true
+    });
+  }
+
+  // estado interno
+  let inFlight = false;
+  const FLY_SPEED_PX_MS = 0.5; // ~px por ms (ajuste fino da velocidade)
+
+  // posição “base” (centro do fab)
+function getHomeCenter(){
+  const r = fab.getBoundingClientRect();
+  return { x: r.left + r.width/2, y: r.top + r.height/2 };
+}
+
+// tira a IMG do vidro e coloca no body, mantendo tamanho/posição
+function undockImageAt({x, y}){
+  // mede tamanho atual (dentro do fab)
+  const rect = img.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+
+  // move pro body
+  if (img.parentElement !== document.body) {
+    document.body.appendChild(img);
+  }
+
+  // fixa dimensões e camadas para o voo
+  img.style.width = `${w}px`;           // <- trava tamanho
+  img.style.height = `${h}px`;
+  img.style.position = 'fixed';
+  img.style.left = `${x - w/2}px`;
+  img.style.top  = `${y - h/2}px`;
+  img.style.transform = 'translate3d(0,0,0)';
+  img.style.transition = 'transform 0ms linear';
+  img.style.willChange = 'transform';
+  img.style.zIndex = '6';               // <- acima do modal/backdrop
+}
+
+// volta a IMG para dentro do FAB e limpa estilos inline
+function dockImage(){
+  img.style.transition = '';
+  img.style.transform = '';
+  img.style.position = '';
+  img.style.left = '';
+  img.style.top = '';
+  img.style.width = '';
+  img.style.height = '';
+  img.style.willChange = '';
+  img.style.zIndex = '';
+  fab.appendChild(img);
+}
+
+// calcula duração pelo deslocamento
+function durationFromDistance(dx, dy){
+  const dist = Math.hypot(dx, dy);
+  // 0.7 px/ms ≈ ~1400ms para ~1000px (mais visível)
+  const pxPerMs = 0.7;
+  const ms = dist / pxPerMs;
+  return Math.max(400, Math.min(1600, ms));
+}
+
+function flyToEl(el, { offsetYFactor = 0.25 } = {}){
+  return new Promise((resolve) => {
+    if (inFlight) return resolve();
+    inFlight = true;
+    fab.classList.add('is-moving');
+
+    const home = getHomeCenter();
+    undockImageAt(home);
+
+    const r = el.getBoundingClientRect();
+    const target = { x: r.left + r.width/2, y: r.top + r.height*offsetYFactor };
+
+    const dx = Math.round(target.x - home.x);
+    const dy = Math.round(target.y - home.y);
+    const dur = durationFromDistance(dx, dy);
+
+    requestAnimationFrame(() => {
+      img.style.transition = `transform ${dur}ms cubic-bezier(.22,.61,.36,1)`;
+      img.style.transform  = `translate3d(${dx}px, ${dy}px, 0)`;
+    });
+
+    const onEnd = () => { img.removeEventListener('transitionend', onEnd); resolve(); };
+    img.addEventListener('transitionend', onEnd);
+  });
+}
+
+
+  // volta para a base
+  function flyHome(){
+    return new Promise((resolve) => {
+      const home = getHomeCenter();
+
+      // posição atual da imagem (como está em fixed, left/top já estão setados no undock)
+      // queremos apenas “voltar” o translate para 0
+      const handleEnd = () => {
+        img.removeEventListener('transitionend', handleEnd);
+        dockImage();                   // prende de volta no vidro
+        fab.classList.remove('is-moving');
+        inFlight = false;
+        resolve();
+      };
+
+      // anima de volta
+      requestAnimationFrame(() => {
+        img.style.transition = `transform 520ms cubic-bezier(.22,.61,.36,1)`;
+        img.style.transform  = `translate3d(0,0,0)`;
+      });
+
+      img.addEventListener('transitionend', handleEnd);
+    });
+  }
+
+  function setBeeZIndex(z){
+    img.style.zIndex = (z == null ? '' : String(z));
+  }
+
+  
+  // Exponho para o flowers.js controlar a camada
+  window.setBeeZIndex = setBeeZIndex;
+
+  // Exponho pro flowers.js
+  window.flyBeeTo   = flyToEl;
+  window.flyBeeHome = flyHome;
+})();
+

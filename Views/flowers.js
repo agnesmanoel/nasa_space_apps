@@ -56,6 +56,7 @@
     if (lastFocusEl && typeof lastFocusEl.focus === 'function') {
       lastFocusEl.focus();
     }
+    window.flyBeeHome?.();
   }
 
   // clique no X
@@ -106,15 +107,22 @@
     el.addEventListener('mouseenter', () => el.classList.remove('is-swaying'));
     el.addEventListener('mouseleave', () => el.classList.add('is-swaying'));
 
-    el.addEventListener('click', (e) => {
-      e.stopPropagation(); // não deixa cair no handler global (scroll/click)
-      // animação de pop
-      el.classList.remove('is-pop');
-      void el.offsetWidth;
-      el.classList.add('is-pop');
-      // abre modal
+    el.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      el.classList.remove('is-pop'); void el.offsetWidth; el.classList.add('is-pop');
+
+      // se existir a função de voo, aguarde o voo até a flor
+      if (typeof window.flyBeeTo === 'function') {
+        try { await window.flyBeeTo(el); } catch {}
+      }
+
+      // ↓ coloca a abelha ATRÁS do modal (e também atrás do backdrop)
+      // backdrop = z-index: 4, modal = 5 → usar 3 garante ficar atrás de ambos
+      window.setBeeZIndex?.(3);
+
       openSunflowerModal();
     });
+
 
     el.appendChild(img);
     layer.appendChild(el);

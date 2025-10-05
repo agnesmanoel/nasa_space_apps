@@ -44,6 +44,8 @@ body::-webkit-scrollbar { display: none; }
   --side-card-max: 520px;
 
   --side-tip-rise: 114px;   /* quanto subir (ajuste à vontade) */
+
+  --bee-mini-size: 40px;
 }
 
 /* =========================
@@ -522,3 +524,39 @@ body::-webkit-scrollbar { display: none; }
   position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;
 }
+
+/* ===== Abelha-mini (abaixo do botão de som) ===== */
+.bee-fab{
+  position: fixed;
+  top: 72px;
+  left: 16px;
+  z-index: 5;
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.18);
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+/* Tamanho da abelha: vale dentro do vidro e quando ela sai para voar */
+.bee-mini{
+  width: var(--bee-mini-size);
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  max-width: none;          /* evita influência do Bootstrap */
+}
+/* tamanho da abelha independente do pai */
+.bee-mini{
+  width: var(--bee-mini-size);
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* enquanto o FAB está “em voo”, só um leve brilho no vidro */
+.bee-fab.is-moving{ filter: brightness(1.05); }
+
