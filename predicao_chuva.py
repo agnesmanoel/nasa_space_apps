@@ -7,7 +7,7 @@ import os
 print(os.getcwd())
 
 
-with open("precipitacao.json", "r") as f:
+with open("dados/precipitacao.json", "r") as f:
     data = json.load(f)
 
 chuva_dict = data["properties"]["parameter"]["PRECTOTCORR"]

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 
 
-with open("temperatura.json", "r") as f:
+with open("dados/temperatura.json", "r") as f:
     data = json.load(f)
 
 temp_dict = data["properties"]["parameter"]["T2M"]
