@@ -1,0 +1,162 @@
+/* ===== Reset mínimo ===== */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+:root{
+  --text: #eaeaea;
+  --muted: #c9ced6;
+  --btn-bg: rgba(255,255,255,0.14);
+  --btn-bg-hover: rgba(255,255,255,0.22);
+  --btn-text: #f3f4f6;
+  --shadow: 0 18px 40px -12px rgba(0,0,0,.45);
+}
+
+/* ===== Vídeo de fundo ===== */
+.bg-video-wrap{
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: -2; /* atrás de tudo */
+  background: #0b0c10;
+}
+
+.bg-video{
+  position: absolute;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+
+  /* centraliza e cobre a tela inteira */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.05);
+}
+
+/* Gradiente sutil por cima do vídeo para melhorar a leitura */
+.bg-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,0.45) 40%,
+    rgba(0,0,0,0.6) 100%
+  );
+  z-index: 1;
+}
+
+/* ===== Camada de conteúdo ===== */
+.hero{
+  position: relative;
+  z-index: 2; /* acima do overlay */
+  height: 100dvh;
+  padding: 6vh clamp(16px, 4vw, 48px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--text);
+}
+
+.brand{
+  display: grid;
+  gap: .75rem;
+  justify-items: center;
+}
+
+.logo{
+  width: clamp(64px, 12vw, 120px);
+  height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.4));
+}
+
+.title{
+  margin: 0;
+  font-size: clamp(28px, 6vw, 56px);
+  line-height: 1.05;
+  text-shadow: 0 2px 28px rgba(0,0,0,.45);
+}
+
+.subtitle{
+  margin: .25rem 0 0 0;
+  font-size: clamp(14px, 2.5vw, 18px);
+  color: var(--muted);
+}
+
+/* ===== Botões ===== */
+.actions{
+  margin-top: 2rem;
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn{
+  -webkit-tap-highlight-color: transparent;
+  border: 1px solid rgba(255,255,255,.25);
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  backdrop-filter: blur(6px);
+  padding: .75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+
+.btn:hover{
+  background: var(--btn-bg-hover);
+  border-color: rgba(255,255,255,.35);
+  transform: translateY(-1px);
+}
+
+.btn:active{
+  transform: translateY(0);
+}
+
+.btn.primary{
+  border-color: rgba(255,255,255,.45);
+  background: rgba(255,255,255,.20);
+  font-weight: 600;
+}
+
+/* ===== Nota de autoplay ===== */
+.note{
+  margin-top: .75rem;
+  font-size: .9rem;
+  color: var(--muted);
+  text-shadow: 0 1px 20px rgba(0,0,0,.4);
+}
+
+/* ===== Créditos ===== */
+.credits{
+  position: fixed;
+  right: clamp(12px, 3vw, 24px);
+  bottom: clamp(10px, 2.5vw, 18px);
+  z-index: 2;
+  color: #cbd5e1;
+  font-size: 12px;
+  opacity: .9;
+  text-shadow: 0 1px 14px rgba(0,0,0,.55);
+}
+
+.credits a{
+  color: #e5e7eb;
+  text-underline-offset: 2px;
+}
+
+/* ===== Acessibilidade (reduzir movimento) ===== */
+@media (prefers-reduced-motion: reduce){
+  .bg-video{ filter: none; }
+  .btn{ transition: none; }
+}

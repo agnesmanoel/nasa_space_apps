@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tela Inicial</title>
+  <link rel="preload" as="video" href="../assets/intro.mp4" type="video/mp4">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Container do vídeo de fundo -->
+  <div class="bg-video-wrap" aria-hidden="true">
+    <video
+      id="bgVideo"
+      class="bg-video"
+      autoplay
+      muted
+      playsinline
+      loop
+      poster="../assets/poster.jpg"
+    >
+      <!-- Dê preferência a webm + mp4 para melhor compatibilidade -->
+      <source src="../assets/intro.webm" type="video/webm" />
+      <source src="../assets/intro.mp4" type="video/mp4" />
+      <!-- Fallback simples para navegadores muito antigos -->
+      Seu navegador não suporta vídeo em HTML5.
+    </video>
+
+    <!-- Camada de gradiente sutil para legibilidade -->
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- Conteúdo por cima do vídeo -->
+  <main class="hero">
+    <header class="brand">
+      <img src="../assets/logo.svg" alt="Logo" class="logo" />
+      <h1 class="title">Bem-vindo(a)!</h1>
+      <p class="subtitle">Sua experiência começa aqui.</p>
+    </header>
+
+    <nav class="actions">
+      <button id="enterBtn" class="btn primary">Entrar</button>
+      <button id="toggleMuteBtn" class="btn">Ativar som</button>
+      <button id="pauseBtn" class="btn">Pausar vídeo</button>
+    </nav>
+
+    <!-- Aviso se o autoplay falhar -->
+    <p id="autoplayNote" class="note" hidden>
+      O vídeo foi pausado pelo navegador. Toque em “Pausar/Play” para iniciar.
+    </p>
+  </main>
+
+  <!-- Opcional: créditos do vídeo -->
+  <footer class="credits">
+    <small>
+      Vídeo: <a href="#" rel="noopener noreferrer">créditos</a>
+    </small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
