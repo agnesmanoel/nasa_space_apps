@@ -41,6 +41,7 @@ html, body{ height:100%; margin:0; overflow:hidden; }
   border-radius: 12px;
   backdrop-filter: saturate(120%) blur(6px);
   color:var(--text);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
 }
 .ctrl-btn{
   width:46px; height:46px; display:grid; place-items:center;
@@ -95,7 +96,8 @@ html, body{ height:100%; margin:0; overflow:hidden; }
   width:44px; height:44px; display:grid; place-items:center;
   border-radius:14px; border:1px solid rgba(255,255,255,0.35);
   background:rgba(255,255,255,0.18); color:#fff; font-size:20px;
-  cursor:pointer; box-shadow:var(--shadow);
+  cursor:pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter:saturate(120%) blur(6px);
 }
 .fs-toggle:hover{ background:rgba(255,255,255,0.22); }
@@ -118,7 +120,7 @@ html, body{ height:100%; margin:0; overflow:hidden; }
   color: #fff;
   font-size: 22px; line-height: 1;
   cursor: pointer;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter: saturate(120%) blur(6px);
 }
 .nav-btn:hover{ background: rgba(255,255,255,0.22); }
