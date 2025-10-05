@@ -25,7 +25,7 @@ function clampScroll(x) {
 /* =========================
    Drag horizontal (ignora áreas interativas)
    ========================= */
-const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button']";
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button'], .flower";
 
 window.addEventListener("pointerdown", (e) => {
   if (e.target.closest(SAFE_SELECTOR)) return; // não inicia drag em áreas interativas
