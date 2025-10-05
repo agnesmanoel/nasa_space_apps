@@ -104,7 +104,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
   background: rgba(255,255,255,0.14);
   color: #fff; font-weight: 800; font-size: clamp(18px, 2.6vw, 28px);
   letter-spacing: .4px;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.45);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   cursor: pointer;
   transition: transform .15s ease, filter .15s ease;
 }
@@ -139,7 +139,7 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
   background: rgba(255,255,255,0.18);
   color: #fff; font-size: 20px; line-height: 1;
   cursor: pointer; pointer-events: auto;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter: saturate(120%) blur(6px);
 }
 .fs-toggle:hover{ background: rgba(255,255,255,0.22); }
@@ -160,28 +160,4 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
 @media (prefers-reduced-motion: reduce){
   .bg-video{ filter: none; }
   .cta{ transition: none; }
-}
-
-/* ===== Aviso: Video created by AI ===== */
-.ai-badge{
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3; /* acima do overlay e do vídeo */
-  padding: 8px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.35);
-  background: rgba(255,255,255,.16);
-  color: #fff;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: .4px;
-  text-transform: uppercase;
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
-  backdrop-filter: saturate(120%) blur(6px);
-  pointer-events: none; /* não bloqueia cliques no Start/ícones */
-}
-@supports not (backdrop-filter: blur(6px)) {
-  .ai-badge{ background: rgba(20,22,26,.55); }
 }

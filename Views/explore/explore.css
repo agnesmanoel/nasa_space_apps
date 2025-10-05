@@ -45,6 +45,10 @@ body::-webkit-scrollbar { display: none; }
 
   --side-tip-rise: 114px;   /* quanto subir (ajuste à vontade) */
   --bee-mini-size: 40px;
+
+  --elev-card: 0 24px 48px -12px rgba(0,0,0,.32);
+  --elev-ctrl: 0 10px 24px -10px rgba(0,0,0,.28);
+  --shadow: box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
 }
 
 /* =========================
@@ -102,7 +106,7 @@ body::-webkit-scrollbar { display: none; }
   border: 1px solid var(--glass-brd);
   background: var(--glass-bg);
   color: var(--text);
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter: saturate(130%) blur(8px);
   align-items: center;                      /* alinha os 3 ao centro vertical */
   z-index: 3;                               /* acima dos efeitos */
@@ -164,6 +168,7 @@ body::-webkit-scrollbar { display: none; }
   background: rgba(255,255,255,0.20);
   align-self: center;     /* centro vertical na linha */
   height: auto;           /* não estica */
+  box-shadow: var(--shadow);
 }
 @supports not (width: fit-content){
   .hud-subcard{ width: auto; display: inline-grid; }
@@ -296,10 +301,10 @@ body::-webkit-scrollbar { display: none; }
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.30);
   background: rgba(255,255,255,0.20);
-  box-shadow: var(--shadow);
   backdrop-filter: saturate(120%) blur(6px);
   align-self: center;  /* centro vertical */
   height: auto;       /* não estica */
+  box-shadow: var(--shadow);
 }
 .rightcard-row{ display: block; }          /* texto ocupa toda a largura */
 .right-icon{ display: none; }              /* sem ícone */
@@ -321,7 +326,7 @@ body::-webkit-scrollbar { display: none; }
   background: rgba(255,255,255,0.18);
   color: #fff; font-size: 20px; line-height: 1;
   cursor: pointer; pointer-events: auto;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter: saturate(120%) blur(6px);
 }
 .fs-toggle:hover{ background: rgba(255,255,255,0.22); }
@@ -352,7 +357,8 @@ body::-webkit-scrollbar { display: none; }
   border: 1px solid rgba(255,255,255,0.35);
   background: rgba(255,255,255,0.18);
   color: #fff; font-size: 22px; line-height: 1;
-  cursor: pointer; box-shadow: var(--shadow);
+  cursor: pointer; 
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
   backdrop-filter: saturate(120%) blur(6px);
 }
 .nav-back:hover{ background: rgba(255,255,255,0.22); }
@@ -376,8 +382,8 @@ body::-webkit-scrollbar { display: none; }
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.35);
   background: rgba(255,255,255,.18);
-  box-shadow: var(--shadow);
   backdrop-filter: saturate(120%) blur(6px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
 }
 .bee-fab.is-moving{ filter: brightness(1.05); }
 .bee-mini{
@@ -416,9 +422,9 @@ body::-webkit-scrollbar { display: none; }
   border: 1px solid var(--glass-brd);
   background: var(--glass-bg);
   color: var(--text);
-  box-shadow: var(--shadow);
   backdrop-filter: saturate(130%) blur(12px);
   z-index: 5;
+  box-shadow: var(--elev-card);
 }
 
 .intro-close{
@@ -502,13 +508,13 @@ body::-webkit-scrollbar { display: none; }
   border: 1px solid var(--glass-brd);
   background: var(--glass-bg);
   color: var(--text);
-  box-shadow: var(--shadow);
   backdrop-filter: saturate(130%) blur(10px);
   z-index: 4;                    /* acima do HUD (3), abaixo de modais (5) */
   opacity: 0;
   pointer-events: none;
   transition: opacity .18s ease, transform .24s ease;
   transform: translateY(calc(-50% - var(--side-tip-rise))) translateX(12px); /* começa levemente fora */
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
 }
 .side-tip.is-open{
   opacity: 1;
