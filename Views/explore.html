@@ -19,22 +19,16 @@
   <!-- HUD inferior -->
   <section class="hud-bar" aria-label="Painel inferior">
     <div class="hud-col left">
-      <!-- subcard com header + pílula -->
       <div class="hud-subcard">
-
-        <!-- Header do subcard -->
         <div class="subcard-header">
           <div class="icon-sq"><span class="i">📅</span></div>
-
           <div class="subcard-title">
             <h3 class="month">Janeiro</h3>
             <div class="season">Estação Chuvosa</div>
           </div>
-
           <div class="icon-sq alt"><span class="i">💧</span></div>
         </div>
 
-        <!-- Pílula de informação -->
         <div class="info-pill">
           <div class="pill-icon">🌡️</div>
           <div class="pill-text">
@@ -42,28 +36,23 @@
             <div class="pill-sub">(22–28°C)</div>
           </div>
         </div>
-
       </div>
     </div>
 
     <div class="hud-col center">
-        <div class="hud-controls">
-            <button class="nav-btn left" aria-label="Mês anterior">‹</button>
+      <div class="hud-controls">
+        <button class="nav-btn left" aria-label="Mês anterior">‹</button>
+        <div class="hud-year">2025</div>
+        <input type="range" class="hud-range" min="0" max="11" value="0" />
+        <button class="nav-btn right" aria-label="Próximo mês">›</button>
+      </div>
 
-            <div class="hud-year">2025</div>
-
-            <input type="range" class="hud-range" min="0" max="11" value="0" />
-
-            <button class="nav-btn right" aria-label="Próximo mês">›</button>
-        </div>
-
-        <div class="hud-months">
-            <span class="active">Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
-            <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
-            <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-        </div>
+      <div class="hud-months">
+        <span class="active">Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+        <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+        <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+      </div>
     </div>
-
 
     <div class="hud-col right">
       <div class="hud-rightcard">
@@ -78,9 +67,17 @@
         </div>
       </div>
     </div>
-
   </section>
 
+  <!-- Botão de Tela Cheia (precisa estar DENTRO do body e ANTES do script) -->
+  <button id="fs-toggle"
+    class="fs-toggle"
+    type="button"
+    aria-label="Entrar em tela cheia"
+    aria-pressed="false"
+    title="Tela cheia (F)">⛶</button>
+
+  <!-- Seu JS deve vir depois do botão -->
   <script src="explore.js"></script>
 </body>
 </html>

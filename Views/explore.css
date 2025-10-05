@@ -281,3 +281,22 @@ body::-webkit-scrollbar { display: none; }
 .right-text{ max-width: 100%; }
 .right-text p{ margin: 0; color: var(--text); line-height: 1.35; max-width: 100%; word-wrap: break-word; }
 .right-text p strong{ display: block; margin-bottom: 6px; }
+
+/* ===== Botão Tela Cheia ===== */
+.fs-toggle{
+  position: fixed;
+  top: 16px; right: 16px;
+  z-index: 2147483647;   /* ↑ garante que fica acima de qualquer coisa */
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.18);
+  color: #fff; font-size: 20px; line-height: 1;
+  cursor: pointer; pointer-events: auto;   /* garante clique */
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.fs-toggle:hover{ background: rgba(255,255,255,0.22); }
+.fs-toggle:focus-visible{ outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+.fs-toggle.is-active{ background: rgba(255,255,255,0.24); }

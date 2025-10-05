@@ -22,46 +22,54 @@ function clampScroll(x) {
   return Math.min(Math.max(0, x), max);
 }
 
-// ===== Mouse/Touch via Pointer Events =====
+/* =========================
+   Drag horizontal (ignora áreas interativas)
+   ========================= */
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button']";
+
 window.addEventListener("pointerdown", (e) => {
+  if (e.target.closest(SAFE_SELECTOR)) return; // não inicia drag em áreas interativas
   dragging = true;
   startX = e.clientX;
-  startScrollX = window.scrollX; // base absoluta
+  startScrollX = window.scrollX;
   dragDistance = 0;
   body.style.cursor = "grabbing";
 });
 
 window.addEventListener("pointermove", (e) => {
   if (!dragging) return;
-  e.preventDefault(); // evita seleção
+  e.preventDefault();
   const delta = (startX - e.clientX) * SPEED;
-  const target = clampScroll(startScrollX + delta); // recalculado sempre
-  window.scrollTo({ left: target });                // sem acumular erro
+  const target = clampScroll(startScrollX + delta);
+  window.scrollTo({ left: target });
   dragDistance += Math.abs(delta);
 });
 
-window.addEventListener("pointerup", () => {
+function endDrag() {
+  if (!dragging) return;
   dragging = false;
   body.style.cursor = "default";
-});
+}
+window.addEventListener("pointerup", endDrag);
+window.addEventListener("pointercancel", endDrag);
 
-window.addEventListener("pointercancel", () => {
-  dragging = false;
-  body.style.cursor = "default";
-});
-
-// ===== Clique para pular (ignora se houve arrasto ou se clicou no HUD) =====
+/* =========================
+   Clique para pular (ignora drag, HUD e botão FS)
+   ========================= */
 document.addEventListener("click", (e) => {
-  if (dragDistance > 10 || dragging) return;           // tratou como arrasto
-  if (e.target.closest(".hud-bar")) return;            // não dispara sobre o HUD
+  if (dragDistance > 10 || dragging) return;
+  if (e.target.closest(".hud-bar")) return;
+  if (e.target.closest("#fs-toggle")) return;
 
-  const STEP = 100; // ajuste se quiser maior/menor (ex.: window.innerWidth * 0.2)
+  const STEP = 100;
   const dir = e.clientX > window.innerWidth / 2 ? 1 : -1;
   const next = clampScroll(window.scrollX + dir * STEP);
   window.scrollTo({ left: next, behavior: "smooth" });
 });
 
-// ===== Setas do teclado =====
+/* =========================
+   Setas do teclado
+   ========================= */
 document.addEventListener("keydown", (e) => {
   const STEP = 100;
   if (e.key === "ArrowRight")
@@ -70,7 +78,9 @@ document.addEventListener("keydown", (e) => {
     window.scrollTo({ left: clampScroll(window.scrollX - STEP), behavior: "smooth" });
 });
 
-// ====== Binding slider ⇄ meses ⇄ botões (não altera seu código de scroll) ======
+/* =========================
+   Slider ⇄ meses ⇄ botões
+   ========================= */
 (function () {
   const range   = document.querySelector('.hud-range');
   const months  = Array.from(document.querySelectorAll('.hud-months span'));
@@ -79,54 +89,110 @@ document.addEventListener("keydown", (e) => {
 
   if (!range || months.length !== 12) return;
 
-  // estado
   let idx = parseInt(range.value, 10) || 0;
-
-  function clamp(n, min, max) { return Math.min(Math.max(n, min), max); }
+  const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
 
   function setMonth(newIdx, from = 'code') {
     idx = clamp(newIdx, 0, 11);
-    // 1) atualiza slider
     if (from !== 'range') range.value = idx;
-    // 2) atualiza destaque dos meses
     months.forEach((el, i) => el.classList.toggle('active', i === idx));
   }
 
-  // clique em um mês → move slider
   months.forEach((el, i) => {
     el.style.cursor = 'pointer';
     el.addEventListener('click', (e) => {
-      e.stopPropagation(); // evita qualquer handler global
+      e.stopPropagation();
       setMonth(i);
     });
   });
 
-  // mover slider → atualiza mês ativo
   range.addEventListener('input', () => setMonth(parseInt(range.value, 10), 'range'));
 
-    // botões < > → mudam mês
-    function step(delta) { setMonth(idx + delta); }
-
-    // segurando o botão repete (responsivo)
-    // (um passo no pointerdown; NENHUM handler de 'click' para evitar passo duplo)
-    function holdRepeat(btn, delta) {
+  function step(delta) { setMonth(idx + delta); }
+  function holdRepeat(btn, delta) {
     if (!btn) return;
     let timer, fast;
     btn.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        step(delta); // passo imediato
-        fast = setTimeout(() => {
-        timer = setInterval(() => step(delta), 110);
-        }, 350);
+      e.preventDefault();
+      e.stopPropagation();
+      step(delta);
+      fast = setTimeout(() => { timer = setInterval(() => step(delta), 110); }, 350);
     });
     ['pointerup','pointerleave','pointercancel','blur'].forEach(ev =>
-        btn.addEventListener(ev, () => { clearTimeout(fast); clearInterval(timer); })
+      btn.addEventListener(ev, () => { clearTimeout(fast); clearInterval(timer); })
     );
-    }
+  }
   holdRepeat(prevBtn, -1);
   holdRepeat(nextBtn,  1);
 
-  // inicializa destaque
   setMonth(idx);
+})();
+/* =========================
+   Botão de Tela Cheia (versão única)
+   ========================= */
+(function () {
+  const btn = document.getElementById('fs-toggle');
+  if (!btn) return; // botão precisa existir no HTML (dentro do <body>, antes do <script>)
+
+  const target = document.documentElement; // mude para document.body se preferir
+
+  const isFS = () =>
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.mozFullScreenElement ||
+    document.msFullscreenElement;
+
+  function requestFS(el) {
+    const req =
+      el.requestFullscreen ||
+      el.webkitRequestFullscreen ||
+      el.mozRequestFullScreen ||
+      el.msRequestFullscreen;
+    if (!req) return;
+    try {
+      const p = req.call(el);
+      if (p && typeof p.catch === 'function') p.catch(()=>{});
+    } catch {}
+  }
+
+  function exitFS() {
+    const ex =
+      document.exitFullscreen ||
+      document.webkitExitFullscreen ||
+      document.mozCancelFullScreen ||
+      document.msExitFullscreen;
+    if (!ex) return;
+    try {
+      const p = ex.call(document);
+      if (p && typeof p.catch === 'function') p.catch(()=>{});
+    } catch {}
+  }
+
+  function updateUI(active){
+    btn.classList.toggle('is-active', active);
+    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    btn.setAttribute('aria-label', active ? 'Sair de tela cheia' : 'Entrar em tela cheia');
+    btn.title = active ? 'Sair de tela cheia (F)' : 'Tela cheia (F)';
+    btn.textContent = active ? '🗗' : '⛶';
+  }
+
+  // evita conflito com o clique global/drag
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    isFS() ? exitFS() : requestFS(target); // síncrono
+  });
+
+  // tecla F alterna fullscreen
+  window.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'f' && !e.repeat) {
+      e.preventDefault();
+      isFS() ? exitFS() : requestFS(target);
+    }
+  });
+
+  // sincroniza estado do botão
+  ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
+    .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
+
+  updateUI(!!isFS());
 })();
