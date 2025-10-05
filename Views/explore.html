@@ -92,5 +92,33 @@
   <!-- Scripts -->
   <script src="explore.js" defer></script>
   <script src="flowers.js" defer></script>
+  <!-- Modal das Flores (Glass) -->
+  <div id="flower-modal-backdrop" class="flower-modal-backdrop" hidden></div>
+
+  <div id="flower-modal"
+      class="flower-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="flower-modal-title"
+      aria-describedby="flower-modal-desc"
+      hidden>
+    <button type="button" class="flower-modal-close" aria-label="Fechar (Esc)">
+      ×
+    </button>
+
+    <div class="flower-modal-media">
+      <img id="flower-modal-img" src="../assets/girassol.png" alt="Girassol">
+    </div>
+
+    <div class="flower-modal-body">
+      <h3 id="flower-modal-title">Girassol</h3>
+      <p id="flower-modal-desc" class="flower-modal-text">
+        <strong>Helianthus annuus</strong> — Planta anual famosa pelo heliotropismo
+        (acompanhar o sol quando jovem) e inflorescências grandes que atraem polinizadores.
+        Prefere sol pleno e solos bem drenados.
+      </p>
+    </div>
+  </div>
+
 </body>
 </html>
