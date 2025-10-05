@@ -52,7 +52,7 @@ body::-webkit-scrollbar { display: none; }
   inset: 0 auto 0 0;
   width: 3000px;
   height: 100vh;
-  background-image: url('../assets/fundo-inicio.jpg');
+  background-image: url('../assets/fundojpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
