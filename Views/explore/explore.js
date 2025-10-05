@@ -82,25 +82,47 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* =========================
-   Slider ⇄ meses ⇄ botões
+   Slider ⇄ Meses ⇄ Anos (2026/2027) ⇄ Botões
    ========================= */
 (function () {
-  const range   = document.querySelector('.hud-range');
-  const months  = Array.from(document.querySelectorAll('.hud-months span'));
-  const prevBtn = document.querySelector('.nav-btn.left');
-  const nextBtn = document.querySelector('.nav-btn.right');
+  const range      = document.querySelector('.hud-range');
+  const months     = Array.from(document.querySelectorAll('.hud-months span'));
+  const yearPills  = Array.from(document.querySelectorAll('.hud-year span'));
+  const prevBtn    = document.querySelector('.nav-btn.left');
+  const nextBtn    = document.querySelector('.nav-btn.right');
 
-  if (!range || months.length !== 12) return;
+  if (!range || months.length !== 12 || yearPills.length !== 2) return;
 
-  let idx = parseInt(range.value, 10) || 0;
+  // anos fixos (só 2026 e 2027)
+  const years = yearPills.map(el => parseInt(el.dataset.year, 10)); // [2026, 2027]
+
+  // estado
+  let mIdx = parseInt(range.value, 10) || 0; // 0..11
+  let yIdx = Math.max(0, yearPills.findIndex(el => el.classList.contains('active')));
+  if (yIdx < 0) yIdx = 0; // default 2026
+
   const clamp = (n, min, max) => Math.min(Math.max(n, min), max);
 
-  function setMonth(newIdx, from = 'code') {
-    idx = clamp(newIdx, 0, 11);
-    if (from !== 'range') range.value = idx;
-    months.forEach((el, i) => el.classList.toggle('active', i === idx));
+  function setYear(newYIdx){
+    yIdx = clamp(newYIdx, 0, yearPills.length - 1);
+    yearPills.forEach((el, i) => el.classList.toggle('active', i === yIdx));
   }
 
+  function setMonth(newIdx, from = 'code') {
+    mIdx = clamp(newIdx, 0, 11);
+    if (from !== 'range') range.value = mIdx;
+    months.forEach((el, i) => el.classList.toggle('active', i === mIdx));
+  }
+
+  // clique direto nas pílulas de ano
+  yearPills.forEach((el, i) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setYear(i);
+    });
+  });
+
+  // clique nos meses
   months.forEach((el, i) => {
     el.style.cursor = 'pointer';
     el.addEventListener('click', (e) => {
@@ -109,9 +131,24 @@ document.addEventListener("keydown", (e) => {
     });
   });
 
+  // slider
   range.addEventListener('input', () => setMonth(parseInt(range.value, 10), 'range'));
 
-  function step(delta) { setMonth(idx + delta); }
+  // setas com rollover de ano entre Jan/Dez
+  function step(delta) {
+    let nextM = mIdx + delta;
+
+    if (nextM < 0) {
+      if (yIdx > 0) { setYear(yIdx - 1); nextM = 11; }
+      else nextM = 0; // trava em Jan do primeiro (2026)
+    } else if (nextM > 11) {
+      if (yIdx < yearPills.length - 1) { setYear(yIdx + 1); nextM = 0; }
+      else nextM = 11; // trava em Dez do último (2027)
+    }
+
+    setMonth(nextM);
+  }
+
   function holdRepeat(btn, delta) {
     if (!btn) return;
     let timer, fast;
@@ -128,8 +165,18 @@ document.addEventListener("keydown", (e) => {
   holdRepeat(prevBtn, -1);
   holdRepeat(nextBtn,  1);
 
-  setMonth(idx);
+  // teclado
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft')  step(-1);
+  });
+
+  // init
+  setYear(yIdx);  // marca 2026 ativo
+  setMonth(mIdx); // mantém mês do slider
 })();
+
+
 
 /* =========================
    Botão de Tela Cheia (ícones iguais às outras telas)

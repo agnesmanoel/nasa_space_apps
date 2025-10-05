@@ -4,7 +4,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
 html { color-scheme: dark; }
-html, body{
+html, body {
   margin: 0;
   padding: 0;
   overflow-x: auto;
@@ -44,12 +44,11 @@ body::-webkit-scrollbar { display: none; }
   --side-card-max: 520px;
 
   --side-tip-rise: 114px;   /* quanto subir (ajuste à vontade) */
-
   --bee-mini-size: 40px;
 }
 
 /* =========================
-   Background (faixa 3000px)
+   Camadas de Fundo / FX
    ========================= */
 .background-scroll-container{
   position: absolute;
@@ -63,9 +62,6 @@ body::-webkit-scrollbar { display: none; }
   z-index: 1; /* base da pilha */
 }
 
-/* =========================
-   Camada de Efeitos (flores)
-   ========================= */
 .fx-layer{
   position: absolute;
   inset: 0 auto 0 0;   /* alinha como o fundo */
@@ -102,11 +98,16 @@ body::-webkit-scrollbar { display: none; }
   .hud-bar{ background: rgba(20,22,26,0.55); }
 }
 @media (max-width: 980px){
-  .hud-bar{ grid-template-columns: 1fr; gap: 16px; padding: 16px; align-items: start; }
+  .hud-bar{
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+    align-items: start;
+  }
 }
 
 /* =========================
-   Colunas
+   Colunas do HUD
    ========================= */
 .hud-col{
   display: grid;
@@ -229,13 +230,6 @@ body::-webkit-scrollbar { display: none; }
 }
 .nav-btn:hover{ background: rgba(255,255,255,.22); }
 
-.hud-year{
-  position: absolute;
-  top: -30px; left: 50%;
-  transform: translateX(-50%);
-  font-weight: 800; letter-spacing: .3px;
-  z-index: 2; pointer-events: none;
-}
 
 .hud-range{
   width: 100%;
@@ -278,7 +272,7 @@ body::-webkit-scrollbar { display: none; }
 }
 
 /* =========================
-   Right Card (direita) — já sem ícone
+   Right Card (direita) — sem ícone
    ========================= */
 .hud-rightcard{
   width: fit-content;
@@ -300,7 +294,9 @@ body::-webkit-scrollbar { display: none; }
 .right-text p{ margin: 0; color: var(--text); line-height: 1.35; max-width: 100%; word-wrap: break-word; }
 .right-text p strong{ display: block; margin-bottom: 6px; }
 
-/* ===== Botão Tela Cheia ===== */
+/* =========================
+   Botões fixos (FS, Som, Voltar)
+   ========================= */
 .fs-toggle{
   position: fixed;
   top: 16px; right: 16px;
@@ -319,8 +315,69 @@ body::-webkit-scrollbar { display: none; }
 .fs-toggle:focus-visible{ outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
 .fs-toggle.is-active{ background: rgba(255,255,255,0.24); }
 
+.icon-btn{
+  position: fixed; top: 16px; left: 16px;
+  display: grid; place-items:center;
+  width: 44px; height: 44px; border-radius: 14px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer; z-index: 4;
+}
+.icon-btn:hover{ filter: brightness(1.04); }
+.icon-btn:active{ transform: translateY(1px); }
+.icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
+.icon .waves{ fill: none; }
+
+.nav-back{
+  position: fixed; top: 16px; left: 72px; /* ao lado do som */
+  z-index: 4;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.18);
+  color: #fff; font-size: 22px; line-height: 1;
+  cursor: pointer; box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.nav-back:hover{ background: rgba(255,255,255,0.22); }
+
+/* util – se precisar (Bootstrap já tem, mas garantimos) */
+.visually-hidden{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;
+}
+
 /* =========================
-   Alerta inicial (glass)
+   Abelha-mini (FAB)
+   ========================= */
+.bee-fab{
+  position: fixed;
+  top: 72px;
+  left: 16px;
+  z-index: 5;
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.18);
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.bee-fab.is-moving{ filter: brightness(1.05); }
+.bee-mini{
+  width: var(--bee-mini-size);
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  max-width: none;          /* evita influência do Bootstrap */
+}
+
+/* =========================
+   Alerta inicial (modal + backdrop)
    ========================= */
 .intro-backdrop{
   position: fixed;
@@ -386,19 +443,16 @@ body::-webkit-scrollbar { display: none; }
   justify-content: flex-end;
 }
 
-/* Botão OK — alinhado ao visual dos outros botões glass */
-/* OK — reset total + estilo glass consistente */
+/* Botão OK — alinhado aos demais botões glass */
 .intro-ok{
-  /* RESET forte */
   -webkit-appearance: none;
   appearance: none;
   outline: none !important;
-  box-shadow: none;                   /* zera sombras padrão */
-  background-clip: padding-box;       /* evita “aura” na borda */
+  box-shadow: none;
+  background-clip: padding-box;
 
-  /* Visual alinhado aos outros botões */
   padding: 10px 16px;
-  border-radius: 14px;                 /* menos redondo */
+  border-radius: 14px;
   border: 1px solid rgba(255,255,255,.28);
   background: rgba(255,255,255,.18);
   color: #fff;
@@ -409,38 +463,26 @@ body::-webkit-scrollbar { display: none; }
   backdrop-filter: saturate(120%) blur(4px);
   transition: background .15s ease, transform .06s ease;
 }
-
-/* hover/active iguais à nav-btn */
 .intro-ok:hover{ background: rgba(255,255,255,.22); }
 .intro-ok:active{ transform: translateY(1px); }
-
-/* foco acessível (sem aro branco grosso) */
 .intro-ok:focus,
 .intro-ok:focus-visible{
   outline: none !important;
-  box-shadow: 0 0 0 2px rgba(255,255,255,.25);  /* aro suave opcional */
+  box-shadow: 0 0 0 2px rgba(255,255,255,.25);
 }
 
-/* “nuclear”: remove qualquer ring herdado dentro do modal */
-.intro-modal button{
-  outline: none !important;
-  box-shadow: none;
-}
+/* remove qualquer ring herdado dentro do modal */
+.intro-modal button{ outline: none !important; box-shadow: none; }
 .intro-modal button:focus,
-.intro-modal button:focus-visible{
-  outline: none !important;
-}
-.intro-ok:focus,
-.intro-ok:focus-visible{ box-shadow: none; }
+.intro-modal button:focus-visible{ outline: none !important; }
 
 /* =========================
-   Cartão lateral (direita)
+   Side Tip (cartão lateral)
    ========================= */
 .side-tip{
   position: fixed;
   right: 16px;
   top: 50%;
-  transform: translateY(-50%) translateX(12px); /* fora um pouquinho */
   width: min(320px, 86vw);
   padding: 14px;
   border-radius: 22px;
@@ -453,11 +495,10 @@ body::-webkit-scrollbar { display: none; }
   opacity: 0;
   pointer-events: none;
   transition: opacity .18s ease, transform .24s ease;
-  transform: translateY(calc(-50% - var(--side-tip-rise))) translateX(12px);
+  transform: translateY(calc(-50% - var(--side-tip-rise))) translateX(12px); /* começa levemente fora */
 }
 .side-tip.is-open{
   opacity: 1;
-  transform: translateY(-50%) translateX(0);
   pointer-events: auto;
   transform: translateY(calc(-50% - var(--side-tip-rise))) translateX(0);
 }
@@ -468,8 +509,6 @@ body::-webkit-scrollbar { display: none; }
   font-size: clamp(14px, 2vw, 18px);
   line-height: 1.35;
 }
-
-/* Botão OK no mesmo estilo glass dos demais */
 .side-tip-actions{ display: flex; justify-content: flex-end; }
 .side-tip-ok{
   -webkit-appearance: none; appearance: none;
@@ -486,81 +525,9 @@ body::-webkit-scrollbar { display: none; }
 .side-tip-ok:hover{ background: rgba(255,255,255,.22); }
 .side-tip-ok:active{ transform: translateY(1px); }
 
-/* ... (todo o seu CSS atual acima permanece igual) ... */
-
-/* ===== Botão Som (igual outras telas) ===== */
-.icon-btn{
-  position: fixed; top: 16px; left: 16px;
-  display: grid; place-items:center;
-  width: 44px; height: 44px; border-radius: 14px;
-  background: rgba(255,255,255,0.25);
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
-  -webkit-tap-highlight-color: transparent;
-  cursor: pointer; z-index: 4;
-}
-.icon-btn:hover{ filter: brightness(1.04); }
-.icon-btn:active{ transform: translateY(1px); }
-.icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
-.icon .waves{ fill: none; }
-
-/* ===== Botão Voltar ===== */
-.nav-back{
-  position: fixed; top: 16px; left: 72px; /* ao lado do som */
-  z-index: 4;
-  width: 44px; height: 44px;
-  display: grid; place-items: center;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.18);
-  color: #fff; font-size: 22px; line-height: 1;
-  cursor: pointer; box-shadow: var(--shadow);
-  backdrop-filter: saturate(120%) blur(6px);
-}
-.nav-back:hover{ background: rgba(255,255,255,0.22); }
-
-/* util – se precisar (Bootstrap já tem, mas garantimos) */
-.visually-hidden{
-  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
-  overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;
-}
-
-/* ===== Abelha-mini (abaixo do botão de som) ===== */
-.bee-fab{
-  position: fixed;
-  top: 72px;
-  left: 16px;
-  z-index: 5;
-  width: 56px; height: 56px;
-  display: grid; place-items: center;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.35);
-  background: rgba(255,255,255,.18);
-  box-shadow: var(--shadow);
-  backdrop-filter: saturate(120%) blur(6px);
-}
-/* Tamanho da abelha: vale dentro do vidro e quando ela sai para voar */
-.bee-mini{
-  width: var(--bee-mini-size);
-  height: auto;
-  display: block;
-  pointer-events: none;
-  user-select: none;
-  max-width: none;          /* evita influência do Bootstrap */
-}
-/* tamanho da abelha independente do pai */
-.bee-mini{
-  width: var(--bee-mini-size);
-  height: auto;
-  display: block;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* enquanto o FAB está “em voo”, só um leve brilho no vidro */
-.bee-fab.is-moving{ filter: brightness(1.05); }
-
-/* ===== Aviso: Video created by AI ===== */
+/* =========================
+   Aviso: "Video created by AI"
+   ========================= */
 .ai-badge{
   position: fixed;
   top: 10px;
@@ -583,3 +550,36 @@ body::-webkit-scrollbar { display: none; }
 @supports not (backdrop-filter: blur(6px)) {
   .ai-badge{ background: rgba(20,22,26,.55); }
 }
+/* =========================
+   Seletor de Anos (3 colunas)
+   ========================= */
+/* HUD: badge do ano virou um seletor de 2 opções */
+.hud-year{
+  position: absolute;
+  top: -30px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 2; pointer-events: auto;     /* pode clicar */
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+/* pílulas 2026 / 2027 */
+.hud-year span{
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--muted);
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.hud-year span.active{
+  color: #fff;
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.35);
+}
+-years{ width: 100%; }
+
