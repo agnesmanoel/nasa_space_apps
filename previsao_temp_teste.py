@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 from neuralprophet import NeuralProphet # Note: NeuralProphet uses y/ds columns by default
-
+from neuralprophet import NeuralProphet
+import matplotlib.pyplot as plt
 
 
 with open("temperatura.json", "r") as f:
@@ -23,13 +24,12 @@ print("DataFrame Mensal (Agregado):")
 print(df_mes.head())
 
 
-
 m = NeuralProphet(
     growth='off', 
     yearly_seasonality=True,
     weekly_seasonality=False, # Since we are using monthly data
     daily_seasonality=False, # Since we are using monthly data
-    quantiles=[0.05, 0.95] 
+    quantiles=[0.025, 0.975] 
 )
 
 df_train, df_val = m.split_df(df_mes, freq='M', valid_p=0.2)
@@ -38,7 +38,8 @@ metrics = m.fit(df_train, freq='M', validation_df=df_val, epochs=1000,
                 progress=None) 
 
 
-future = m.make_future_dataframe(df_train, periods=24) 
+future = m.make_future_dataframe(df_train, periods=36, n_historic_predictions=len(df_mes)) 
+# future = m.make_future_dataframe(df_mes, periods=24, n_historic_predictions=len(df_mes)) 
 forecast = m.predict(future)
 
 # Gráfico dos componentes (sazonalidade, tendência, etc.)
@@ -51,4 +52,7 @@ fig_forecast.show()
 
 print("\nPrevisão dos Próximos 24 Meses:")
 cols = [c for c in ['ds', 'yhat1', 'yhat1_lower', 'yhat1_upper'] if c in forecast.columns]
-print(forecast[cols].tail(24))
+print(forecast[cols])
+
+forecast[cols].to_csv("previsao_temperatura_mensal.csv", index=False)
+print("\n✅ Exportação para CSV concluída.")
