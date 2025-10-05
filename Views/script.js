@@ -29,6 +29,7 @@ startBtn.addEventListener('click', () => {
   setMuteIcon(false);
   video.play().catch(()=>{});
   // window.location.href = './explore.html';
+  window.location.href = './intro.html';
 });
 window.addEventListener('load', () => { setMuteIcon(true); ensureAutoplay(); });
 video.addEventListener('error', () => { if (autoplayNote) autoplayNote.hidden = false; });

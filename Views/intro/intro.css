@@ -1,0 +1,107 @@
+/* Reset + sem rolagem */
+*,
+*::before,
+*::after{ box-sizing: border-box; }
+html, body{ height:100%; margin:0; overflow:hidden; }
+:root{
+  --text:#fff;
+  --muted:#e5e7ebcc;
+  --shadow:0 25px 60px -18px rgba(0,0,0,.55);
+}
+
+/* Utilitário tipo Bootstrap */
+.visually-hidden{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;
+}
+
+/* ===== VÍDEO DE FUNDO ===== */
+.bg-video-wrap{ position:fixed; inset:0; overflow:hidden; z-index:-2; background:#0b0c10; }
+.bg-video{
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  min-width:100%; min-height:100%;
+  object-fit:cover;
+  filter:saturate(1.05) contrast(1.05);
+}
+.bg-overlay{
+  position:absolute; inset:0; z-index:1;
+  /* vinheta sutil p/ leitura dos controles */
+  background: radial-gradient(1200px 600px at 50% 70%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,.45) 80%);
+}
+
+/* ===== CONTROLES (sobre o vídeo) ===== */
+.controls{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+  display:grid; grid-template-columns:auto auto min(72vw, 960px) auto;
+  gap:12px; align-items:center; z-index:3;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.14);
+  border-radius: 12px;
+  backdrop-filter: saturate(120%) blur(6px);
+  color:var(--text);
+}
+.ctrl-btn{
+  width:46px; height:46px; display:grid; place-items:center;
+  border-radius:12px; border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.2); color:#fff; font-size:22px; line-height:1;
+  cursor:pointer;
+}
+.ctrl-btn:hover{ background: rgba(255,255,255,.24); }
+.time{ font-variant-numeric: tabular-nums; font-weight:700; text-shadow:0 1px 10px rgba(0,0,0,.45); }
+.seek{
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:14px; border-radius:999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.25));
+  border:1px solid rgba(255,255,255,.45); outline:none;
+}
+.seek::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:28px; height:28px; border-radius:50%;
+  background:#fff; border:0; box-shadow:0 3px 12px rgba(0,0,0,.25);
+  cursor:pointer; margin-top:-3px;
+}
+.seek::-moz-range-thumb{
+  width:28px; height:28px; border-radius:50%;
+  background:#fff; border:0; box-shadow:0 3px 12px rgba(0,0,0,.25);
+  cursor:pointer; transform:translateY(3px);
+}
+.seek::-moz-range-track{
+  height:14px; border-radius:999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.25));
+  border:1px solid rgba(255,255,255,.45);
+}
+
+/* Botão de som (topo-esq) */
+.icon-btn{
+  position:fixed; top:16px; left:16px;
+  display:grid; place-items:center;
+  width:44px; height:44px; border-radius:14px;
+  background:rgba(255,255,255,0.25);
+  border:1px solid rgba(255,255,255,0.35);
+  box-shadow:0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  cursor:pointer; z-index:3;
+}
+.icon-btn:hover{ filter:brightness(1.04); }
+.icon-btn:active{ transform:translateY(1px); }
+.icon{ width:22px; height:22px; fill:#fff; stroke:#fff; stroke-width:1.6; }
+.icon .waves{ fill:none; }
+
+/* Tela cheia (topo-dir) */
+.fs-toggle{
+  position:fixed; top:16px; right:16px;
+  z-index:2147483647;
+  width:44px; height:44px; display:grid; place-items:center;
+  border-radius:14px; border:1px solid rgba(255,255,255,0.35);
+  background:rgba(255,255,255,0.18); color:#fff; font-size:20px;
+  cursor:pointer; box-shadow:var(--shadow);
+  backdrop-filter:saturate(120%) blur(6px);
+}
+.fs-toggle:hover{ background:rgba(255,255,255,0.22); }
+.fs-toggle.is-active{ background:rgba(255,255,255,0.24); }
+
+/* Responsivo leve */
+@media (max-width: 560px){
+  .controls{ grid-template-columns:auto auto min(86vw, 960px) auto; }
+}
