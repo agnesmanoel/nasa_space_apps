@@ -24,7 +24,6 @@ body::-webkit-scrollbar { display: none; }
   --text: #e6e6e6;
   --muted: #b9c0cc;
 
-  /* sombra “do botão de volume” (padrão unificado) */
   --elev-button: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
 
   --section-pad-x: clamp(12px, 1.2vw, 18px);
@@ -32,7 +31,7 @@ body::-webkit-scrollbar { display: none; }
 }
 
 /* =========================
-   Background (faixa 3000px) — VÍDEO
+   Background (faixa 3000px) — FOTO
    ========================= */
 .background-scroll-container{
   position: absolute;
@@ -40,21 +39,14 @@ body::-webkit-scrollbar { display: none; }
   width: 3000px;
   height: 100vh;
   z-index: 1;
-  background: #0b0c10; /* fallback */
-}
-.background-scroll-container .bg-video{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  pointer-events: none;
-  transform: translateZ(0);
+  background-image: url("../../assets/fundo.jpg"); /* <— volta para FOTO */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* =========================
-   HUD (container + texto; botão OK fixo à direita)
+   HUD
    ========================= */
 .hud-bar{
   position: fixed;
@@ -66,8 +58,7 @@ body::-webkit-scrollbar { display: none; }
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  /* reserva espaço extra à direita pro botão OK */
-  padding: 16px calc(var(--section-pad-x) + 72px) 16px var(--section-pad-x);
+  padding: 16px var(--section-pad-x);
   border-radius: 24px;
   border: 1px solid var(--glass-brd);
   background: var(--glass-bg);
@@ -76,30 +67,26 @@ body::-webkit-scrollbar { display: none; }
   z-index: 3;
 }
 .hud-col.center{
-  position: relative;           /* para posicionar o OK por absolute */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch; /* permite empurrar o OK p/ direita */
   gap: 14px;
 }
 
-/* Texto dentro do HUD (sem bold, legível) */
+/* Texto do HUD (maior um pouco, sem bold) */
 .hud-placeholder{
   width: var(--center-inner-w);
   max-width: 100%;
   margin: 0 auto;
   color: var(--text);
-  font-size: clamp(14px, 1.6vw, 18px);
+  font-size: clamp(30px, 2vw, 22px); /* ↑ aumentei a fonte */
   line-height: 1.45;
   text-align: center;
   opacity: .98;
 }
 
-/* Botão OK (mesmo look do botão de volume) — FIXO na direita do HUD */
+/* Botão OK (fica à direita) */
 .hud-ok{
-  position: absolute;
-  right: 16px;                 /* encosta na borda interna */
-  bottom: 16px;                /* encosta na borda inferior */
   -webkit-appearance: none;
   appearance: none;
   outline: none;
@@ -114,13 +101,15 @@ body::-webkit-scrollbar { display: none; }
   backdrop-filter: saturate(120%) blur(6px);
   box-shadow: var(--elev-button);
   transition: background .15s ease, transform .06s ease, filter .15s ease;
+  width: fit-content;
+  margin-left: auto;            /* <— empurra p/ a direita */
 }
 .hud-ok:hover{ background: rgba(255,255,255,.22); filter: brightness(1.03); }
 .hud-ok:active{ transform: translateY(1px); }
 .hud-ok:focus-visible{ outline: 2px solid rgba(255,255,255,.6); outline-offset: 2px; }
 
 /* =========================
-   Botões fixos (som, voltar, FS, avançar) – mesma sombra
+   Botões fixos
    ========================= */
 .icon-btn, .nav-back, .fs-toggle, .next-btn{
   position: fixed;
@@ -146,44 +135,38 @@ body::-webkit-scrollbar { display: none; }
 .icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
 .icon .waves{ fill: none; }
 
-/* Posições */
-.icon-btn{ top: 16px; left: 16px; }            /* som */
-.nav-back{ top: 16px; left: 72px; }            /* voltar */
-.fs-toggle{ top: 16px; right: 16px; }          /* tela cheia */
-.next-btn{ top: 72px; right: 16px; }           /* avançar (logo abaixo do FS) */
+.icon-btn{ top: 16px; left: 16px; }
+.nav-back{ top: 16px; left: 72px; }
+.fs-toggle{ top: 16px; right: 16px; }
+.next-btn{ top: 72px; right: 16px; }
 
-/* Estados do FS */
 .fs-toggle.is-active{ background: rgba(255,255,255,.24); }
 .fs-toggle:focus-visible{ outline: 2px solid rgba(255,255,255,.6); outline-offset: 2px; }
 
 /* =========================
-   Abelha animada — overlay central (fora do HUD)
+   Abelha animada — overlay central
    ========================= */
 .bee-intro-overlay{
-  --bee-scale: 1;
+  --bee-scale: 1.15;                 /* ligeiramente maior */
   position: fixed !important;
-  z-index: 2147483000 !important;   /* acima de tudo */
-  top: 50vh !important;             /* centro vertical da viewport */
+  z-index: 2147483000 !important;
+  top: 50vh !important;
   left: 50% !important;
-  bottom: auto !important;
-  width: clamp(160px, 18vw, 360px); /* grande/responsivo */
-  min-width: 140px;
+  width: clamp(160px, 18vw, 360px);
   height: auto;
-  display: block;                   /* garante que não colapse */
+  display: block;                    /* evita exibir apenas o alt */
+  color: transparent;                /* evita o alt text aparecer */
   pointer-events: none;
   filter: drop-shadow(0 12px 28px rgba(0,0,0,.38));
-  transform: translate3d(-50%, -50%, 0);  /* centraliza; JS move só o X */
+  transform: translate3d(-50%, -50%, 0);
   transition: transform 650ms cubic-bezier(.22,.77,.34,.98);
 }
-.bee-intro-overlay[hidden]{ display: none !important; }
 
 @media (max-width: 680px){
-  .bee-intro-overlay{ width: clamp(130px, 24vw, 240px); }
+  .bee-intro-overlay{ width: clamp(140px, 26vw, 260px); }
 }
 
-/* =========================
-   Acessibilidade util
-   ========================= */
+/* Acessibilidade util */
 .visually-hidden{
   position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;

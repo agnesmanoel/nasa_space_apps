@@ -78,6 +78,10 @@ window.addEventListener("load", () => {
   const okBtn   = document.getElementById("hudOk");
   const beeEl   = document.getElementById("beeIntro");
 
+  // garante 1º frame visível como fallback
+  if (beeEl) beeEl.src = "../../assets/abelha/abelha0.png";
+
+
   // Frações horizontais da viewport (0=esq, 1=dir)
   // Começa bem à esquerda e caminha até quase o canto.
   const beeFractions = [0.08, 0.50, 0.82]; // passo 1, 2, 3 (cada OK)
@@ -104,7 +108,7 @@ window.addEventListener("load", () => {
             ext: "png",
             frames: 10,
             fps: 12,
-            scale: 1,
+            scale: 1.5,
             autoplay: true,
             loop: true
           });
