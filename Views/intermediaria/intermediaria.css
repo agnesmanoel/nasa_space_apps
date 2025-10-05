@@ -1,0 +1,107 @@
+/* ========= Intermediária — overrides da Explore ========= */
+
+/* HUD com 1 coluna e conteúdo centralizado */
+.hud-bar{
+  grid-template-columns: 1fr;
+  gap: 0;
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Coluna central ocupa a largura do conteúdo e fica no centro */
+.hud-col.center{
+  width: var(--center-inner-w);
+  max-width: 100%;
+  margin-inline: auto;
+  padding: var(--section-pad-top) 0 var(--section-pad-bottom);
+  display: block;
+}
+
+/* Contêiner do passo-a-passo */
+.hud-steps{
+  position: relative;
+  max-width: 900px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+/* Texto do HUD — menor, sem negrito e centralizado */
+.hud-placeholder{
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: .1px;
+  line-height: 1.28;
+  padding: 6px 10px;
+  font-size: clamp(14px, 1.4vw, 20px);
+  text-align: center;
+}
+
+/* Telas pequenas: reduz um pouco mais */
+@media (max-width: 600px){
+  .hud-placeholder{
+    font-size: clamp(13px, 3.4vw, 18px);
+    line-height: 1.3;
+  }
+}
+
+/* Telas muito largas: trava no topo do clamp */
+@media (min-width: 1600px){
+  .hud-placeholder{ font-size: 20px; }
+}
+
+/* Ações (OK) */
+.hud-actions{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.hud-ok{
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.18);
+  color: #fff; font-weight: 700; letter-spacing: .2px;
+  cursor: pointer;
+  backdrop-filter: saturate(120%) blur(4px);
+  transition: background .15s ease, transform .06s ease;
+  box-shadow: var(--shadow);
+}
+.hud-ok:hover{ background: rgba(255,255,255,.22); }
+.hud-ok:active{ transform: translateY(1px); }
+
+/* Abelha animada (só aparece no último passo) */
+.bee-intro{
+  --bee-scale: 1;
+  position: absolute;
+  right: -24px;
+  bottom: -10px;
+  width: calc(80px * var(--bee-scale));
+  height: auto;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,.35));
+  pointer-events: none;
+}
+@media (max-width: 680px){
+  .bee-intro{ right: -8px; width: calc(64px * var(--bee-scale)); }
+}
+
+/* Esconde qualquer coisa que venha do explore por engano */
+.hud-col.left,
+.hud-col.right,
+.hud-months,
+.hud-controls{
+  display: none !important;
+}
+
+/* Botão Avançar — mesmo estilo do FS, posicionado logo abaixo dele */
+.next-btn{
+  position: fixed;
+  right: 16px;
+  top: 72px;   /* 16 (margem top) + 44 (altura FS) + ~12 gap */
+  z-index: 2147483647;
+}
+
+/* Fallback: garante que textos auxiliares dentro dos botões não apareçam */
+.fs-toggle span{ display: none; }
