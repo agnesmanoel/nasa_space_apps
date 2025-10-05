@@ -9,6 +9,11 @@ const dur = document.getElementById('duration');
 const toggleMuteBtn = document.getElementById('toggleMuteBtn');
 const fsBtn = document.getElementById('fs-toggle');
 
+const STORAGE_KEYS = {
+  muted: 'bee_audio_muted',
+  volume: 'bee_audio_volume'
+};
+
 /* ===== Helpers ===== */
 const fmt = (s) => {
   if (!isFinite(s)) return '0:00';
@@ -19,6 +24,19 @@ const fmt = (s) => {
 
 /* ===== Autoplay seguro (muted + playsinline) ===== */
 window.addEventListener('load', async () => {
+  const savedMuted  = localStorage.getItem(STORAGE_KEYS.muted);
+  const savedVolume = localStorage.getItem(STORAGE_KEYS.volume);
+
+  if (savedMuted !== null) {
+    video.muted = savedMuted === 'true';
+  }
+  if (savedVolume !== null) {
+    const v = Math.min(1, Math.max(0, parseFloat(savedVolume)));
+    if (!Number.isNaN(v)) video.volume = v;
+  }
+  setMuteIcon(video.muted);
+
+  // tentar tocar; se estiver desmutado, deve funcionar pq veio de clique do Start
   try { await video.play(); } catch {}
 });
 
@@ -33,9 +51,15 @@ function setMuteIcon(isMuted){
 toggleMuteBtn.addEventListener('click', () => {
   video.muted = !video.muted;
   setMuteIcon(video.muted);
+  localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
+  localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
   if (!video.muted) video.play().catch(()=>{});
 });
 setMuteIcon(true);
+
+function persistVolume(){
+  localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
+}
 
 /* ===== Play / Pause ===== */
 function updatePlayUI(){
