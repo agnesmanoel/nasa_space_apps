@@ -1,107 +1,190 @@
-/* ========= Intermediária — overrides da Explore ========= */
+/* =========================
+   Reset / Base
+   ========================= */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+html { color-scheme: dark; }
+html, body{
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  scrollbar-width: none;
+}
+body { user-select: none; background: #0b0c10; }
+body::-webkit-scrollbar { display: none; }
 
-/* HUD com 1 coluna e conteúdo centralizado */
-.hud-bar{
-  grid-template-columns: 1fr;
-  gap: 0;
-  min-height: 120px;
-  display: flex;
-  justify-content: center;
+/* =========================
+   Tokens
+   ========================= */
+:root{
+  --glass-bg: rgba(255,255,255,0.10);
+  --glass-brd: rgba(255,255,255,0.20);
+  --text: #e6e6e6;
+  --muted: #b9c0cc;
+
+  /* sombra “do botão de volume” (padrão unificado) */
+  --elev-button: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+
+  --section-pad-x: clamp(12px, 1.2vw, 18px);
+  --center-inner-w: clamp(560px, 92vw, 1400px);
 }
 
-/* Coluna central ocupa a largura do conteúdo e fica no centro */
+/* =========================
+   Background (faixa 3000px) — VÍDEO
+   ========================= */
+.background-scroll-container{
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3000px;
+  height: 100vh;
+  z-index: 1;
+  background: #0b0c10; /* fallback */
+}
+.background-scroll-container .bg-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+/* =========================
+   HUD (container + texto; botão OK fixo à direita)
+   ========================= */
+.hud-bar{
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  width: clamp(320px, 94vw, 1600px);
+  min-height: 120px;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  /* reserva espaço extra à direita pro botão OK */
+  padding: 16px calc(var(--section-pad-x) + 72px) 16px var(--section-pad-x);
+  border-radius: 24px;
+  border: 1px solid var(--glass-brd);
+  background: var(--glass-bg);
+  color: var(--text);
+  backdrop-filter: saturate(130%) blur(10px);
+  z-index: 3;
+}
 .hud-col.center{
+  position: relative;           /* para posicionar o OK por absolute */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Texto dentro do HUD (sem bold, legível) */
+.hud-placeholder{
   width: var(--center-inner-w);
   max-width: 100%;
-  margin-inline: auto;
-  padding: var(--section-pad-top) 0 var(--section-pad-bottom);
-  display: block;
-}
-
-/* Contêiner do passo-a-passo */
-.hud-steps{
-  position: relative;
-  max-width: 900px;
-  width: 100%;
-  margin-inline: auto;
-}
-
-/* Texto do HUD — menor, sem negrito e centralizado */
-.hud-placeholder{
-  font-weight: 300;
+  margin: 0 auto;
   color: var(--text);
-  letter-spacing: .1px;
-  line-height: 1.28;
-  padding: 6px 10px;
-  font-size: clamp(14px, 1.4vw, 20px);
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.45;
   text-align: center;
+  opacity: .98;
 }
 
-/* Telas pequenas: reduz um pouco mais */
-@media (max-width: 600px){
-  .hud-placeholder{
-    font-size: clamp(13px, 3.4vw, 18px);
-    line-height: 1.3;
-  }
-}
-
-/* Telas muito largas: trava no topo do clamp */
-@media (min-width: 1600px){
-  .hud-placeholder{ font-size: 20px; }
-}
-
-/* Ações (OK) */
-.hud-actions{
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
+/* Botão OK (mesmo look do botão de volume) — FIXO na direita do HUD */
 .hud-ok{
+  position: absolute;
+  right: 16px;                 /* encosta na borda interna */
+  bottom: 16px;                /* encosta na borda inferior */
   -webkit-appearance: none;
   appearance: none;
-  padding: 10px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.28);
+  outline: none;
+  border: 1px solid rgba(255,255,255,.32);
   background: rgba(255,255,255,.18);
-  color: #fff; font-weight: 700; letter-spacing: .2px;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: .2px;
+  border-radius: 16px;
+  padding: 10px 18px;
   cursor: pointer;
-  backdrop-filter: saturate(120%) blur(4px);
-  transition: background .15s ease, transform .06s ease;
-  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(6px);
+  box-shadow: var(--elev-button);
+  transition: background .15s ease, transform .06s ease, filter .15s ease;
 }
-.hud-ok:hover{ background: rgba(255,255,255,.22); }
+.hud-ok:hover{ background: rgba(255,255,255,.22); filter: brightness(1.03); }
 .hud-ok:active{ transform: translateY(1px); }
+.hud-ok:focus-visible{ outline: 2px solid rgba(255,255,255,.6); outline-offset: 2px; }
 
-/* Abelha animada (só aparece no último passo) */
-.bee-intro{
-  --bee-scale: 1;
-  position: absolute;
-  right: -24px;
-  bottom: -10px;
-  width: calc(80px * var(--bee-scale));
-  height: auto;
-  filter: drop-shadow(0 6px 20px rgba(0,0,0,.35));
-  pointer-events: none;
-}
-@media (max-width: 680px){
-  .bee-intro{ right: -8px; width: calc(64px * var(--bee-scale)); }
-}
-
-/* Esconde qualquer coisa que venha do explore por engano */
-.hud-col.left,
-.hud-col.right,
-.hud-months,
-.hud-controls{
-  display: none !important;
-}
-
-/* Botão Avançar — mesmo estilo do FS, posicionado logo abaixo dele */
-.next-btn{
+/* =========================
+   Botões fixos (som, voltar, FS, avançar) – mesma sombra
+   ========================= */
+.icon-btn, .nav-back, .fs-toggle, .next-btn{
   position: fixed;
-  right: 16px;
-  top: 72px;   /* 16 (margem top) + 44 (altura FS) + ~12 gap */
-  z-index: 2147483647;
+  z-index: 4;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: saturate(120%) blur(6px);
+  box-shadow: var(--elev-button);
+  -webkit-tap-highlight-color: transparent;
+  transition: filter .15s ease, background .15s ease, transform .06s ease;
+}
+.icon-btn:hover, .nav-back:hover, .fs-toggle:hover, .next-btn:hover{
+  background: rgba(255,255,255,.22); filter: brightness(1.04);
+}
+.icon-btn:active, .nav-back:active, .fs-toggle:active, .next-btn:active{
+  transform: translateY(1px);
+}
+.icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
+.icon .waves{ fill: none; }
+
+/* Posições */
+.icon-btn{ top: 16px; left: 16px; }            /* som */
+.nav-back{ top: 16px; left: 72px; }            /* voltar */
+.fs-toggle{ top: 16px; right: 16px; }          /* tela cheia */
+.next-btn{ top: 72px; right: 16px; }           /* avançar (logo abaixo do FS) */
+
+/* Estados do FS */
+.fs-toggle.is-active{ background: rgba(255,255,255,.24); }
+.fs-toggle:focus-visible{ outline: 2px solid rgba(255,255,255,.6); outline-offset: 2px; }
+
+/* =========================
+   Abelha animada — overlay central (fora do HUD)
+   ========================= */
+.bee-intro-overlay{
+  --bee-scale: 1;
+  position: fixed !important;
+  z-index: 2147483000 !important;   /* acima de tudo */
+  top: 50vh !important;             /* centro vertical da viewport */
+  left: 50% !important;
+  bottom: auto !important;
+  width: clamp(160px, 18vw, 360px); /* grande/responsivo */
+  min-width: 140px;
+  height: auto;
+  display: block;                   /* garante que não colapse */
+  pointer-events: none;
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,.38));
+  transform: translate3d(-50%, -50%, 0);  /* centraliza; JS move só o X */
+  transition: transform 650ms cubic-bezier(.22,.77,.34,.98);
+}
+.bee-intro-overlay[hidden]{ display: none !important; }
+
+@media (max-width: 680px){
+  .bee-intro-overlay{ width: clamp(130px, 24vw, 240px); }
 }
 
-/* Fallback: garante que textos auxiliares dentro dos botões não apareçam */
-.fs-toggle span{ display: none; }
+/* =========================
+   Acessibilidade util
+   ========================= */
+.visually-hidden{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,1px,1px);white-space:nowrap;border:0;
+}

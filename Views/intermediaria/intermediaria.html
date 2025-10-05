@@ -12,6 +12,10 @@
   <!-- Herda visual da explore + overrides locais -->
   <link rel="stylesheet" href="../explore/explore.css" />
   <link rel="stylesheet" href="./intermediaria.css" />
+
+  <!-- Scripts (BeeAnimator deve carregar antes do intermediaria.js) -->
+  <script src="../bee-anim.js" defer></script>
+  <script src="./intermediaria.js" defer></script>
 </head>
 
 <body>
@@ -23,19 +27,15 @@
     </video>
   </div>
 
+  <!-- Abelha animada (overlay fora do HUD, no centro da tela) -->
+  <img id="beeIntro" class="bee-intro-overlay" alt="Uruçu animada" hidden />
+
   <!-- HUD simples (passo-a-passo) -->
   <section class="hud-bar" aria-label="Painel inferior">
     <div class="hud-col center">
-      <div class="hud-steps">
-        <p id="hudText" class="hud-placeholder"></p>
-
-        <!-- abelha animada (mostra só no último passo) -->
-        <img id="beeIntro" class="bee-intro" alt="Abelha" aria-hidden="true" hidden />
-
-        <div class="hud-actions">
-          <button id="hudOk" class="hud-ok" type="button" aria-label="Avançar texto">OK</button>
-        </div>
-      </div>
+      <p id="hudText" class="hud-placeholder"></p>
+      <!-- Botão OK (posicionado à direita via CSS) -->
+      <button id="hudOk" class="hud-ok" type="button" aria-label="Avançar texto">OK</button>
     </div>
   </section>
 
@@ -65,10 +65,5 @@
     <i class="bi bi-arrow-right-short" aria-hidden="true"></i>
     <span class="visually-hidden">Avançar</span>
   </button>
-
-  <!-- Scripts -->
-  <!-- ajuste o caminho do bee-anim.js conforme sua estrutura -->
-  <script src="../bee-anim.js"></script>
-  <script src="./intermediaria.js" defer></script>
 </body>
 </html>
