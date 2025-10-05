@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 
 
 
-with open("dados/umidade.json", "r") as f:
+with open("dados/radiacao.json", "r") as f:
     data = json.load(f)
 
-temp_dict = data["properties"]["parameter"]["RH2M"]
+temp_dict = data["properties"]["parameter"]["ALLSKY_SFC_SW_DWN"]
 
 df = pd.DataFrame(list(temp_dict.items()), columns=["ds", "y"])
 df["ds"] = pd.to_datetime(df["ds"], format="%Y%m%d") # Convert to datetime objects
@@ -26,18 +26,19 @@ print(df_mes.head())
 
 
 m = NeuralProphet(
-    growth='linear', 
+    growth='off', 
     yearly_seasonality=True,
-    weekly_seasonality=False, # Since we are using monthly data
-    daily_seasonality=False, # Since we are using monthly data
-    # seasonality_mode='multiplicative', 
-    seasonality_mode='additive', 
-    quantiles=[0.05, 0.95]
+    weekly_seasonality=False,
+    daily_seasonality=False,
+    seasonality_mode='multiplicative', 
+    n_changepoints=12,                
+    quantiles=[0.025, 0.975]          
 )
 
 df_train, df_val = m.split_df(df_mes, freq='M', valid_p=0.2)
 
-metrics = m.fit(df_train, freq='M', validation_df=df_val, epochs=500, progress=None) 
+metrics = m.fit(df_train, freq='M', validation_df=df_val, epochs=500,
+                progress=None) 
 
 
 future = m.make_future_dataframe(df_train, periods=36, n_historic_predictions=len(df_mes)) 
@@ -56,5 +57,5 @@ print("\nPrevisão dos Próximos 24 Meses:")
 cols = [c for c in ['ds', 'yhat1', 'yhat1_lower', 'yhat1_upper'] if c in forecast.columns]
 print(forecast[cols])
 
-forecast[cols].to_csv("previsao_umidade_mensal_maior.csv", index=False)
+forecast[cols].to_csv("previsao_radiacao_mensal_maior.csv", index=False)
 print("\n✅ Exportação para CSV concluída.")
