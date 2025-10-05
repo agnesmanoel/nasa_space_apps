@@ -216,7 +216,7 @@ window.addEventListener("load", () => {
   // Voltar -> tela início
   backBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    window.location.href = "../intro.html"; // ajuste se seu arquivo inicial for outro
+    window.location.href = "../intro/intro.html"; // ajuste se seu arquivo inicial for outro
   });
 
   // Avançar (atalho) -> explore
