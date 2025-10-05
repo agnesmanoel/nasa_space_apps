@@ -195,7 +195,7 @@ body::-webkit-scrollbar { display: none; }
 /* Ano central acima da barra */
 .hud-year{
   position: absolute;
-  top: -28px; left: 50%;
+  top: 25px; left: 50%;
   transform: translateX(-50%);
   font-weight: 800;
   letter-spacing: .3px;
@@ -260,4 +260,14 @@ body::-webkit-scrollbar { display: none; }
 /* ↓ move a bolinha um pouco para BAIXO no Firefox */
 .hud-range::-moz-range-thumb{
   transform: translateY(3px); /* 1–3px costuma bastar */
+}
+
+/* Sobe o "2025" acima da barra */
+.hud-controls > .hud-year{
+  position: absolute;
+  top: -30px;        /* negativo = sobe; ajuste: -24, -28, -36... */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;        /* garante que fique sobre o input range */
+  pointer-events: none;
 }
