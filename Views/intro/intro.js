@@ -1,13 +1,16 @@
 /* ===== Seletores ===== */
-const video = document.getElementById('introVideo');
-const playPauseBtn = document.getElementById('playPause');
+const video         = document.getElementById('introVideo');
+const playPauseBtn  = document.getElementById('playPause');
 const playPauseIcon = playPauseBtn.querySelector('i');
-const seek = document.getElementById('seek');
-const cur = document.getElementById('currentTime');
-const dur = document.getElementById('duration');
+const seek          = document.getElementById('seek');
+const cur           = document.getElementById('currentTime');
+const dur           = document.getElementById('duration');
 
 const toggleMuteBtn = document.getElementById('toggleMuteBtn');
-const fsBtn = document.getElementById('fs-toggle');
+const fsBtn         = document.getElementById('fs-toggle');
+
+/* Controles (para auto-hide) */
+const controls = document.querySelector('.controls');
 
 const STORAGE_KEYS = {
   muted: 'bee_audio_muted',
@@ -36,11 +39,13 @@ window.addEventListener('load', async () => {
   }
   setMuteIcon(video.muted);
 
-  // tentar tocar; se estiver desmutado, deve funcionar pq veio de clique do Start
   try { await video.play(); } catch {}
+
+  // mostra os controles por alguns segundos ao entrar
+  showControlsTemporariamente(2500);
 });
 
-/* ===== Som (mesmo padrão da landing) ===== */
+/* ===== Som ===== */
 function setMuteIcon(isMuted){
   toggleMuteBtn.title = isMuted ? 'Ativar som' : 'Silenciar';
   toggleMuteBtn.setAttribute('aria-label', toggleMuteBtn.title);
@@ -54,6 +59,7 @@ toggleMuteBtn.addEventListener('click', () => {
   localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
   localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
   if (!video.muted) video.play().catch(()=>{});
+  showControlsTemporariamente(2000);
 });
 setMuteIcon(true);
 
@@ -66,12 +72,22 @@ function updatePlayUI(){
   const playing = !video.paused && !video.ended;
   playPauseIcon.className = playing ? 'bi bi-pause-fill' : 'bi bi-play-fill';
   playPauseBtn.setAttribute('aria-label', playing ? 'Pausar' : 'Reproduzir');
+
+  // se estiver pausado, mantenha controles visíveis sem timer
+  if (video.paused || video.ended) {
+    controls.classList.add('is-visible');
+    clearTimeout(hideTimer);
+  } else {
+    showControlsTemporariamente(1200);
+  }
 }
 playPauseBtn.addEventListener('click', () => {
   if (video.paused) video.play().catch(()=>{}); else video.pause();
+  showControlsTemporariamente(2000);
 });
 video.addEventListener('click', () => { // clique no vídeo também alterna
   if (video.paused) video.play().catch(()=>{}); else video.pause();
+  showControlsTemporariamente(2000);
 });
 video.addEventListener('play', updatePlayUI);
 video.addEventListener('pause', updatePlayUI);
@@ -95,11 +111,13 @@ seek.addEventListener('input', () => {
   seeking = true;
   const t = (seek.value / 100) * video.duration;
   cur.textContent = fmt(t);
+  showControlsTemporariamente(1500);
 });
 seek.addEventListener('change', () => {
   const t = (seek.value / 100) * video.duration;
   video.currentTime = t;
   seeking = false;
+  showControlsTemporariamente(2000);
 });
 
 /* ===== Atalhos ===== */
@@ -107,9 +125,35 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'Space'){ e.preventDefault(); playPauseBtn.click(); }
   if (e.key === 'ArrowRight'){ video.currentTime = Math.min(video.currentTime + 5, video.duration || Infinity); }
   if (e.key === 'ArrowLeft'){  video.currentTime = Math.max(video.currentTime - 5, 0); }
+  showControlsTemporariamente(2000);
 });
 
-/* ===== Tela Cheia (igual explore/landing) ===== */
+/* ===== Auto-hide dos controles ===== */
+let hideTimer = 0;
+
+function showControlsTemporariamente(ms = 2000){
+  controls.classList.add('is-visible');
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => {
+    // não esconda se pausado/ended
+    if (video.paused || video.ended) return;
+    // não esconda se o mouse está por cima ou se algum controle tem foco
+    if (controls.matches(':hover')) return;
+    if (document.activeElement && controls.contains(document.activeElement)) return;
+    controls.classList.remove('is-visible');
+  }, ms);
+}
+
+// mouse/touch reexibe
+['mousemove','touchstart','touchmove'].forEach(evt => {
+  window.addEventListener(evt, () => showControlsTemporariamente(2000), { passive: true });
+});
+// sair de cima → inicia contagem menor
+controls.addEventListener('mouseleave', () => showControlsTemporariamente(800));
+// qualquer clique nos controles prolonga um pouco
+controls.addEventListener('click', () => showControlsTemporariamente(1500));
+
+/* ===== Tela Cheia ===== */
 (function () {
   if (!fsBtn) return;
   const target = document.documentElement;
@@ -140,12 +184,14 @@ window.addEventListener('keydown', (e) => {
   fsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     isFS() ? exitFS() : requestFS(target);
+    showControlsTemporariamente(1500);
   });
 
   window.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'f' && !e.repeat) {
       e.preventDefault();
       isFS() ? exitFS() : requestFS(target);
+      showControlsTemporariamente(1500);
     }
   });
 
@@ -161,17 +207,13 @@ const skipBtn = document.getElementById('skipBtn');
 if (backBtn){
   backBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    // Volta para a primeira tela (landing dentro de /views)
     window.location.href = '../index.html';
-    // Se preferir histórico: history.length > 1 ? history.back() : (window.location.href = './index.html');
   });
 }
 
 if (skipBtn){
   skipBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    // Vai para a tela de explore
-    window.location.href = '../intermediaria/intermediaria.html'; // use '../explore.html' se seu explore estiver fora de /views
+    window.location.href = '../intermediaria/intermediaria.html';
   });
 }
-

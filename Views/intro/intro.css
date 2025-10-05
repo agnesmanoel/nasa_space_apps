@@ -32,9 +32,15 @@ html, body{ height:100%; margin:0; overflow:hidden; }
 
 /* ===== CONTROLES (sobre o vídeo) ===== */
 .controls{
-  position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-  display:grid; grid-template-columns:auto auto min(72vw, 960px) auto;
+  position:fixed; left:50%; bottom:18px;
+  /* centralizado e com largura controlada */
+  width: min(92vw, 980px);
+  box-sizing: border-box;
+
+  /* grid: botão | tempo | SLIDER ocupa o resto | duração */
+  display:grid; grid-template-columns:auto auto 1fr auto;
   gap:12px; align-items:center; z-index:3;
+
   padding:10px 12px;
   border:1px solid rgba(255,255,255,.28);
   background: rgba(255,255,255,.14);
@@ -42,7 +48,20 @@ html, body{ height:100%; margin:0; overflow:hidden; }
   backdrop-filter: saturate(120%) blur(6px);
   color:var(--text);
   box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+
+  /* Auto-hide padrão (invisível até hover/JS) */
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
 }
+.controls:hover,
+.controls.is-visible{
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
 .ctrl-btn{
   width:46px; height:46px; display:grid; place-items:center;
   border-radius:12px; border:1px solid rgba(255,255,255,.35);
@@ -51,6 +70,7 @@ html, body{ height:100%; margin:0; overflow:hidden; }
 }
 .ctrl-btn:hover{ background: rgba(255,255,255,.24); }
 .time{ font-variant-numeric: tabular-nums; font-weight:700; text-shadow:0 1px 10px rgba(0,0,0,.45); }
+
 .seek{
   -webkit-appearance:none; appearance:none;
   width:100%; height:14px; border-radius:999px;
@@ -105,7 +125,7 @@ html, body{ height:100%; margin:0; overflow:hidden; }
 
 /* Responsivo leve */
 @media (max-width: 560px){
-  .controls{ grid-template-columns:auto auto min(86vw, 960px) auto; }
+  .controls{ width: min(96vw, 980px); }
 }
 
 /* ===== Botões de navegação (Voltar / Pular) ===== */
@@ -140,7 +160,7 @@ html, body{ height:100%; margin:0; overflow:hidden; }
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3; /* acima do overlay e do vídeo */
+  z-index: 3;
   padding: 8px 14px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.35);
@@ -152,7 +172,7 @@ html, body{ height:100%; margin:0; overflow:hidden; }
   text-transform: uppercase;
   box-shadow: 0 10px 30px rgba(0,0,0,.25);
   backdrop-filter: saturate(120%) blur(6px);
-  pointer-events: none; /* não bloqueia cliques no Start/ícones */
+  pointer-events: none;
 }
 @supports not (backdrop-filter: blur(6px)) {
   .ai-badge{ background: rgba(20,22,26,.55); }
