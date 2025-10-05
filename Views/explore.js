@@ -25,7 +25,8 @@ function clampScroll(x) {
 /* =========================
    Drag horizontal (ignora áreas interativas)
    ========================= */
-const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop";
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop, #side-tip";
+
 
 
 window.addEventListener("pointerdown", (e) => {
@@ -218,6 +219,9 @@ document.addEventListener("keydown", (e) => {
   function closeIntro(){
     backdrop.hidden = true;
     modal.hidden = true;
+
+    // (atraso pequeno só para a transição do modal terminar bonitinha)
+    setTimeout(() => window.sideTip?.show(), 150);
   }
 
   // abrir na primeira carga
@@ -235,3 +239,28 @@ document.addEventListener("keydown", (e) => {
     if (e.key === 'Escape' && !modal.hidden) closeIntro();
   });
 })();
+
+/* =========================
+   Cartão lateral (direita) — controlado pelo intro
+   ========================= */
+(function(){
+  const tip   = document.getElementById('side-tip');
+  const okBtn = document.getElementById('side-tip-ok');
+  if (!tip || !okBtn) return;
+
+  function show(){
+    tip.hidden = false;
+    requestAnimationFrame(()=> tip.classList.add('is-open'));
+  }
+
+  function hide(){
+    tip.classList.remove('is-open');
+    setTimeout(()=> tip.hidden = true, 240);
+  }
+
+  okBtn.addEventListener('click', hide);
+
+  // Exponho um controle global simples para o bloco do modal inicial chamar
+  window.sideTip = { show, hide };
+})();
+

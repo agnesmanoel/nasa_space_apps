@@ -42,6 +42,8 @@ body::-webkit-scrollbar { display: none; }
   /* limites dos cards laterais (iguais) */
   --side-card-min: 240px;
   --side-card-max: 520px;
+
+  --side-tip-rise: 114px;   /* quanto subir (ajuste à vontade) */
 }
 
 /* =========================
@@ -429,3 +431,55 @@ body::-webkit-scrollbar { display: none; }
 .intro-ok:focus,
 .intro-ok:focus-visible{ box-shadow: none; }
 
+/* =========================
+   Cartão lateral (direita)
+   ========================= */
+.side-tip{
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%) translateX(12px); /* fora um pouquinho */
+  width: min(320px, 86vw);
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid var(--glass-brd);
+  background: var(--glass-bg);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(130%) blur(10px);
+  z-index: 4;                    /* acima do HUD (3), abaixo de modais (5) */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .24s ease;
+  transform: translateY(calc(-50% - var(--side-tip-rise))) translateX(12px);
+}
+.side-tip.is-open{
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  pointer-events: auto;
+  transform: translateY(calc(-50% - var(--side-tip-rise))) translateX(0);
+}
+
+.side-tip-content{ display: grid; gap: 12px; }
+.side-tip-text{
+  margin: 0;
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.35;
+}
+
+/* Botão OK no mesmo estilo glass dos demais */
+.side-tip-actions{ display: flex; justify-content: flex-end; }
+.side-tip-ok{
+  -webkit-appearance: none; appearance: none;
+  outline: none; box-shadow: none;
+  padding: 8px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.18);
+  color: #fff; font-weight: 700; letter-spacing: .2px;
+  cursor: pointer;
+  backdrop-filter: saturate(120%) blur(4px);
+  transition: background .15s ease, transform .06s ease;
+}
+.side-tip-ok:hover{ background: rgba(255,255,255,.22); }
+.side-tip-ok:active{ transform: translateY(1px); }
