@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tela Inicial</title>
+
+  <!-- Bootstrap + Icons (primeiro) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous" />
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- Seus estilos por último (ganham na cascata) -->
+  <link rel="stylesheet" href="explore.css" />
+  <link rel="stylesheet" href="flowers.css" />
+</head>
+
+<body>
+  <!-- Plano de fundo rolável horizontal -->
+  <div class="background-scroll-container" role="img" aria-label="Paisagem do Cerrado"></div>
+
+  <!-- Camada de efeitos (flores) -->
+  <div id="fx-layer" class="fx-layer" aria-hidden="true"></div>
+
+  <!-- HUD inferior -->
+  <section class="hud-bar" aria-label="Painel inferior">
+    <div class="hud-col left">
+      <div class="hud-subcard">
+        <div class="subcard-header">
+          <div class="icon-sq"><span class="i">📅</span></div>
+          <div class="subcard-title">
+            <h3 class="month">Janeiro</h3>
+            <div class="season">Estação Chuvosa</div>
+          </div>
+          <div class="icon-sq alt"><span class="i">💧</span></div>
+        </div>
+
+        <div class="info-pill">
+          <div class="pill-icon">🌡️</div>
+          <div class="pill-text">
+            <div class="pill-title">Quente e úmido</div>
+            <div class="pill-sub">(22–28°C)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud-col center">
+      <div class="hud-controls">
+        <button class="nav-btn left" type="button" aria-label="Mês anterior">‹</button>
+        <!-- ANO: vira um seletor com 2026/2027 (apenas aqui) -->
+        <div class="hud-year" role="tablist" aria-label="Selecionar ano">
+          <span data-year="2026" class="active">2026</span>
+          <span data-year="2027">2027</span>
+        </div>
+
+        <input type="range" class="hud-range" min="0" max="11" value="0" aria-label="Selecionar mês" />
+        <button class="nav-btn right" type="button" aria-label="Próximo mês">›</button>
+      </div>
+    
+
+      <div class="hud-months">
+        <span class="active">Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+        <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+        <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+      </div>
+    </div>
+
+    <div class="hud-col right">
+      <div class="hud-rightcard">
+        <div class="rightcard-row">
+          <div class="right-text">
+            <p>
+              <strong>Estação chuvosa em pleno vigor.</strong>
+              O cerrado está verde e exuberante, com gramíneas altas e árvores com folhagem completa.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Botão Som (novo) -->
+  <button id="toggleMuteBtn" class="icon-btn" aria-label="Ativar som" title="Ativar som">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 10v4h4l5 4V6L7 10H3z"></path>
+      <path class="waves" d="M14.5 8.5a4 4 0 0 1 0 7m2.5-9a 7 7 0 0 1 0 11"></path>
+    </svg>
+    <span class="visually-hidden">Som</span>
+  </button>
+
+  <!-- Abelha-mini (caixa de vidro) -->
+  <div id="beeFab" class="bee-fab" aria-hidden="false">
+    <img id="beeMini" class="bee-mini" src="../../assets/abelha/abelha0.png" alt="Abelha guia" />
+  </div>
+
+  <!-- Botão Voltar (novo) -->
+  <button id="backBtn" class="nav-back" type="button" aria-label="Voltar" title="Voltar">
+    <i class="bi bi-arrow-left-short" aria-hidden="true"></i>
+    <span class="visually-hidden">Voltar</span>
+  </button>
+
+  <!-- Botão de Tela Cheia -->
+  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia">
+    <i class="bi bi-fullscreen" aria-hidden="true"></i>
+    <span class="visually-hidden">Tela cheia</span>
+  </button>
+
+  <!-- Cartão lateral (direita) -->
+  <aside id="side-tip" class="side-tip" aria-live="polite" hidden>
+    <div class="side-tip-content">
+      <p class="side-tip-text">
+        Hi there! Bees see the world in different colors. This is the adapted view we created to give you the best experience.
+      </p>
+      <div class="side-tip-actions">
+        <button id="side-tip-ok" class="side-tip-ok" type="button">OK</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Scripts -->
+  <script src="./explore.js" defer></script>
+  <script src="./flowers.js" defer></script>
+
+  <!-- Modal das Flores (Glass) -->
+<div id="flower-modal-backdrop" class="flower-modal-backdrop" hidden></div>
+
+  <div id="flower-modal" class="flower-modal" role="dialog" aria-modal="true"
+      aria-labelledby="flower-modal-title" aria-describedby="flower-modal-desc" hidden>
+
+    <button type="button" class="flower-modal-close" aria-label="Fechar (Esc)">×</button>
+
+    <div class="flower-modal-content">
+      <div class="flower-modal-media">
+        <!-- se já tiver imagem da Sucupira, troque o src abaixo -->
+        <img id="flower-modal-img" src="../../assets/girassol.png" alt="Sucupira-branca">
+      </div>
+
+      <div class="flower-modal-body">
+        <h3 id="flower-modal-title">Sucupira-branca</h3>
+        <ul id="flower-modal-desc" class="flower-bullets">
+          <li><strong>Planta:</strong> Sucupira-branca <em>(Pterodon emarginatus)</em></li>
+          <li><strong>Época de Floração:</strong> Abril a Junho. É uma das primeiras árvores a florescer massivamente após o fim das chuvas.</li>
+          <li><strong>Floração e Condições:</strong> Floresce no início do período seco, aproveitando a umidade ainda residual no solo. Flores lilás ou roxo-pálido, perfume adocicado; floração abundante.</li>
+          <li><strong>Polinização:</strong> Principalmente por abelhas de médio a grande porte (incluindo mamangavas) e também visitada por abelhas sociais como a uruçu em busca de néctar e pólen.</li>
+          <li><strong>Relevância para o BloomWatch:</strong> Excelente indicador do início da estação seca. A floração roxa se destaca quando a paisagem ainda está relativamente verde, mas as chuvas já cessaram; monitorá-la ajuda a definir o começo do período de estresse hídrico.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

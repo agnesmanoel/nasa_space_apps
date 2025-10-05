@@ -1,0 +1,163 @@
+/* Reset + sem rolagem */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; overflow: hidden; }
+
+:root{
+  --text: #ffffff;
+  --muted: #e5e7ebcc;
+  --shadow: 0 25px 60px -18px rgba(0,0,0,.55);
+
+  /* <<< padding fixo da borda do SQUAD >>> */
+  --squad-pad: clamp(12px, 12vw, 88px);
+
+  --bee-scale: 1;
+  --bee-x: 0%;     /* deslocamento horizontal da abelha */
+  --bee-y: 0px;    /* deslocamento vertical da abelha */
+}
+
+/* Utilitário (equiv. Bootstrap) para esconder texto visualmente */
+.visually-hidden{
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,1px,1px);
+  white-space: nowrap; border: 0;
+}
+
+/* Vídeo ao fundo */
+.bg-video-wrap{ position: fixed; inset: 0; overflow: hidden; z-index: -2; background:#0b0c10; }
+.bg-video{
+  position: absolute; top:50%; left:50%;
+  transform: translate(-50%, -50%);
+  min-width:100%; min-height:100%;
+  object-fit: cover; filter: saturate(1.05) contrast(1.05);
+}
+.bg-overlay{
+  position:absolute; inset:0; z-index:1;
+  background: radial-gradient(1200px 600px at 60% 45%, rgba(0,0,0,0.20) 0%, rgba(0,0,0,.48) 60%, rgba(0,0,0,.58) 100%);
+}
+
+/* ===== SQUAD =====
+   Ocupa a tela inteira com um padding/margem das bordas.
+   Responsivo: height e width ajustam com a viewport.
+*/
+.squad{
+  position: fixed;
+  inset: var(--squad-pad);
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(12px, 3vw, 32px);
+  align-items: center;
+
+  /* estética sutil sobre o vídeo */
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+  color: var(--text);
+}
+
+/* Colunas internas */
+.col{ position: relative; min-width: 0; }
+/* garante centralização no grid/coluna da abelha */
+.bee-wrap{ 
+  display: grid; 
+  place-items: center;  /* centro perfeito da coluna */
+}
+.bee{
+  width: min(540px, 50vw);
+  height: auto;
+  filter:
+    drop-shadow(0 14px 28px rgba(0,0,0,.45))
+    drop-shadow(0 2px 6px rgba(0,0,0,.25));
+  transform: translate(var(--bee-x), var(--bee-y)) scale(var(--bee-scale, 1));
+  transform-origin: center center;
+}
+
+.hero-copy{ align-self: center; } 
+.title{
+  margin: 0 0 .35rem 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 64px);
+  letter-spacing: .2px;
+  text-shadow: 0 2px 28px rgba(0,0,0,.45);
+}
+.subtitle{
+  margin: 0 0 1.75rem 0;
+  color: var(--muted);
+  font-size: clamp(14px, 2.2vw, 20px);
+  line-height: 1.35;
+}
+
+/* CTA */
+.cta{
+  -webkit-tap-highlight-color: transparent;
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 16px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,0.14);
+  color: #fff; font-weight: 800; font-size: clamp(18px, 2.6vw, 28px);
+  letter-spacing: .4px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  cursor: pointer;
+  transition: transform .15s ease, filter .15s ease;
+}
+.cta .play{ width: 28px; height: 28px; fill: #fff; }
+.cta:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+.cta:active{ transform: translateY(0); }
+
+/* Botões flutuantes */
+.icon-btn{
+  position: fixed; top: 16px; left: 16px;
+  display: grid; place-items:center;
+  width: 44px; height: 44px; border-radius: 14px;
+  background: rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer; z-index: 3;
+}
+.icon-btn:hover{ filter: brightness(1.04); }
+.icon-btn:active{ transform: translateY(1px); }
+.icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
+.icon .waves{ fill: none; }
+
+.fs-toggle{
+  position: fixed;
+  top: 16px; right: 16px;
+  z-index: 2147483647;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.18);
+  color: #fff; font-size: 20px; line-height: 1;
+  cursor: pointer; pointer-events: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  backdrop-filter: saturate(120%) blur(6px);
+}
+.fs-toggle:hover{ background: rgba(255,255,255,0.22); }
+.fs-toggle:focus-visible{ outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+.fs-toggle.is-active{ background: rgba(255,255,255,0.24); }
+
+/* Responsivo */
+@media (max-width: 980px){
+  .squad{
+    grid-template-columns: 1fr;
+  }
+  .bee{ width: min(520px, 78vw); transform: none; }
+  .hero-copy{ text-align: center; }
+  .cta{ justify-content: center; }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce){
+  .bg-video{ filter: none; }
+  .cta{ transition: none; }
+}
