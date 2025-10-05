@@ -3,60 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Tela Inicial</title>
+  <title>Bee Adventure</title>
+
+  <!-- Vídeo no fundo; sem poster -->
   <link rel="preload" as="video" href="../assets/intro.mp4" type="video/mp4">
-  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Estilos da landing -->
+  <link rel="stylesheet" href="./styles.css" />
+
+  <!-- Bootstrap Icons (mesmo pacote usado no explore) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
 </head>
 <body>
-  <!-- Container do vídeo de fundo -->
+  <!-- Vídeo de fundo -->
   <div class="bg-video-wrap" aria-hidden="true">
-    <video
-      id="bgVideo"
-      class="bg-video"
-      autoplay
-      muted
-      playsinline
-      loop
-      poster="../assets/poster.jpg"
-    >
-      <!-- Dê preferência a webm + mp4 para melhor compatibilidade -->
+    <video id="bgVideo" class="bg-video" autoplay muted playsinline loop>
       <source src="../assets/intro.webm" type="video/webm" />
-      <source src="../assets/intro.mp4" type="video/mp4" />
-      <!-- Fallback simples para navegadores muito antigos -->
+      <source src="../assets/intro.mp4"  type="video/mp4" />
       Seu navegador não suporta vídeo em HTML5.
     </video>
-
-    <!-- Camada de gradiente sutil para legibilidade -->
     <div class="bg-overlay"></div>
   </div>
 
-  <!-- Conteúdo por cima do vídeo -->
-  <main class="hero">
-    <header class="brand">
-      <img src="../assets/logo.svg" alt="Logo" class="logo" />
-      <h1 class="title">Bem-vindo(a)!</h1>
-      <p class="subtitle">Sua experiência começa aqui.</p>
-    </header>
+  <!-- Botão Som (flutuante, topo-esq) -->
+  <button id="toggleMuteBtn" class="icon-btn" aria-label="Ativar som" title="Ativar som">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 10v4h4l5 4V6L7 10H3z"></path>
+      <path class="waves" d="M14.5 8.5a4 4 0 0 1 0 7m2.5-9a7 7 0 0 1 0 11"></path>
+    </svg>
+  </button>
 
-    <nav class="actions">
-      <button id="enterBtn" class="btn primary">Entrar</button>
-      <button id="toggleMuteBtn" class="btn">Ativar som</button>
-      <button id="pauseBtn" class="btn">Pausar vídeo</button>
-    </nav>
+  <!-- Botão de Tela Cheia -->
+  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia">
+    <i class="bi bi-fullscreen" aria-hidden="true"></i>
+    <span class="visually-hidden">Tela cheia</span>
+  </button>
 
-    <!-- Aviso se o autoplay falhar -->
-    <p id="autoplayNote" class="note" hidden>
-      O vídeo foi pausado pelo navegador. Toque em “Pausar/Play” para iniciar.
-    </p>
+  <!-- HUD simples, 2 colunas -->
+  <main class="hud">
+    <div class="col bee-wrap">
+      <img class="bee" src="../assets/abelha.png" alt="Abelha" />
+    </div>
+
+    <div class="col hero-copy">
+      <h1 class="title">Bee Adventure</h1>
+      <p class="subtitle">Explore, learn and protect the brazilian ecosystem Cerrado</p>
+
+      <button id="startBtn" class="cta" aria-label="Start">
+        <span>Start</span>
+        <svg class="play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+      </button>
+
+      <p id="autoplayNote" class="note" hidden>
+        O navegador bloqueou o autoplay. Toque em “Start” ou no botão de som.
+      </p>
+    </div>
   </main>
 
-  <!-- Opcional: créditos do vídeo -->
-  <footer class="credits">
-    <small>
-      Vídeo: <a href="#" rel="noopener noreferrer">créditos</a>
-    </small>
-  </footer>
-
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>

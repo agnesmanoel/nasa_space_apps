@@ -1,56 +1,116 @@
 const video = document.getElementById('bgVideo');
 const toggleMuteBtn = document.getElementById('toggleMuteBtn');
-const pauseBtn = document.getElementById('pauseBtn');
 const autoplayNote = document.getElementById('autoplayNote');
-const enterBtn = document.getElementById('enterBtn');
+const startBtn = document.getElementById('startBtn');
 
-// Tenta garantir autoplay em dispositivos móveis (muted + playsinline já ajuda)
+/* =========================
+   Autoplay + Som
+   ========================= */
 async function ensureAutoplay() {
   try {
-    // Alguns navegadores bloqueiam play() até interação do usuário
     await video.play();
-    autoplayNote.hidden = true;
-  } catch (err) {
-    // Se falhar, mostra aviso para o usuário interagir
-    autoplayNote.hidden = false;
+    if (autoplayNote) autoplayNote.hidden = true;
+  } catch {
+    if (autoplayNote) autoplayNote.hidden = false;
   }
 }
 
-// Botão para mutar/desmutar
+function setMuteIcon(isMuted){
+  toggleMuteBtn.title = isMuted ? 'Ativar som' : 'Silenciar';
+  toggleMuteBtn.setAttribute('aria-label', toggleMuteBtn.title);
+  const waves = toggleMuteBtn.querySelector('.waves');
+  if (waves) waves.style.opacity = isMuted ? '0.45' : '1';
+  toggleMuteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
+}
+
 toggleMuteBtn.addEventListener('click', () => {
   video.muted = !video.muted;
-  toggleMuteBtn.textContent = video.muted ? 'Ativar som' : 'Silenciar';
-  // Se desmutar e o vídeo estava pausado por bloqueio, tenta tocar
-  if (!video.muted) {
-    video.play().catch(() => { /* silencia erros */ });
-  }
+  setMuteIcon(video.muted);
+  if (!video.muted) video.play().catch(()=>{});
 });
 
-// Botão pausar/retomar
-pauseBtn.addEventListener('click', () => {
-  if (video.paused) {
-    video.play().then(() => {
-      pauseBtn.textContent = 'Pausar vídeo';
-      autoplayNote.hidden = true;
-    }).catch(() => {
-      autoplayNote.hidden = false;
-    });
-  } else {
-    video.pause();
-    pauseBtn.textContent = 'Reproduzir vídeo';
-  }
+startBtn.addEventListener('click', () => {
+  video.muted = false;
+  setMuteIcon(false);
+  video.play().catch(()=>{});
+  // Quando quiser navegar:
+  // window.location.href = './explore.html';
 });
 
-// Exemplo de ação do botão "Entrar"
-enterBtn.addEventListener('click', () => {
-  // Trocar para sua rota/página real
-  window.location.href = 'app.html';
+window.addEventListener('load', () => {
+  setMuteIcon(true); // começa mutado
+  ensureAutoplay();
 });
 
-// Quando a página carrega, tenta o autoplay
-window.addEventListener('load', ensureAutoplay);
-
-// Se o vídeo não carregar, usa o poster como fundo (CSS já cobre)
 video.addEventListener('error', () => {
-  autoplayNote.hidden = false;
+  if (autoplayNote) autoplayNote.hidden = false;
 });
+/* =========================
+   Botão de Tela Cheia (versão única)
+   ========================= */
+(function () {
+  const btn = document.getElementById('fs-toggle');
+  if (!btn) return; // botão precisa existir no HTML (dentro do <body>, antes do <script>)
+
+  const target = document.documentElement; // mude para document.body se preferir
+
+  const isFS = () =>
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.mozFullScreenElement ||
+    document.msFullscreenElement;
+
+  function requestFS(el) {
+    const req =
+      el.requestFullscreen ||
+      el.webkitRequestFullscreen ||
+      el.mozRequestFullScreen ||
+      el.msRequestFullscreen;
+    if (!req) return;
+    try {
+      const p = req.call(el);
+      if (p && typeof p.catch === 'function') p.catch(()=>{});
+    } catch {}
+  }
+
+  function exitFS() {
+    const ex =
+      document.exitFullscreen ||
+      document.webkitExitFullscreen ||
+      document.mozCancelFullScreen ||
+      document.msExitFullscreen;
+    if (!ex) return;
+    try {
+      const p = ex.call(document);
+      if (p && typeof p.catch === 'function') p.catch(()=>{});
+    } catch {}
+  }
+
+  function updateUI(active){
+    const i = btn.querySelector('i');
+    i.className = active ? 'bi bi-fullscreen-exit' : 'bi bi-arrows-fullscreen';
+    btn.setAttribute('aria-label', active ? 'Sair de tela cheia' : 'Tela cheia');
+    btn.title = active ? 'Sair de tela cheia (F)' : 'Tela cheia (F)';
+  }
+
+
+  // evita conflito com o clique global/drag
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    isFS() ? exitFS() : requestFS(target); // síncrono
+  });
+
+  // tecla F alterna fullscreen
+  window.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'f' && !e.repeat) {
+      e.preventDefault();
+      isFS() ? exitFS() : requestFS(target);
+    }
+  });
+
+  // sincroniza estado do botão
+  ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
+    .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
+
+  updateUI(!!isFS());
+})();
