@@ -50,17 +50,30 @@ body::-webkit-scrollbar { display: none; }
 /* =========================
    Camadas de Fundo / FX
    ========================= */
+/* =========================
+   Background (faixa 3000px) — VIDEO
+   ========================= */
 .background-scroll-container{
   position: absolute;
   inset: 0 auto 0 0;
   width: 3000px;
   height: 100vh;
-  background-image: url('../../assets/fundo.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   z-index: 1; /* base da pilha */
+  background: #0b0c10; /* fallback se video não carregar */
 }
+
+/* vídeo ocupa toda a faixa, sem bloquear interações */
+.background-scroll-container .bg-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* cobre 3000px x 100vh */
+  object-position: center;
+  pointer-events: none;   /* não captura cliques/arrastos */
+  transform: translateZ(0); /* aceleração GPU, suaviza */
+}
+
 
 .fx-layer{
   position: absolute;

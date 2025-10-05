@@ -20,7 +20,15 @@
 
 <body>
   <!-- Plano de fundo rolável horizontal -->
-  <div class="background-scroll-container" role="img" aria-label="Paisagem do Cerrado"></div>
+  <div class="background-scroll-container" role="img" aria-label="Paisagem do Cerrado">
+    <video id="bg-video" class="bg-video"
+          playsinline autoplay muted loop preload="auto" aria-hidden="true">
+      <source src="../../assets/fundo.webm" type="video/webm" />
+      <source src="../../assets/fundo.mp4"  type="video/mp4" />
+      <!-- sem poster -->
+    </video>
+  </div>
+
 
   <!-- Camada de efeitos (flores) -->
   <div id="fx-layer" class="fx-layer" aria-hidden="true"></div>

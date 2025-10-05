@@ -293,12 +293,13 @@ document.addEventListener("keydown", (e) => {
 })();
 
 /* =========================
-   NOVO: Som sincronizado + Voltar
+   NOVO: Som sincronizado + Voltar (controla o vídeo de fundo)
    ========================= */
 (function(){
   const STORAGE_KEYS = { muted: 'bee_audio_muted', volume: 'bee_audio_volume' };
   const muteBtn = document.getElementById('toggleMuteBtn');
   const backBtn = document.getElementById('backBtn');
+  const bgVideo = document.getElementById('bg-video');
 
   function setMuteIcon(isMuted){
     if (!muteBtn) return;
@@ -309,29 +310,58 @@ document.addEventListener("keydown", (e) => {
     muteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
   }
 
+  function applyAudioState(isMuted, volume){
+    if (!bgVideo) return;
+    bgVideo.muted = isMuted;
+    // volume só tem efeito quando não está mutado
+    bgVideo.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
+    if (!isMuted) {
+      // gesto do usuário já ocorreu (clique no botão), então tentamos tocar com áudio
+      try { bgVideo.play()?.catch(()=>{}); } catch {}
+    }
+  }
+
   // Restaurar estado salvo
   (function restoreAudioState(){
     const savedMuted  = localStorage.getItem(STORAGE_KEYS.muted);
-    setMuteIcon(savedMuted === 'true'); // atualiza visual (aqui não há <video>, só refletimos o estado global)
+    const savedVolume = parseFloat(localStorage.getItem(STORAGE_KEYS.volume));
+    const isMuted = savedMuted === 'true' || savedMuted === null; // padrão: mutado
+    const vol = Number.isFinite(savedVolume) ? savedVolume : 1;
+    setMuteIcon(isMuted);
+    applyAudioState(isMuted, vol);
   })();
 
   // Alternar e persistir
   muteBtn?.addEventListener('click', () => {
-    const currentMuted = localStorage.getItem(STORAGE_KEYS.muted) === 'true';
+    const currentMuted = localStorage.getItem(STORAGE_KEYS.muted) === 'true' || localStorage.getItem(STORAGE_KEYS.muted) === null;
     const nextMuted = !currentMuted;
     localStorage.setItem(STORAGE_KEYS.muted, String(nextMuted));
-    // mantenha último volume se já existir; se não, salva 1 como padrão
+
+    // garante um volume salvo
     if (localStorage.getItem(STORAGE_KEYS.volume) === null) {
       localStorage.setItem(STORAGE_KEYS.volume, '1');
     }
+    const vol = parseFloat(localStorage.getItem(STORAGE_KEYS.volume)) || 1;
+
     setMuteIcon(nextMuted);
+    applyAudioState(nextMuted, vol);
+  });
+
+  // (Opcional) se um dia ajustar volume em outro lugar, persiste:
+  bgVideo?.addEventListener('volumechange', () => {
+    if (!bgVideo) return;
+    if (!bgVideo.muted) {
+      localStorage.setItem(STORAGE_KEYS.volume, String(bgVideo.volume));
+    }
+    localStorage.setItem(STORAGE_KEYS.muted, String(bgVideo.muted));
+    setMuteIcon(bgVideo.muted);
   });
 
   // Voltar (histórico com fallback)
   backBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     if (history.length > 1) history.back();
-    else window.location.href = '../index.html';
+    else window.location.href = './index.html';
   });
 })();
 
