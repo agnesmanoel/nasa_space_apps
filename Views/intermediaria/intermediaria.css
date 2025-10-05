@@ -39,7 +39,7 @@ body::-webkit-scrollbar { display: none; }
   width: 3000px;
   height: 100vh;
   z-index: 1;
-  background-image: url("../../assets/fundo.jpg"); /* <— volta para FOTO */
+  background-image: url("../../assets/transicao.png"); /* <— volta para FOTO */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

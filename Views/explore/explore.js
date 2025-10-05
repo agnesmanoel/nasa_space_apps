@@ -25,8 +25,7 @@ function clampScroll(x) {
 /* =========================
    Drag horizontal (ignora áreas interativas)
    ========================= */
-const SAFE_SELECTOR = ".hud-bar, #fs-toggle, #toggleMuteBtn, #backBtn, #beeFab, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #intro-modal, #intro-backdrop, #side-tip";
-
+const SAFE_SELECTOR = ".hud-bar, #fs-toggle, #toggleMuteBtn, #backBtn, #beeFab, button, input, a, [role='button'], .flower, #flower-modal, .flower-modal-backdrop, #side-tip";
 
 window.addEventListener("pointerdown", (e) => {
   if (e.target.closest(SAFE_SELECTOR)) return;
@@ -176,8 +175,6 @@ document.addEventListener("keydown", (e) => {
   setMonth(mIdx); // mantém mês do slider
 })();
 
-
-
 /* =========================
    Botão de Tela Cheia (ícones iguais às outras telas)
    ========================= */
@@ -238,42 +235,7 @@ document.addEventListener("keydown", (e) => {
 })();
 
 /* =========================
-   Alerta inicial (glass)
-   ========================= */
-(function () {
-  const backdrop = document.getElementById('intro-backdrop');
-  const modal    = document.getElementById('intro-modal');
-  const btnOk    = document.getElementById('intro-ok');
-  const btnX     = document.querySelector('.intro-close');
-  if (!backdrop || !modal || !btnOk || !btnX) return;
-
-  function openIntro(){
-    backdrop.hidden = false;
-    modal.hidden = false;
-    btnOk.focus();
-  }
-  function closeIntro(){
-    backdrop.hidden = true;
-    modal.hidden = true;
-    setTimeout(() => window.sideTip?.show(), 150);
-  }
-
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    openIntro();
-  } else {
-    window.addEventListener('DOMContentLoaded', openIntro, { once:true });
-  }
-
-  btnOk.addEventListener('click', closeIntro);
-  btnX.addEventListener('click', closeIntro);
-  backdrop.addEventListener('click', closeIntro);
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.hidden) closeIntro();
-  });
-})();
-
-/* =========================
-   Cartão lateral (direita) — controlado pelo intro
+   Cartão lateral (direita) — independente do modal
    ========================= */
 (function(){
   const tip   = document.getElementById('side-tip');
@@ -292,14 +254,19 @@ document.addEventListener("keydown", (e) => {
   window.sideTip = { show, hide };
 })();
 
+// Mostra o side-tip automaticamente (sem modal)
+window.addEventListener('load', () => {
+  setTimeout(() => window.sideTip?.show(), 300);
+});
+
 /* =========================
-   NOVO: Som sincronizado + Voltar (controla o vídeo de fundo)
+   NOVO: Som sincronizado + Voltar (controla possível vídeo de fundo)
    ========================= */
 (function(){
   const STORAGE_KEYS = { muted: 'bee_audio_muted', volume: 'bee_audio_volume' };
   const muteBtn = document.getElementById('toggleMuteBtn');
   const backBtn = document.getElementById('backBtn');
-  const bgVideo = document.getElementById('bg-video');
+  const bgVideo = document.getElementById('bg-video'); // pode ser null nesta tela (fundo por imagem)
 
   function setMuteIcon(isMuted){
     if (!muteBtn) return;
@@ -311,14 +278,10 @@ document.addEventListener("keydown", (e) => {
   }
 
   function applyAudioState(isMuted, volume){
-    if (!bgVideo) return;
+    if (!bgVideo) return; // nesta página não tem vídeo — apenas mantém o estado salvo
     bgVideo.muted = isMuted;
-    // volume só tem efeito quando não está mutado
     bgVideo.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
-    if (!isMuted) {
-      // gesto do usuário já ocorreu (clique no botão), então tentamos tocar com áudio
-      try { bgVideo.play()?.catch(()=>{}); } catch {}
-    }
+    if (!isMuted) { try { bgVideo.play()?.catch(()=>{}); } catch {} }
   }
 
   // Restaurar estado salvo
@@ -336,23 +299,18 @@ document.addEventListener("keydown", (e) => {
     const currentMuted = localStorage.getItem(STORAGE_KEYS.muted) === 'true' || localStorage.getItem(STORAGE_KEYS.muted) === null;
     const nextMuted = !currentMuted;
     localStorage.setItem(STORAGE_KEYS.muted, String(nextMuted));
-
-    // garante um volume salvo
     if (localStorage.getItem(STORAGE_KEYS.volume) === null) {
       localStorage.setItem(STORAGE_KEYS.volume, '1');
     }
     const vol = parseFloat(localStorage.getItem(STORAGE_KEYS.volume)) || 1;
-
     setMuteIcon(nextMuted);
     applyAudioState(nextMuted, vol);
   });
 
-  // (Opcional) se um dia ajustar volume em outro lugar, persiste:
+  // Persistência se ajustar volume em algum outro player
   bgVideo?.addEventListener('volumechange', () => {
     if (!bgVideo) return;
-    if (!bgVideo.muted) {
-      localStorage.setItem(STORAGE_KEYS.volume, String(bgVideo.volume));
-    }
+    if (!bgVideo.muted) localStorage.setItem(STORAGE_KEYS.volume, String(bgVideo.volume));
     localStorage.setItem(STORAGE_KEYS.muted, String(bgVideo.muted));
     setMuteIcon(bgVideo.muted);
   });
@@ -390,104 +348,89 @@ document.addEventListener("keydown", (e) => {
 
   // estado interno
   let inFlight = false;
-  const FLY_SPEED_PX_MS = 0.5; // ~px por ms (ajuste fino da velocidade)
 
-  // posição “base” (centro do fab)
-function getHomeCenter(){
-  const r = fab.getBoundingClientRect();
-  return { x: r.left + r.width/2, y: r.top + r.height/2 };
-}
-
-// tira a IMG do vidro e coloca no body, mantendo tamanho/posição
-function undockImageAt({x, y}){
-  // mede tamanho atual (dentro do fab)
-  const rect = img.getBoundingClientRect();
-  const w = rect.width;
-  const h = rect.height;
-
-  // move pro body
-  if (img.parentElement !== document.body) {
-    document.body.appendChild(img);
+  // posição base (centro do fab)
+  function getHomeCenter(){
+    const r = fab.getBoundingClientRect();
+    return { x: r.left + r.width/2, y: r.top + r.height/2 };
   }
 
-  // fixa dimensões e camadas para o voo
-  img.style.width = `${w}px`;           // <- trava tamanho
-  img.style.height = `${h}px`;
-  img.style.position = 'fixed';
-  img.style.left = `${x - w/2}px`;
-  img.style.top  = `${y - h/2}px`;
-  img.style.transform = 'translate3d(0,0,0)';
-  img.style.transition = 'transform 0ms linear';
-  img.style.willChange = 'transform';
-  img.style.zIndex = '6';               // <- acima do modal/backdrop
-}
+  // tira a IMG do vidro e coloca no body, mantendo tamanho/posição
+  function undockImageAt({x, y}){
+    const rect = img.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
 
-// volta a IMG para dentro do FAB e limpa estilos inline
-function dockImage(){
-  img.style.transition = '';
-  img.style.transform = '';
-  img.style.position = '';
-  img.style.left = '';
-  img.style.top = '';
-  img.style.width = '';
-  img.style.height = '';
-  img.style.willChange = '';
-  img.style.zIndex = '';
-  fab.appendChild(img);
-}
+    if (img.parentElement !== document.body) document.body.appendChild(img);
 
-// calcula duração pelo deslocamento
-function durationFromDistance(dx, dy){
-  const dist = Math.hypot(dx, dy);
-  // 0.7 px/ms ≈ ~1400ms para ~1000px (mais visível)
-  const pxPerMs = 0.7;
-  const ms = dist / pxPerMs;
-  return Math.max(400, Math.min(1600, ms));
-}
+    img.style.width = `${w}px`;
+    img.style.height = `${h}px`;
+    img.style.position = 'fixed';
+    img.style.left = `${x - w/2}px`;
+    img.style.top  = `${y - h/2}px`;
+    img.style.transform = 'translate3d(0,0,0)';
+    img.style.transition = 'transform 0ms linear';
+    img.style.willChange = 'transform';
+    img.style.zIndex = '6'; // acima de modais
+  }
 
-function flyToEl(el, { offsetYFactor = 0.25 } = {}){
-  return new Promise((resolve) => {
-    if (inFlight) return resolve();
-    inFlight = true;
-    fab.classList.add('is-moving');
+  // volta a IMG pro FAB e limpa estilos
+  function dockImage(){
+    img.style.transition = '';
+    img.style.transform = '';
+    img.style.position = '';
+    img.style.left = '';
+    img.style.top = '';
+    img.style.width = '';
+    img.style.height = '';
+    img.style.willChange = '';
+    img.style.zIndex = '';
+    fab.appendChild(img);
+  }
 
-    const home = getHomeCenter();
-    undockImageAt(home);
+  function durationFromDistance(dx, dy){
+    const dist = Math.hypot(dx, dy);
+    const pxPerMs = 0.7;
+    const ms = dist / pxPerMs;
+    return Math.max(400, Math.min(1600, ms));
+  }
 
-    const r = el.getBoundingClientRect();
-    const target = { x: r.left + r.width/2, y: r.top + r.height*offsetYFactor };
+  function flyToEl(el, { offsetYFactor = 0.25 } = {}){
+    return new Promise((resolve) => {
+      if (inFlight) return resolve();
+      inFlight = true;
+      fab.classList.add('is-moving');
 
-    const dx = Math.round(target.x - home.x);
-    const dy = Math.round(target.y - home.y);
-    const dur = durationFromDistance(dx, dy);
+      const home = getHomeCenter();
+      undockImageAt(home);
 
-    requestAnimationFrame(() => {
-      img.style.transition = `transform ${dur}ms cubic-bezier(.22,.61,.36,1)`;
-      img.style.transform  = `translate3d(${dx}px, ${dy}px, 0)`;
+      const r = el.getBoundingClientRect();
+      const target = { x: r.left + r.width/2, y: r.top + r.height*offsetYFactor };
+
+      const dx = Math.round(target.x - home.x);
+      const dy = Math.round(target.y - home.y);
+      const dur = durationFromDistance(dx, dy);
+
+      requestAnimationFrame(() => {
+        img.style.transition = `transform ${dur}ms cubic-bezier(.22,.61,.36,1)`;
+        img.style.transform  = `translate3d(${dx}px, ${dy}px, 0)`;
+      });
+
+      const onEnd = () => { img.removeEventListener('transitionend', onEnd); resolve(); };
+      img.addEventListener('transitionend', onEnd);
     });
+  }
 
-    const onEnd = () => { img.removeEventListener('transitionend', onEnd); resolve(); };
-    img.addEventListener('transitionend', onEnd);
-  });
-}
-
-
-  // volta para a base
   function flyHome(){
     return new Promise((resolve) => {
-      const home = getHomeCenter();
-
-      // posição atual da imagem (como está em fixed, left/top já estão setados no undock)
-      // queremos apenas “voltar” o translate para 0
       const handleEnd = () => {
         img.removeEventListener('transitionend', handleEnd);
-        dockImage();                   // prende de volta no vidro
+        dockImage();
         fab.classList.remove('is-moving');
         inFlight = false;
         resolve();
       };
 
-      // anima de volta
       requestAnimationFrame(() => {
         img.style.transition = `transform 520ms cubic-bezier(.22,.61,.36,1)`;
         img.style.transform  = `translate3d(0,0,0)`;
@@ -501,12 +444,8 @@ function flyToEl(el, { offsetYFactor = 0.25 } = {}){
     img.style.zIndex = (z == null ? '' : String(z));
   }
 
-  
-  // Exponho para o flowers.js controlar a camada
+  // Expor para flowers.js
   window.setBeeZIndex = setBeeZIndex;
-
-  // Exponho pro flowers.js
   window.flyBeeTo   = flyToEl;
   window.flyBeeHome = flyHome;
 })();
-

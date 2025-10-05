@@ -81,14 +81,32 @@ window.addEventListener("load", () => {
   // garante 1º frame visível como fallback
   if (beeEl) beeEl.src = "../../assets/abelha/abelha0.png";
 
-
   // Frações horizontais da viewport (0=esq, 1=dir)
-  // Começa bem à esquerda e caminha até quase o canto.
-  const beeFractions = [0.08, 0.50, 0.82]; // passo 1, 2, 3 (cada OK)
-  const beeFinal     = 0.97;               // corrida final antes de trocar de página
+  const beeFractions = [0.08, 0.50, 0.82];
+  const beeFinal     = 0.97;
 
   let idx = 0;
   let beeAnimatorStarted = false;
+  let fallbackTimer = null;
+
+  function startFallbackAnimator(){
+    if (fallbackTimer) return;
+    let f = 0;
+    const frames = 10;
+    const fps = 12;
+    const base = "../../assets/abelha/abelha";
+    const ext  = "png";
+    fallbackTimer = setInterval(() => {
+      f = (f + 1) % frames;
+      beeEl.src = `${base}${f}.${ext}`;
+    }, 1000 / fps);
+  }
+  function stopFallbackAnimator(){
+    if (fallbackTimer){
+      clearInterval(fallbackTimer);
+      fallbackTimer = null;
+    }
+  }
 
   function render(){
     hudText.innerHTML = parts[idx];
@@ -96,38 +114,45 @@ window.addEventListener("load", () => {
     if (beeEl.hidden){
       beeEl.hidden = false;
 
-      // (opcional) aumentar via escala extra
-      beeEl.style.setProperty('--bee-scale', '1'); // mude para 1.2/1.3 se quiser maior
+      // (opcional) tamanho extra
+      beeEl.style.setProperty('--bee-scale', '1');
 
-      // inicia sprite uma única vez
-      if (!beeAnimatorStarted && window.BeeAnimator){
-        try{
-          new window.BeeAnimator(beeEl, {
-            basePath: "../../assets/abelha",
-            prefix: "abelha",
-            ext: "png",
-            frames: 10,
-            fps: 12,
-            scale: 1.5,
-            autoplay: true,
-            loop: true
-          });
-          beeAnimatorStarted = true;
-        }catch{}
+      // tenta BeeAnimator; se não existir, cai no fallback
+      if (!beeAnimatorStarted){
+        if (window.BeeAnimator){
+          try{
+            new window.BeeAnimator(beeEl, {
+              basePath: "../../assets/abelha",
+              prefix: "abelha",
+              ext: "png",
+              frames: 10,
+              fps: 12,
+              scale: 1.5,
+              autoplay: true,
+              loop: true
+            });
+            beeAnimatorStarted = true;
+            stopFallbackAnimator();
+          }catch{
+            startFallbackAnimator();
+          }
+        } else {
+          startFallbackAnimator();
+        }
       }
 
-      // posiciona na primeira fração (esquerda), instantaneamente
+      // primeira posição (instantaneamente)
       moveBeeToFraction(beeFractions[0], true);
     } else {
       moveBeeToFraction(beeFractions[idx]);
     }
   }
 
-  // Move a abelha para uma fração horizontal da viewport (mantém centro vertical)
+  // Move a abelha horizontalmente (mantém centro vertical)
   function moveBeeToFraction(frac = 0.5, instant = false){
     if (!beeEl) return;
     const clamped = Math.max(0.02, Math.min(0.98, frac));
-    const dx = (clamped - 0.5) * window.innerWidth;  // delta X desde o centro
+    const dx = (clamped - 0.5) * window.innerWidth;
     if (instant) beeEl.style.transitionDuration = "0ms";
     beeEl.style.transform = `translate(calc(-50% + ${dx}px), -50%)`;
     if (instant) requestAnimationFrame(()=> beeEl.style.transitionDuration = "");
@@ -136,10 +161,9 @@ window.addEventListener("load", () => {
   okBtn.addEventListener("click", () => {
     if (idx < parts.length - 1){
       idx++;
-      render();               // texto + move para a próxima posição
+      render();
       return;
     }
-    // último OK → corre ao final e só então na vega
     const handleEnd = () => {
       beeEl.removeEventListener("transitionend", handleEnd);
       window.location.href = "../explore/explore.html";
@@ -148,7 +172,6 @@ window.addEventListener("load", () => {
     moveBeeToFraction(beeFinal);
   });
 
-  // Reposiciona corretamente ao redimensionar
   window.addEventListener("resize", () =>
     moveBeeToFraction(
       (idx < beeFractions.length ? beeFractions[idx] : beeFinal),
