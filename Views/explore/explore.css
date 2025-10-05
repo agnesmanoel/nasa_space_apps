@@ -62,7 +62,7 @@ body::-webkit-scrollbar { display: none; }
   width: 3000px;
   height: 100vh;
   z-index: 1;              /* base da pilha */
-  background-image: url('../../assets/chuvoso.png'); /* << foto aqui */
+  background-image: none; /* << foto aqui */
   background-size: cover;                           /* cobre toda a faixa */
   background-position: center;                      /* centralizado */
   background-repeat: no-repeat;
@@ -301,8 +301,21 @@ body::-webkit-scrollbar { display: none; }
 .rightcard-row{ display: block; }          /* texto ocupa toda a largura */
 .right-icon{ display: none; }              /* sem ícone */
 .right-text{ max-width: 100%; }
-.right-text p{ margin: 0; color: var(--text); line-height: 1.35; max-width: 100%; word-wrap: break-word; }
-.right-text p strong{ display: block; margin-bottom: 6px; }
+.right-text p{
+  margin: 0;
+  color: var(--text);
+  line-height: 1.35;
+  max-width: 100%;
+  white-space: 100%;      /* não quebra linha */
+  overflow: hidden;         /* esconde o excedente */
+  text-overflow: ellipsis;  /* mostra reticências (…) */
+}
+
+
+.right-text p strong{
+   display: inline;
+   margin: 0 .4em 0 0; /* um espacinho depois do título */
+}
 
 /* =========================
    Botões fixos (FS, Som, Voltar)

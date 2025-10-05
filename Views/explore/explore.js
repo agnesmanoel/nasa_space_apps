@@ -59,13 +59,37 @@ function atualizarCards(ano, indiceMes) {
   const tendenciaPrecip = { up: 'increasing', down: 'decreasing', same: 'stable' };
   elDescricao.innerHTML = `Precipitation forecast for <strong>${dadosDoMes.name}</strong> is <strong>${dadosDoMes.precip_forecast.toFixed(1)}mm</strong>, with a trend of ${tendenciaPrecip[dadosDoMes.precip_trend] || 'N/A'}.`;
 
+
+  // NDVI pill (direita)
+  const elNdviTitle = document.querySelector('.ndvi-pill .pill-title');
+  const elNdviSub   = document.querySelector('.ndvi-pill .pill-sub');
+
   // As chaves aqui precisam corresponder aos valores em inglês do seu objeto de dados
   const iconeEstacao = { Rainy: '💧', Dry: '☀️', Transition: '🌀' };
   elIconeEstacao.textContent = iconeEstacao[dadosDoMes.season] || '❔';
 
+      // === NDVI (mostra valor ou "—" se não houver) ===
+  if (elNdviTitle && elNdviSub) {
+    elNdviTitle.textContent = 'NDVI Forecast';
+    if (typeof dadosDoMes.ndvi === 'number' && Number.isFinite(dadosDoMes.ndvi)) {
+      elNdviSub.textContent = `Index: ${dadosDoMes.ndvi.toFixed(3)}`;
+    } else {
+      elNdviSub.textContent = '—';
+    }
+  }
 
-    elNdviSub.textContent = `Index: ${dadosDoMes.ndvi.toFixed(4)}`;
-  
+  // === Fundo dinâmico conforme estação ===
+  const bgEl = document.querySelector('.background-scroll-container');
+  if (bgEl) {
+    const bgMap = {
+      Rainy: "../../assets/chuvoso.png",
+      Dry: "../../assets/seca.png",
+      Transition: "../../assets/transicao.png"
+    };
+    bgEl.style.backgroundImage = `url('${bgMap[dadosDoMes.season] || bgMap.Rainy}')`;
+  }
+
+
 }
 
 // === Centraliza ao carregar ===
