@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Bee Adventure</title>
+
+  <link rel="preload" as="video" href="../assets/intro.mp4" type="video/mp4">
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+</head>
+<body>
+  <!-- Vídeo de fundo -->
+  <div class="bg-video-wrap" aria-hidden="true">
+    <video id="bgVideo" class="bg-video" autoplay muted playsinline loop>
+      <source src="../assets/intro.webm" type="video/webm" />
+      <source src="../assets/intro.mp4"  type="video/mp4" />
+      Seu navegador não suporta vídeo em HTML5.
+    </video>
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- Botões flutuantes -->
+  <button id="toggleMuteBtn" class="icon-btn" aria-label="Ativar som" title="Ativar som">
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 10v4h4l5 4V6L7 10H3z"></path>
+      <path class="waves" d="M14.5 8.5a4 4 0 0 1 0 7m2.5-9a7 7 0 0 1 0 11"></path>
+    </svg>
+  </button>
+
+  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia" title="Tela cheia (F)">
+    <i class="bi bi-fullscreen" aria-hidden="true"></i>
+    <span class="visually-hidden">Tela cheia</span>
+  </button>
+
+  <!-- SQUAD: ocupa a viewport com padding das bordas -->
+  <main class="squad" role="main" aria-label="Tela inicial">
+    <div class="col bee-wrap">
+      <img class="bee" src="../assets/abelha.png" alt="Abelha" />
+    </div>
+
+    <div class="col hero-copy">
+      <h1 class="title">Bee Adventure</h1>
+      <p class="subtitle">Explore, aprenda e proteja o ecossistema brasileiro</p>
+
+      <button id="startBtn" class="cta" aria-label="Start">
+        <span>Start</span>
+        <svg class="play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+      </button>
+
+      <p id="autoplayNote" class="note" hidden>
+        O navegador bloqueou o autoplay. Toque em “Start” ou no botão de som.
+      </p>
+    </div>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>

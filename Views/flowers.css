@@ -1,0 +1,131 @@
+/* Camada já definida em explore.css:
+   .fx-layer { position:absolute; inset:0 auto 0 0; width:3000px; height:100vh; z-index:2; } */
+
+:root{
+  --flower-min: 56px;   /* tamanho mínimo das flores */
+  --flower-max: 120px;  /* tamanho máximo das flores */
+
+  /* tokens do vidro para o modal */
+  --glass-bg: rgba(255,255,255,0.10);
+  --glass-brd: rgba(255,255,255,0.20);
+  --text: #e6e6e6;
+  --muted: #b9c0cc;
+  --shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+}
+
+/* ========== FLORES ========== */
+.flower{
+  position: absolute;
+  transform-origin: 50% 100%;
+  will-change: transform;
+  transition: transform .22s ease, filter .22s ease;
+  pointer-events: auto;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.25));
+}
+.flower img{
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* balanço leve */
+@keyframes sway {
+  0%   { transform: rotate(-1.2deg); }
+  50%  { transform: rotate(1.2deg); }
+  100% { transform: rotate(-1.2deg); }
+}
+.flower.is-swaying{ animation: sway 3.5s ease-in-out infinite; }
+
+/* interação */
+.flower:hover{
+  transform: translateY(-4px) scale(1.06) var(--tilt, rotate(0deg));
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.32));
+}
+
+/* clique → pulinho */
+@keyframes pop {
+  0% { transform: translateY(0) scale(1); }
+  40%{ transform: translateY(-10px) scale(1.08); }
+  100%{ transform: translateY(0) scale(1); }
+}
+.flower.is-pop{ animation: pop .35s ease; }
+
+/* ========== MODAL GLASS ========== */
+/* backdrop ocupa a tela mas deixa “janela” pro HUD no rodapé por não cobrir */
+.flower-modal-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  backdrop-filter: blur(2px);
+  z-index: 4;                 /* acima do HUD(3)? Não: modal vai 5, backdrop 4 */
+}
+
+/* caixa do modal — topo central, sem invadir HUD (altura limitada) */
+.flower-modal{
+  position: fixed;
+  left: 50%;
+  top: 24px;
+  transform: translateX(-50%);
+  width: min(92vw, 560px);
+  max-height: calc(100vh - 220px);    /* deixa “respiro” para o HUD */
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-brd);
+  background: var(--glass-bg);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(130%) blur(12px);
+  z-index: 5;
+}
+
+/* botão de fechar (X) */
+.flower-modal-close{
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  font-size: 20px; line-height: 1;
+  display: grid; place-items: center;
+  cursor: pointer;
+  backdrop-filter: saturate(120%) blur(4px);
+}
+.flower-modal-close:hover{ background: rgba(255,255,255,.22); }
+
+/* conteúdo */
+.flower-modal-media{
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.08);
+  aspect-ratio: 16 / 9;
+  display: grid; place-items: center;
+}
+.flower-modal-media img{
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.flower-modal-body{
+  overflow: auto;
+  padding-right: 4px;
+}
+.flower-modal-body h3{
+  margin: 8px 0 6px;
+  font-weight: 800; letter-spacing: .2px;
+}
+.flower-modal-text{
+  margin: 0;
+  color: var(--text);
+}
