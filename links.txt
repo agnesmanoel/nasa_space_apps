@@ -1,0 +1,11 @@
+https://power.larc.nasa.gov/api/temporal/daily/point?start=20200101&end=20251002&latitude=-15.0&longitude=-47.0&format=JSON&user=isabel2025&community=AG&parameters=T2M
+
+
+https://power.larc.nasa.gov/api/temporal/daily/point?start=20200101&end=20251002&latitude=-15.0&longitude=-47.0&format=JSON&user=isabel2025&community=AG&parameters=PRECTOT
+
+
+https://power.larc.nasa.gov/api/temporal/daily/point?start=20200101&end=20251002&latitude=-15.0&longitude=-47.0&format=JSON&user=isabel2025&community=AG&parameters=RH2M
+
+
+https://power.larc.nasa.gov/api/temporal/daily/point?start=20200101&end=20251002&latitude=-15.0&longitude=-47.0&format=JSON&user=isabel2025&community=AG&parameters=WS2M
+
