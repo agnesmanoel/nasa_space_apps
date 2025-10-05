@@ -1,19 +1,28 @@
-/* ===== Reset mínimo ===== */
+/* Reset + sem rolagem */
 *,
 *::before,
 *::after { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-
-/* Sem rolagem vertical */
-html, body { overflow: hidden; }
+html, body { height: 100%; margin: 0; overflow: hidden; }
 
 :root{
   --text: #ffffff;
   --muted: #e5e7ebcc;
   --shadow: 0 25px 60px -18px rgba(0,0,0,.55);
+
+  /* <<< padding fixo da borda do SQUAD >>> */
+  --squad-pad: clamp(12px, 12vw, 108px);
 }
 
-/* ===== Vídeo de fundo ===== */
+/* Utilitário (equiv. Bootstrap) para esconder texto visualmente */
+.visually-hidden{
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,1px,1px);
+  white-space: nowrap; border: 0;
+}
+
+/* Vídeo ao fundo */
 .bg-video-wrap{ position: fixed; inset: 0; overflow: hidden; z-index: -2; background:#0b0c10; }
 .bg-video{
   position: absolute; top:50%; left:50%;
@@ -23,25 +32,33 @@ html, body { overflow: hidden; }
 }
 .bg-overlay{
   position:absolute; inset:0; z-index:1;
-  /* vinheta leve p/ legibilidade */
   background: radial-gradient(1200px 600px at 60% 45%, rgba(0,0,0,0.20) 0%, rgba(0,0,0,.48) 60%, rgba(0,0,0,.58) 100%);
 }
 
-/* ===== HUD 2 colunas (sem card) ===== */
-.hud{
-  position: relative; z-index: 2;
-  height: 100dvh;
+/* ===== SQUAD =====
+   Ocupa a tela inteira com um padding/margem das bordas.
+   Responsivo: height e width ajustam com a viewport.
+*/
+.squad{
+  position: fixed;
+  inset: var(--squad-pad);
+  z-index: 2;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: clamp(12px, 3vw, 32px);
   align-items: center;
-  padding: clamp(10px, 2.6vw, 24px) clamp(14px, 3.2vw, 28px);
+
+  /* estética sutil sobre o vídeo */
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
   color: var(--text);
 }
 
-.col{ position: relative; }
-
-/* Abelha à esquerda */
+/* Colunas internas */
+.col{ position: relative; min-width: 0; }
 .bee-wrap{ display: grid; place-items: center; }
 .bee{
   width: min(540px, 50vw);
@@ -52,7 +69,6 @@ html, body { overflow: hidden; }
   transform: translateX(6%);
 }
 
-/* Textos à direita */
 .hero-copy{ align-self: center; }
 .title{
   margin: 0 0 .35rem 0;
@@ -69,7 +85,7 @@ html, body { overflow: hidden; }
   line-height: 1.35;
 }
 
-/* Botão Start (pílula) */
+/* CTA */
 .cta{
   -webkit-tap-highlight-color: transparent;
   display: inline-flex; align-items: center; gap: 14px;
@@ -87,7 +103,7 @@ html, body { overflow: hidden; }
 .cta:hover{ filter: brightness(1.06); transform: translateY(-1px); }
 .cta:active{ transform: translateY(0); }
 
-/* Botão de som (flutuante, topo-esq) */
+/* Botões flutuantes */
 .icon-btn{
   position: fixed; top: 16px; left: 16px;
   display: grid; place-items:center;
@@ -103,14 +119,10 @@ html, body { overflow: hidden; }
 .icon{ width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.6; }
 .icon .waves{ fill: none; }
 
-/* Nota de autoplay */
-.note{ margin-top: .75rem; font-size: .95rem; color: var(--muted); }
-
-/* ===== Botão Tela Cheia ===== */
 .fs-toggle{
   position: fixed;
   top: 16px; right: 16px;
-  z-index: 2147483647;   /* ↑ acima de tudo */
+  z-index: 2147483647;
   width: 44px; height: 44px;
   display: grid; place-items: center;
   border-radius: 14px;
@@ -127,12 +139,11 @@ html, body { overflow: hidden; }
 
 /* Responsivo */
 @media (max-width: 980px){
-  .hud{
+  .squad{
     grid-template-columns: 1fr;
-    padding: clamp(12px, 3vw, 18px);
-    text-align: center;
   }
   .bee{ width: min(520px, 78vw); transform: none; }
+  .hero-copy{ text-align: center; }
   .cta{ justify-content: center; }
 }
 
@@ -140,13 +151,4 @@ html, body { overflow: hidden; }
 @media (prefers-reduced-motion: reduce){
   .bg-video{ filter: none; }
   .cta{ transition: none; }
-}
-
-/* Utilitário para esconder texto visualmente (equivalente ao Bootstrap) */
-.visually-hidden{
-  position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0, 0, 1px, 1px);
-  white-space: nowrap; border: 0;
 }

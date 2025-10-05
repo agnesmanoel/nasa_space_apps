@@ -5,17 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Bee Adventure</title>
 
-  <!-- Vídeo no fundo; sem poster -->
   <link rel="preload" as="video" href="../assets/intro.mp4" type="video/mp4">
-
-  <!-- Estilos da landing -->
   <link rel="stylesheet" href="./styles.css" />
-
-  <!-- Bootstrap Icons (mesmo pacote usado no explore) -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 </head>
 <body>
   <!-- Vídeo de fundo -->
@@ -28,7 +20,7 @@
     <div class="bg-overlay"></div>
   </div>
 
-  <!-- Botão Som (flutuante, topo-esq) -->
+  <!-- Botões flutuantes -->
   <button id="toggleMuteBtn" class="icon-btn" aria-label="Ativar som" title="Ativar som">
     <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M3 10v4h4l5 4V6L7 10H3z"></path>
@@ -36,21 +28,20 @@
     </svg>
   </button>
 
-  <!-- Botão de Tela Cheia -->
-  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia">
+  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia" title="Tela cheia (F)">
     <i class="bi bi-fullscreen" aria-hidden="true"></i>
     <span class="visually-hidden">Tela cheia</span>
   </button>
 
-  <!-- HUD simples, 2 colunas -->
-  <main class="hud">
+  <!-- SQUAD: ocupa a viewport com padding das bordas -->
+  <main class="squad" role="main" aria-label="Tela inicial">
     <div class="col bee-wrap">
       <img class="bee" src="../assets/abelha.png" alt="Abelha" />
     </div>
 
     <div class="col hero-copy">
       <h1 class="title">Bee Adventure</h1>
-      <p class="subtitle">Explore, learn and protect the brazilian ecosystem Cerrado</p>
+      <p class="subtitle">Explore, aprenda e proteja o ecossistema brasileiro</p>
 
       <button id="startBtn" class="cta" aria-label="Start">
         <span>Start</span>
