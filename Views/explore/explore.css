@@ -62,7 +62,7 @@ body::-webkit-scrollbar { display: none; }
   width: 3000px;
   height: 100vh;
   z-index: 1;              /* base da pilha */
-  background-image: url('../../assets/transicao.png'); /* << foto aqui */
+  background-image: url('../../assets/chuvoso.png'); /* << foto aqui */
   background-size: cover;                           /* cobre toda a faixa */
   background-position: center;                      /* centralizado */
   background-repeat: no-repeat;

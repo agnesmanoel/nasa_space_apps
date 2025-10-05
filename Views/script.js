@@ -1,123 +1,138 @@
-const video = document.getElementById('bgVideo');
-const toggleMuteBtn = document.getElementById('toggleMuteBtn');
-const autoplayNote = document.getElementById('autoplayNote');
-const startBtn = document.getElementById('startBtn');
+document.addEventListener('DOMContentLoaded', () => {
+  const video         = document.getElementById('bgVideo');
+  const toggleMuteBtn = document.getElementById('toggleMuteBtn');
+  const autoplayNote  = document.getElementById('autoplayNote');
+  const startBtn      = document.getElementById('startBtn');
+  const fsBtn         = document.getElementById('fs-toggle');
+  const beeEl         = document.getElementById('beeSprite');
 
-const STORAGE_KEYS = {
-  muted: 'bee_audio_muted',
-  volume: 'bee_audio_volume'
-};
-
-/* Autoplay + Som */
-async function ensureAutoplay() {
-  try {
-    await video.play();
-    if (autoplayNote) autoplayNote.hidden = true;
-  } catch {
-    if (autoplayNote) autoplayNote.hidden = false;
+  if (!video) {
+    console.warn('[index] #bgVideo não encontrado.');
+    return;
   }
-}
-function setMuteIcon(isMuted){
-  toggleMuteBtn.title = isMuted ? 'Ativar som' : 'Silenciar';
-  toggleMuteBtn.setAttribute('aria-label', toggleMuteBtn.title);
-  const waves = toggleMuteBtn.querySelector('.waves');
-  if (waves) waves.style.opacity = isMuted ? '0.45' : '1';
-  toggleMuteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
-}
-toggleMuteBtn.addEventListener('click', () => {
-  video.muted = !video.muted;
-  setMuteIcon(video.muted);
-  localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
-  localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
-  if (!video.muted) video.play().catch(()=>{});
 
-});
-startBtn.addEventListener('click', () => {
-  localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
-  localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
+  const STORAGE_KEYS = {
+    muted: 'bee_audio_muted',
+    volume: 'bee_audio_volume'
+  };
 
-  // window.location.href = './explore.html';
-  window.location.href = './intro/intro.html';
-});
-window.addEventListener('load', () => { 
-  const savedMuted  = localStorage.getItem(STORAGE_KEYS.muted);
-  const savedVolume = localStorage.getItem(STORAGE_KEYS.volume);
+  /* ---------- Helpers ---------- */
+  const setMuteIcon = (isMuted) => {
+    if (!toggleMuteBtn) return;
+    toggleMuteBtn.title = isMuted ? 'Ativar som' : 'Silenciar';
+    toggleMuteBtn.setAttribute('aria-label', toggleMuteBtn.title);
+    const waves = toggleMuteBtn.querySelector('.waves');
+    if (waves) waves.style.opacity = isMuted ? '0.45' : '1';
+    toggleMuteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
+  };
 
-  if (savedMuted !== null) {
-    video.muted = savedMuted === 'true';
+  const ensureAutoplay = async () => {
+    try {
+      await video.play();
+      if (autoplayNote) autoplayNote.hidden = true;
+    } catch {
+      if (autoplayNote) autoplayNote.hidden = false;
+    }
+  };
+
+  /* ---------- Estado inicial (som) ---------- */
+  (() => {
+    const savedMuted  = localStorage.getItem(STORAGE_KEYS.muted);
+    const savedVolume = localStorage.getItem(STORAGE_KEYS.volume);
+
+    if (savedMuted !== null) {
+      video.muted = savedMuted === 'true';
+    } else {
+      video.muted = true; // padrão
+    }
     setMuteIcon(video.muted);
-  } else {
-    setMuteIcon(true); // padrão: mutado
-  }
 
-  if (savedVolume !== null) {
-    const v = Math.min(1, Math.max(0, parseFloat(savedVolume)));
-    if (!Number.isNaN(v)) video.volume = v;
-  }
+    if (savedVolume !== null) {
+      const v = Math.min(1, Math.max(0, parseFloat(savedVolume)));
+      if (!Number.isNaN(v)) video.volume = v;
+    }
+  })();
 
-  ensureAutoplay(); 
+  /* ---------- Autoplay ---------- */
+  ensureAutoplay();
+  video.addEventListener('error', () => { if (autoplayNote) autoplayNote.hidden = false; });
 
-   // Bee Animator — você pode mudar fps/scale por página
-  const beeEl = document.getElementById('beeSprite');
+  /* ---------- Botão Som ---------- */
+  toggleMuteBtn?.addEventListener('click', () => {
+    video.muted = !video.muted;
+    setMuteIcon(video.muted);
+    localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
+    localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
+    if (!video.muted) video.play().catch(()=>{});
+  });
+
+  /* ---------- Botão Start ---------- */
+  startBtn?.addEventListener('click', () => {
+    localStorage.setItem(STORAGE_KEYS.muted, String(video.muted));
+    localStorage.setItem(STORAGE_KEYS.volume, String(video.volume ?? 1));
+    window.location.href = './intro/intro.html';
+  });
+
+  /* ---------- Fullscreen ---------- */
+  (function () {
+    if (!fsBtn) return;
+
+    const target = document.documentElement;
+    const isFS = () =>
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement;
+
+    function requestFS(el) {
+      const req =
+        el.requestFullscreen ||
+        el.webkitRequestFullscreen ||
+        el.mozRequestFullScreen ||
+        el.msRequestFullscreen;
+      try { req?.call(el)?.catch?.(()=>{}); } catch {}
+    }
+    function exitFS() {
+      const ex =
+        document.exitFullscreen ||
+        document.webkitExitFullscreen ||
+        document.mozCancelFullScreen ||
+        document.msExitFullscreen;
+      try { ex?.call(document)?.catch?.(()=>{}); } catch {}
+    }
+    function updateUI(active){
+      const i = fsBtn.querySelector('i');
+      if (i) i.className = active ? 'bi bi-fullscreen-exit' : 'bi bi-fullscreen';
+      const label = active ? 'Sair de tela cheia' : 'Tela cheia';
+      fsBtn.setAttribute('aria-label', label);
+      fsBtn.title = active ? 'Sair de tela cheia (F)' : 'Tela cheia (F)';
+      fsBtn.classList.toggle('is-active', !!active);
+    }
+
+    fsBtn.addEventListener('click', (e) => { e.stopPropagation(); isFS() ? exitFS() : requestFS(target); });
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'f' && !e.repeat) { e.preventDefault(); isFS() ? exitFS() : requestFS(target); }
+    });
+    ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
+      .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
+    updateUI(!!isFS());
+  })();
+
+  /* ---------- Abelha animada ---------- */
   if (beeEl && window.BeeAnimator) {
-    // exemplo: 12 fps, escala 1.0, 10 frames "abelha0..9.png"
-    window.beeAnim = new BeeAnimator(beeEl, {
-      basePath: "../assets/abelha",
-      prefix: "abelha",   // arquivos: abelha0..abelha9
-      ext: "png",         // "png" | "webp" | "jpg"
-      frames: 10,
-      fps: 10,
-      scale: 1.5,           // escala dessa página
-      autoplay: true,
-      loop: true
-    }); 
+    try {
+      window.beeAnim = new BeeAnimator(beeEl, {
+        basePath: "../assets/abelha",
+        prefix: "abelha",
+        ext: "png",
+        frames: 10,
+        fps: 10,
+        scale: 1.5,
+        autoplay: true,
+        loop: true
+      });
+    } catch (err) {
+      console.warn('BeeAnimator falhou:', err);
+    }
   }
 });
-video.addEventListener('error', () => { if (autoplayNote) autoplayNote.hidden = false; });
-
-/* Botão de Tela Cheia (mesma lógica do explore) */
-(function () {
-  const btn = document.getElementById('fs-toggle');
-  if (!btn) return;
-
-  const target = document.documentElement;
-  const isFS = () =>
-    document.fullscreenElement ||
-    document.webkitFullscreenElement ||
-    document.mozFullScreenElement ||
-    document.msFullscreenElement;
-
-  function requestFS(el) {
-    const req =
-      el.requestFullscreen ||
-      el.webkitRequestFullscreen ||
-      el.mozRequestFullScreen ||
-      el.msRequestFullscreen;
-    if (!req) return;
-    try { const p = req.call(el); if (p?.catch) p.catch(()=>{}); } catch {}
-  }
-  function exitFS() {
-    const ex =
-      document.exitFullscreen ||
-      document.webkitExitFullscreen ||
-      document.mozCancelFullScreen ||
-      document.msExitFullscreen;
-    if (!ex) return;
-    try { const p = ex.call(document); if (p?.catch) p.catch(()=>{}); } catch {}
-  }
-  function updateUI(active){
-    const i = btn.querySelector('i');
-    i.className = active ? 'bi bi-fullscreen-exit' : 'bi bi-fullscreen';
-    const label = active ? 'Sair de tela cheia' : 'Tela cheia';
-    btn.setAttribute('aria-label', label);
-    btn.title = active ? 'Sair de tela cheia (F)' : 'Tela cheia (F)';
-    btn.classList.toggle('is-active', !!active);
-  }
-  btn.addEventListener('click', (e) => { e.stopPropagation(); isFS() ? exitFS() : requestFS(target); });
-  window.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'f' && !e.repeat) { e.preventDefault(); isFS() ? exitFS() : requestFS(target); }
-  });
-  ['fullscreenchange','webkitfullscreenchange','mozfullscreenchange','MSFullscreenChange']
-    .forEach(ev => document.addEventListener(ev, () => updateUI(!!isFS())));
-  updateUI(!!isFS());
-})();
