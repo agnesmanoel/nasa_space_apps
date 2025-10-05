@@ -169,12 +169,12 @@ document.addEventListener("keydown", (e) => {
   }
 
   function updateUI(active){
-    btn.classList.toggle('is-active', active);
-    btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-    btn.setAttribute('aria-label', active ? 'Sair de tela cheia' : 'Entrar em tela cheia');
+    const i = btn.querySelector('i');
+    i.className = active ? 'bi bi-fullscreen-exit' : 'bi bi-arrows-fullscreen';
+    btn.setAttribute('aria-label', active ? 'Sair de tela cheia' : 'Tela cheia');
     btn.title = active ? 'Sair de tela cheia (F)' : 'Tela cheia (F)';
-    btn.textContent = active ? '🗗' : '⛶';
   }
+
 
   // evita conflito com o clique global/drag
   btn.addEventListener('click', (e) => {

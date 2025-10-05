@@ -11,6 +11,8 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 <body>
   <!-- Plano de fundo rolável horizontal -->
@@ -70,12 +72,11 @@
   </section>
 
   <!-- Botão de Tela Cheia (precisa estar DENTRO do body e ANTES do script) -->
-  <button id="fs-toggle"
-    class="fs-toggle"
-    type="button"
-    aria-label="Entrar em tela cheia"
-    aria-pressed="false"
-    title="Tela cheia (F)">⛶</button>
+  <button id="fs-toggle" class="fs-toggle" type="button" aria-label="Tela cheia">
+    <i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>
+    <span class="visually-hidden">Tela cheia</span>
+  </button>
+
 
   <!-- Seu JS deve vir depois do botão -->
   <script src="explore.js"></script>
