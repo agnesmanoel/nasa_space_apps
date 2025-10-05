@@ -34,21 +34,28 @@
 
   // —————————————— Modal control ——————————————
   function openSunflowerModal() {
-    // conteúdo do Girassol (pode personalizar depois)
-    modalImg.src = SRC;
-    modalImg.alt = 'Girassol';
-    modalTitle.textContent = 'Girassol';
-    modalDesc.innerHTML =
-      '<strong>Helianthus annuus</strong> — Famoso pelo heliotropismo na fase jovem e cabeças florais grandes que atraem polinizadores. ' +
-      'Gosta de sol pleno, regas regulares e solo bem drenado.';
+    // se tiver o arquivo da sucupira, troque o src abaixo
+    // modalImg.src = "../../assets/sucupira.png";
+    modalImg.alt = "Sucupira-branca";
+    modalTitle.textContent = "Sucupira-branca";
+    modalDesc.innerHTML = `
+      <li><strong>Planta:</strong> Sucupira-branca <em>(Pterodon emarginatus)</em></li>
+      <li><strong>Época de Floração:</strong> Abril a Junho. É uma das primeiras árvores a florescer massivamente após o fim das chuvas.</li>
+      <li><strong>Floração e Condições:</strong> Floresce no início do período seco, aproveitando a umidade ainda residual no solo. Flores lilás ou roxo-pálido, perfume adocicado; floração abundante.</li>
+      <li><strong>Polinização:</strong> Principalmente por abelhas de médio a grande porte (incluindo mamangavas) e também visitada por abelhas sociais como a uruçu em busca de néctar e pólen.</li>
+      <li><strong>Relevância para o BloomWatch:</strong> Excelente indicador do início da estação seca. A floração roxa se destaca quando a paisagem ainda está relativamente verde, mas as chuvas já cessaram; monitorá-la ajuda a definir o começo do período de estresse hídrico.</li>
+    `;
+    // garantir tags <li> dentro de <ul>
+    if (modalDesc.tagName !== "UL") {
+      modalDesc.innerHTML = `<ul class="flower-bullets">${modalDesc.innerHTML}</ul>`;
+    }
 
     backdrop.hidden = false;
     modal.hidden = false;
-
-    // foco
     lastFocusEl = document.activeElement;
     modalClose.focus();
   }
+
 
   function closeModal() {
     backdrop.hidden = true;

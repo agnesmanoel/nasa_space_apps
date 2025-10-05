@@ -59,74 +59,107 @@
   inset: 0;
   background: rgba(0,0,0,.45);
   backdrop-filter: blur(2px);
-  z-index: 4;                 /* acima do HUD(3)? Não: modal vai 5, backdrop 4 */
+  z-index: 4;
 }
-
 /* caixa do modal — topo central, sem invadir HUD (altura limitada) */
 .flower-modal{
   position: fixed;
   left: 50%;
-  top: 24px;
-  transform: translateX(-50%);
-  width: min(92vw, 560px);
-  max-height: calc(100vh - 220px);    /* deixa “respiro” para o HUD */
-  overflow: hidden;
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: 12px;
+  top: 50%;
+  transform: translate(-50%,-50%);       /* CENTRADO NA TELA */
+  width: min(96vw, 980px);                /* mais largo, como a ref */
+  max-height: min(88vh, 720px);
   padding: 16px;
-  border-radius: 20px;
+  border-radius: 22px;
   border: 1px solid var(--glass-brd);
   background: var(--glass-bg);
   color: var(--text);
   box-shadow: var(--shadow);
   backdrop-filter: saturate(130%) blur(12px);
   z-index: 5;
-}
-
-/* botão de fechar (X) */
-.flower-modal-close{
-  position: absolute;
-  top: 10px; right: 10px;
-  width: 36px; height: 36px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.35);
-  background: rgba(255,255,255,.16);
-  color: #fff;
-  font-size: 20px; line-height: 1;
-  display: grid; place-items: center;
-  cursor: pointer;
-  backdrop-filter: saturate(120%) blur(4px);
-}
-.flower-modal-close:hover{ background: rgba(255,255,255,.22); }
-
-/* conteúdo */
-.flower-modal-media{
-  width: 100%;
-  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,.25);
+}
+
+/* Layout interno: mídia à esquerda, texto à direita (imagem centralizada) */
+.flower-modal-content{
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) 1fr; /* coluna da imagem um tiquinho maior */
+  gap: clamp(14px, 2vw, 24px);
+  align-items: center;              /* centra VERTICAL a mídia */
+  justify-items: stretch;
+  min-height: 0;
+}
+/* No mobile empilha e centraliza tudo bonitinho */
+@media (max-width: 820px){
+  .flower-modal-content{
+    grid-template-columns: 1fr;
+    justify-items: center;          /* centra HORIZONTAL a mídia */
+    align-items: start;
+  }
+}
+
+/* Caixinha da mídia — centralizada na coluna e com largura estável */
+.flower-modal-media{
+  width: clamp(260px, 32vw, 360px);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;              /* centra horizontalmente */
+  place-self: center;               /* garante centro na grid */
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.22);
   background: rgba(255,255,255,.08);
-  aspect-ratio: 16 / 9;
+  overflow: hidden;
   display: grid; place-items: center;
 }
 .flower-modal-media img{
   max-width: 100%;
   max-height: 100%;
+  object-fit: cover;
   display: block;
-  object-fit: contain;
 }
 
+/* Texto */
+/* Texto continua alinhado ao topo da coluna da direita */
 .flower-modal-body{
+  align-self: start;                /* não “desce” junto com a mídia */
   overflow: auto;
   padding-right: 4px;
 }
 .flower-modal-body h3{
-  margin: 8px 0 6px;
-  font-weight: 800; letter-spacing: .2px;
+  margin: 4px 0 10px;
+  font-weight: 800;
+  font-size: clamp(20px, 3.2vw, 28px);
+  letter-spacing: .2px;
 }
-.flower-modal-text{
+.flower-bullets{
   margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: .55rem;
   color: var(--text);
+}
+.flower-bullets li{ line-height: 1.35; }
+.flower-bullets em{ opacity: .9; }
+
+/* Botão de fechar — sem borda preta, ainda numa caixinha glass */
+.flower-modal-close{
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.32);   /* nada de borda preta */
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  font-size: 20px; line-height: 1;
+  cursor: pointer;
+  backdrop-filter: saturate(120%) blur(4px);
+  box-shadow: none;                           /* remove anel escuro */
+  outline: none;
+}
+.flower-modal-close:hover{ background: rgba(255,255,255,.22); }
+.flower-modal-close:focus,
+.flower-modal-close:focus-visible{
+  outline: none;                              /* sem aro preto do foco */
+  box-shadow: 0 0 0 2px rgba(255,255,255,.35);/* aro sutil acessível */
 }
 
