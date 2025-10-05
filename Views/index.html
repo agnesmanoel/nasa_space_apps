@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Bee Adventure</title>
 
+  <!-- Pré-carrega o vídeo de fundo -->
   <link rel="preload" as="video" href="../assets/intro.mp4" type="video/mp4">
+  <!-- (Opcional) pré-carrega o primeiro frame da abelha para evitar flash -->
+  <link rel="preload" as="image" href="../assets/abelha/abelha0.png" imagesrcset="../assets/abelha/abelha0.png 1x">
+
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 </head>
@@ -36,7 +40,12 @@
   <!-- SQUAD: ocupa a viewport com padding das bordas -->
   <main class="squad" role="main" aria-label="Tela inicial">
     <div class="col bee-wrap">
-      <img class="bee" src="../assets/abelha.png" alt="Abelha" />
+      <img
+        id="beeSprite"
+        class="bee"
+        src="../assets/abelha/abelha0.png"
+        alt="Abelha animada"
+      />
     </div>
 
     <div class="col hero-copy">
@@ -54,6 +63,9 @@
     </div>
   </main>
 
+  <!-- Animador reutilizável da abelha (deve estar em /views/bee-anim.js) -->
+  <script src="./bee-anim.js"></script>
+  <!-- Seu script principal -->
   <script src="./script.js"></script>
 </body>
 </html>

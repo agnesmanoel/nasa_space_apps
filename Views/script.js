@@ -54,7 +54,24 @@ window.addEventListener('load', () => {
     const v = Math.min(1, Math.max(0, parseFloat(savedVolume)));
     if (!Number.isNaN(v)) video.volume = v;
   }
+
   ensureAutoplay(); 
+
+   // Bee Animator — você pode mudar fps/scale por página
+  const beeEl = document.getElementById('beeSprite');
+  if (beeEl && window.BeeAnimator) {
+    // exemplo: 12 fps, escala 1.0, 10 frames "abelha0..9.png"
+    window.beeAnim = new BeeAnimator(beeEl, {
+      basePath: "../assets/abelha",
+      prefix: "abelha",   // arquivos: abelha0..abelha9
+      ext: "png",         // "png" | "webp" | "jpg"
+      frames: 10,
+      fps: 2,
+      scale: 1,           // escala dessa página
+      autoplay: true,
+      loop: true
+    }); 
+  }
 });
 video.addEventListener('error', () => { if (autoplayNote) autoplayNote.hidden = false; });
 
