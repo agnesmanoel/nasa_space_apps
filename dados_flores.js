@@ -63,3 +63,18 @@ const flores = [
     porcentagem_mes: { Jan: 20, Feb: 20, Mar: 20, Apr: 20, May: 20, Jun: 20, Jul: 20, Aug: 20, Sep: 20, Oct: 20, Nov: 20, Dec: 20 }
   }
 ];
+
+
+// // Função para obter flores ativas em um mês
+// function floresAtivas(mes) {
+//   return flores.filter(flor => flor.porcentagem_mes[mes] > 0);
+// }
+
+// // Exemplo: mostrar flores de Abril
+// const mesSelecionado = "Apr";
+// const floresEmAbril = floresAtivas(mesSelecionado);
+
+// console.log(`Flores em ${mesSelecionado}:`);
+// floresEmAbril.forEach(flor => {
+//   console.log(`${flor.nome} (${flor.nome_cientifico}) - ${flor.porcentagem_mes[mesSelecionado]}%`);
+// });
