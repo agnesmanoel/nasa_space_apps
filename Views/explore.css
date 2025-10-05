@@ -56,6 +56,19 @@ body::-webkit-scrollbar { display: none; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 1; /* base da pilha */
+}
+
+/* =========================
+   Camada de Efeitos (flores)
+   ========================= */
+.fx-layer{
+  position: absolute;
+  inset: 0 auto 0 0;   /* alinha como o fundo */
+  width: 3000px;
+  height: 100vh;
+  z-index: 2;          /* entre o fundo (1) e o HUD (3) */
+  pointer-events: auto;/* torne 'none' se quiser só visual */
 }
 
 /* =========================
@@ -79,6 +92,7 @@ body::-webkit-scrollbar { display: none; }
   box-shadow: var(--shadow);
   backdrop-filter: saturate(130%) blur(8px);
   align-items: center;                      /* alinha os 3 ao centro vertical */
+  z-index: 3;                               /* acima dos efeitos */
 }
 @supports not (backdrop-filter: blur(8px)){
   .hud-bar{ background: rgba(20,22,26,0.55); }
@@ -286,14 +300,14 @@ body::-webkit-scrollbar { display: none; }
 .fs-toggle{
   position: fixed;
   top: 16px; right: 16px;
-  z-index: 2147483647;   /* ↑ garante que fica acima de qualquer coisa */
+  z-index: 2147483647;   /* ↑ acima de tudo */
   width: 44px; height: 44px;
   display: grid; place-items: center;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.35);
   background: rgba(255,255,255,0.18);
   color: #fff; font-size: 20px; line-height: 1;
-  cursor: pointer; pointer-events: auto;   /* garante clique */
+  cursor: pointer; pointer-events: auto;
   box-shadow: var(--shadow);
   backdrop-filter: saturate(120%) blur(6px);
 }
