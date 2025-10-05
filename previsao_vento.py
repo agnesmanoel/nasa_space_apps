@@ -26,7 +26,7 @@ print(df_mes.head())
 
 
 m = NeuralProphet(
-    growth='off', 
+    growth='linear', 
     yearly_seasonality=True,
     weekly_seasonality=False, # Since we are using monthly data
     daily_seasonality=False, # Since we are using monthly data
@@ -39,7 +39,7 @@ metrics = m.fit(df_train, freq='M', validation_df=df_val, epochs=1000,
                 progress=None) 
 
 
-future = m.make_future_dataframe(df_train, periods=24, n_historic_predictions=len(df_mes)) 
+future = m.make_future_dataframe(df_train, periods=36, n_historic_predictions=len(df_mes)) 
 # future = m.make_future_dataframe(df_mes, periods=24, n_historic_predictions=len(df_mes)) 
 forecast = m.predict(future)
 
@@ -55,5 +55,5 @@ print("\nPrevisão dos Próximos 24 Meses:")
 cols = [c for c in ['ds', 'yhat1', 'yhat1_lower', 'yhat1_upper'] if c in forecast.columns]
 print(forecast[cols])
 
-# forecast[cols].to_csv("previsao_vento_mensal_menor.csv", index=False)
-# print("\n✅ Exportação para CSV concluída.")
+forecast[cols].to_csv("previsao_vento_mensal_maior.csv", index=False)
+print("\n✅ Exportação para CSV concluída.")
