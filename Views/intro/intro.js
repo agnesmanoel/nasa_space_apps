@@ -217,3 +217,11 @@ if (skipBtn){
     window.location.href = '../intermediaria/intermediaria.html';
   });
 }
+
+// Avança automaticamente para a tela intermediária quando o vídeo terminar
+video.addEventListener('ended', () => {
+  // pequena folga opcional para não "cortar" abrupto
+  setTimeout(() => {
+    window.location.href = '../intermediaria/intermediaria.html';
+  }, 250);
+});
