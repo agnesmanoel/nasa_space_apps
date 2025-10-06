@@ -233,8 +233,8 @@
   if (!layer) return;
 
   const WIDTH = 3000;
-  const Y_MIN = 0.55; 
-  const Y_MAX = 0.90;
+  const Y_MIN = 0.35; 
+  const Y_MAX = 0.70;
 
   // ————— Dados das flores —————
   const flores = [
@@ -303,7 +303,7 @@
     }
   ];
 
-  const imagensFlores = {
+  const imagensFlores_zoom = {
     "Sucupira-branca": "/imagens_zoom/Sucupira-brancazoom.png",
     "Candeia": "/imagens_zoom/Candeiazoom.png",
     "Ipê-amarelo": "/imagens_zoom/Ipê-amarelozoom.png",
@@ -311,6 +311,15 @@
     "Puçá / Pindabuna": "/imagens_zoom/pucazoom.png",
     "Tingui": "/imagens_zoom/Tinguizoom.png",
     "Velame": "/imagens_zoom/velamezoom.png"
+  };
+    const imagensFlores = {
+    "Sucupira-branca": "/imagens/Sucupira-branca.png",
+    "Candeia": "/imagens/Candeia.png",
+    "Ipê-amarelo": "/imagens/Ipê-amarelo.png",
+    "Barbatimão": "/imagens/barbatimao.png",
+    "Puçá / Pindabuna": "/imagens/puca.png",
+    "Tingui": "/imagens/Tingui.png",
+    "Velame": "/imagens/velame.png"
   };
   const SRC = '/assets/girassol.png'; // fallback
 
@@ -335,7 +344,7 @@
 
   // Modal
   function openFlowerModal(flower) {
-    modalImg.src = imagensFlores[flower.nome] || SRC;
+    modalImg.src = imagensFlores_zoom[flower.nome] || SRC;
     modalImg.alt = flower.nome;
     modalTitle.textContent = flower.nome;
     modalDesc.innerHTML = `
