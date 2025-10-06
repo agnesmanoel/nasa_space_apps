@@ -226,7 +226,20 @@ window.addEventListener("load", () => {
   const muteBtn = document.getElementById('toggleMuteBtn');
   const backBtn = document.getElementById('backBtn');
   const nextBtn = document.getElementById('nextBtn');
-  const bgVideo = document.getElementById('bg-video');
+  const bgAudio = document.getElementById('bg-audio');
+
+  // força a trilha "chuvoso" nesta tela
+  if (bgAudio) {
+    // ajuste o caminho se necessário
+    const rainSrc = '../../assets/audioCHUVA.mp3';
+    if (bgAudio.src !== rainSrc) {
+      bgAudio.src = rainSrc;
+      bgAudio.load();
+    }
+    // tenta iniciar (fica mudo até o usuário clicar no botão de som)
+    try { bgAudio.play()?.catch(()=>{}); } catch {}
+  }
+
 
   function setMuteIcon(isMuted){
     if (!muteBtn) return;
@@ -237,10 +250,10 @@ window.addEventListener("load", () => {
     muteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
   }
   function applyAudioState(isMuted, volume){
-    if (!bgVideo) return;
-    bgVideo.muted = isMuted;
-    bgVideo.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
-    if (!isMuted) { try { bgVideo.play()?.catch(()=>{}); } catch {} }
+    if (!bgAudio) return;
+    bgAudio.muted = isMuted;
+    bgAudio.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
+    if (!isMuted) { try { bgAudio.play()?.catch(()=>{}); } catch {} }
   }
 
   // Estado inicial (muted por padrão)
@@ -263,11 +276,11 @@ window.addEventListener("load", () => {
     applyAudioState(nextMuted, vol);
   });
 
-  bgVideo?.addEventListener('volumechange', () => {
-    if (!bgVideo) return;
-    if (!bgVideo.muted) localStorage.setItem(STORAGE_KEYS.volume, String(bgVideo.volume));
-    localStorage.setItem(STORAGE_KEYS.muted, String(bgVideo.muted));
-    setMuteIcon(bgVideo.muted);
+  bgAudio?.addEventListener('volumechange', () => {
+    if (!bgAudio) return;
+    if (!bgAudio.muted) localStorage.setItem(STORAGE_KEYS.volume, String(bgAudio.volume));
+    localStorage.setItem(STORAGE_KEYS.muted, String(bgAudio.muted));
+    setMuteIcon(bgAudio.muted);
   });
 
   // Voltar -> tela início

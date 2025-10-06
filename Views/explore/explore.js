@@ -95,6 +95,26 @@ function atualizarCards(ano, indiceMes) {
     bgEl.style.backgroundImage = `url('${bgMap[dadosDoMes.season] || bgMap.Rainy}')`;
   }
 
+  // === Áudio dinâmico conforme estação ===
+  const audioEl = document.getElementById('bg-audio');
+  if (audioEl) {
+    const srcMap = {
+      Rainy:      '../../assets/audioCHUVA.mp3',
+      Transition: '../../assets/audioNEUTRO.mp3',
+      Dry:        '../../assets/audioSECA.mp3'
+    };
+    const nextSrc = srcMap[dadosDoMes.season] || srcMap.Rainy;
+
+    // evita recarregar se já está na mesma track
+    if (audioEl.dataset.track !== nextSrc) {
+      audioEl.dataset.track = nextSrc;
+      audioEl.src = nextSrc;
+      audioEl.loop = true;
+      try { audioEl.load(); audioEl.play()?.catch(()=>{}); } catch {}
+    }
+  }
+
+
 
 }
 
@@ -365,7 +385,7 @@ window.addEventListener('load', () => {
   const STORAGE_KEYS = { muted: 'bee_audio_muted', volume: 'bee_audio_volume' };
   const muteBtn = document.getElementById('toggleMuteBtn');
   const backBtn = document.getElementById('backBtn');
-  const bgVideo = document.getElementById('bg-video');
+  const bgAudio = document.getElementById('bg-audio');
 
   function setMuteIcon(isMuted){
     if (!muteBtn) return;
@@ -376,12 +396,12 @@ window.addEventListener('load', () => {
     muteBtn.style.filter = isMuted ? 'grayscale(10%) brightness(0.95)' : 'none';
   }
   function applyAudioState(isMuted, volume){
-    if (!bgVideo) return; // nesta página não tem vídeo — apenas mantém o estado salvo
-    bgVideo.muted = isMuted;
-    bgVideo.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
+    if (!bgAudio) return; // nesta página não tem vídeo — apenas mantém o estado salvo
+    bgAudio.muted = isMuted;
+    bgAudio.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
     if (!isMuted) {
       // gesto do usuário já ocorreu (clique no botão), então tentamos tocar com áudio
-      try { bgVideo.play()?.catch(()=>{}); } catch {}
+      try { bgAudio.play()?.catch(()=>{}); } catch {}
     }
   }
   (function restoreAudioState(){
@@ -405,11 +425,11 @@ window.addEventListener('load', () => {
   });
 
   // (Opcional) se um dia ajustar volume em outro lugar, persiste:
-  bgVideo?.addEventListener('volumechange', () => {
-    if (!bgVideo) return;
-    if (!bgVideo.muted) localStorage.setItem(STORAGE_KEYS.volume, String(bgVideo.volume));
-    localStorage.setItem(STORAGE_KEYS.muted, String(bgVideo.muted));
-    setMuteIcon(bgVideo.muted);
+  bgAudio?.addEventListener('volumechange', () => {
+    if (!bgAudio) return;
+    if (!bgAudio.muted) localStorage.setItem(STORAGE_KEYS.volume, String(bgAudio.volume));
+    localStorage.setItem(STORAGE_KEYS.muted, String(bgAudio.muted));
+    setMuteIcon(bgAudio.muted);
   });
   backBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
