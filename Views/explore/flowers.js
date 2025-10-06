@@ -50,7 +50,7 @@
       month_percentage: { Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0, Jul: 0, Aug: 0, Sep: 60, Oct: 80, Nov: 60, Dec: 0 }
     },
     {
-      name: "Puca (Pindabuna)",
+      name: "Puça (Pindabuna)",
       scientific_name: "Mouriri pusa",
       flowering: "December – February",
       description: "Rainy-summer peak; cauliflory with purple, highly fragrant flowers growing on trunk and thick branches.",
