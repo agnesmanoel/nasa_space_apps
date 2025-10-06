@@ -207,7 +207,7 @@ const skipBtn = document.getElementById('skipBtn');
 if (backBtn){
   backBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    window.location.href = '../index.html';
+    window.location.href = '../../index.html';
   });
 }
 
