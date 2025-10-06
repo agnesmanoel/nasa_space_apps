@@ -237,7 +237,7 @@
         img.src = images[spec.name] || SRC;
 
         const jitter = rand(-10, 10);
-        const size = Math.max(36, baseSize + jitter);
+        const size = Math.max(36, (baseSize + jitter) * (spec.name === "Velame" ? 1.75 : 1));
         el.style.width = size + 'px';
 
         const top  = Math.round(rand(h * Y_MIN - size/2, h * Y_MAX - size/2));
