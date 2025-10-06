@@ -97,7 +97,7 @@
     "Tingui": "../../imagens/Tingui.png",
     "Velame": "../../imagens/velame.png"
   };
-  const SRC = './assets/girassol.png'; // fallback
+  const SRC = '../../assets/girassol.png'; // fallback
 
   // Utils
   const clamp01 = v => Math.max(0, Math.min(1, v));
