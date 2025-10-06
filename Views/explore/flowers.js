@@ -84,7 +84,7 @@
     "Candeia": "../../imagens_zoom/Candeiazoom.png",
     "Yellow Ipê": "../../imagens_zoom/Ipê-amarelozoom.png",
     "Barbatimao": "../../imagens_zoom/barbatimaozoom.png",
-    "Puca (Pindabuna)": "../../imagens_zoom/pucazoom.png",
+    "Puça (Pindabuna)": "../../imagens_zoom/pucazoom.png",
     "Tingui": "../../imagens_zoom/Tinguizoom.png",
     "Velame": "../../imagens_zoom/velamezoom.png"
   };
@@ -93,7 +93,7 @@
     "Candeia": "../../imagens/Candeia.png",
     "Yellow Ipê": "../../imagens/Ipê-amarelo.png",
     "Barbatimao": "../../imagens/barbatimao.png",
-    "Puca (Pindabuna)": "../../imagens/puca.png",
+    "Puça (Pindabuna)": "../../imagens/puca.png",
     "Tingui": "../../imagens/Tingui.png",
     "Velame": "../../imagens/velame.png"
   };
