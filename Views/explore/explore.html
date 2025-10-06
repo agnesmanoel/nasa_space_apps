@@ -120,8 +120,31 @@
 
   <script src="./explore.js" defer></script>
   <script src="./flowers.js" defer></script>
+<div id="flower-modal-backdrop" class="flower-modal-backdrop" hidden></div>
 
-  <div id="flower-modal-backdrop" class="flower-modal-backdrop" hidden></div>
+  <div id="flower-modal" class="flower-modal" role="dialog" aria-modal="true"
+      aria-labelledby="flower-modal-title" aria-describedby="flower-modal-desc" hidden>
+
+    <button type="button" class="flower-modal-close" aria-label="Fechar (Esc)">×</button>
+
+    <div class="flower-modal-content">
+      <div class="flower-modal-media">
+        <img id="flower-modal-img" src="../../assets/girassol.png" alt="">
+      </div>
+
+      <div class="flower-modal-body">
+        <h3 id="flower-modal-title"></h3>
+        <ul id="flower-modal-desc" class="flower-bullets"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./explore.js" defer></script>
+  <script src="./flowers.js" defer></script>
+</body>
+</html>
+  <!-- <div id="flower-modal-backdrop" class="flower-modal-backdrop" hidden></div>
 
   <div id="flower-modal" class="flower-modal" role="dialog" aria-modal="true"
       aria-labelledby="flower-modal-title" aria-describedby="flower-modal-desc" hidden>
@@ -147,4 +170,4 @@
   </div>
 
 </body>
-</html>
+</html> -->

@@ -77,6 +77,12 @@ function atualizarCards(ano, indiceMes) {
       elNdviSub.textContent = '—';
     }
   }
+  
+  // NOVO: avisa o resto do app que o NDVI mudou
+  window.dispatchEvent(new CustomEvent('ndvi-change', {
+    detail: { year: ano, monthIndex: indiceMes, ndvi: dadosDoMes.ndvi }
+  }));
+
 
   // === Fundo dinâmico conforme estação ===
   const bgEl = document.querySelector('.background-scroll-container');
