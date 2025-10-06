@@ -149,6 +149,7 @@
     backdrop.hidden = true;
     modal.hidden = true;
     if (lastFocusEl?.focus) lastFocusEl.focus();
+    window.flyBeeHome?.();
   }
   modalClose?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
   backdrop?.addEventListener('click', closeModal);
@@ -248,7 +249,24 @@
         // interactions + modal
         el.addEventListener('mouseenter', () => el.classList.remove('is-swaying'));
         el.addEventListener('mouseleave', () => el.classList.add('is-swaying'));
-        el.addEventListener('click', () => openFlowerModal(spec));
+        el.addEventListener('click', async (e) => {
+          e.stopPropagation();
+
+          // anima um “pop” leve na flor (opcional)
+          el.classList.remove('is-pop'); void el.offsetWidth; el.classList.add('is-pop');
+
+          // se o controlador da abelha existir, voa até a flor
+          if (typeof window.flyBeeTo === 'function') {
+            try { await window.flyBeeTo(el, { offsetYFactor: 0.25 }); } catch {}
+          }
+
+          // coloca a abelha ATRÁS do modal/backdrop (modal z=5, backdrop z=4)
+          if (typeof window.setBeeZIndex === 'function') {
+            window.setBeeZIndex(3);
+          }
+
+          openFlowerModal(spec);
+        });
 
         el.appendChild(img);
         layer.appendChild(el);
