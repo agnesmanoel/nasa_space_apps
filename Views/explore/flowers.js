@@ -133,7 +133,7 @@
     modalTitle.textContent = flower?.name || 'Flower';
     modalDesc.innerHTML = `
       <ul class="flower-bullets">
-        ${flower?.scientific_name ? `<li><strong>Scientific name:</strong> ${flower.scientific_name}</li>` : ''}
+        ${flower?.scientific_name ? `<li><strong>Scientific name:</strong> <em>${flower.scientific_name}</em></li>` : ''}
         ${flower?.flowering ? `<li><strong>Flowering season:</strong> ${flower.flowering}</li>` : ''}
         ${flower?.description ? `<li><strong>Description:</strong> ${flower.description}</li>` : ''}
         ${flower?.pollination ? `<li><strong>Pollination:</strong> ${flower.pollination}</li>` : ''}
