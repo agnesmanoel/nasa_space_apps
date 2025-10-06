@@ -69,7 +69,7 @@ window.addEventListener("load", () => {
 // =====================
 (function(){
   const parts = [
-    "Today, you are a  Yellow Uruçu, a Cerrado bee.",
+    "Today, you are a Uruçu, a Cerrado bee.",
     "Fly through the Cerrado of tomorrow — a living forecast shaped by seasons, rain, and bloom.",
     "Follow the rhythm of the flowers, and discover how every season tells a story of life, balance, and change.",
     "Drag, click, or tap to explore.<br/>Every flower holds a clue to the future of this biome."
