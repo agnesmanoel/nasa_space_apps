@@ -80,24 +80,24 @@
 
   // Image paths (keys must match `name`)
   const imagesZoom = {
-    "White Sucupira": "/imagens_zoom/Sucupira-brancazoom.png",
-    "Candeia": "/imagens_zoom/Candeiazoom.png",
-    "Yellow Ipê": "/imagens_zoom/Ipê-amarelozoom.png",
-    "Barbatimao": "/imagens_zoom/barbatimaozoom.png",
-    "Puca (Pindabuna)": "/imagens_zoom/pucazoom.png",
-    "Tingui": "/imagens_zoom/Tinguizoom.png",
-    "Velame": "/imagens_zoom/velamezoom.png"
+    "White Sucupira": "../../imagens_zoom/Sucupira-brancazoom.png",
+    "Candeia": "../../imagens_zoom/Candeiazoom.png",
+    "Yellow Ipê": "../../imagens_zoom/Ipê-amarelozoom.png",
+    "Barbatimao": "../../imagens_zoom/barbatimaozoom.png",
+    "Puca (Pindabuna)": "../../imagens_zoom/pucazoom.png",
+    "Tingui": "../../imagens_zoom/Tinguizoom.png",
+    "Velame": "../../imagens_zoom/velamezoom.png"
   };
   const images = {
-    "White Sucupira": "/imagens/Sucupira-branca.png",
-    "Candeia": "/imagens/Candeia.png",
-    "Yellow Ipê": "/imagens/Ipê-amarelo.png",
-    "Barbatimao": "/imagens/barbatimao.png",
-    "Puca (Pindabuna)": "/imagens/puca.png",
-    "Tingui": "/imagens/Tingui.png",
-    "Velame": "/imagens/velame.png"
+    "White Sucupira": "../../imagens/Sucupira-branca.png",
+    "Candeia": "../../imagens/Candeia.png",
+    "Yellow Ipê": "../../imagens/Ipê-amarelo.png",
+    "Barbatimao": "../../imagens/barbatimao.png",
+    "Puca (Pindabuna)": "../../imagens/puca.png",
+    "Tingui": "../../imagens/Tingui.png",
+    "Velame": "../../imagens/velame.png"
   };
-  const SRC = '/assets/girassol.png'; // fallback
+  const SRC = './assets/girassol.png'; // fallback
 
   // Utils
   const clamp01 = v => Math.max(0, Math.min(1, v));
